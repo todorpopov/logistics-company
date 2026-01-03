@@ -1,6 +1,6 @@
 package com.logistics.company.models;
 
-import com.logistics.company.models.enums.UserType;
+import com.logistics.company.models.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,5 +33,5 @@ public class User {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserType user_type;
+    private UserRole user_type;
 }
