@@ -16,7 +16,7 @@ import lombok.Setter;
 public class CourierEmployee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long courier_employee_id;
+    Long courierEmployeeId;
 
     @OneToOne(optional = false)
     @JoinColumn(

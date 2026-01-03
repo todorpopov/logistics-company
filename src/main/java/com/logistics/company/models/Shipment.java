@@ -21,7 +21,7 @@ import java.time.LocalDate;
 public class Shipment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long shipment_id;
+    Long shipmentId;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -54,13 +54,13 @@ public class Shipment {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private ShipmentDeliveryType delivery_type;
+    private ShipmentDeliveryType deliveryType;
 
     @Column(nullable = false)
-    private String phone_number;
+    private String phoneNumber;
 
     @Column(nullable = false)
-    private Integer weight_gram;
+    private Integer weightGram;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;

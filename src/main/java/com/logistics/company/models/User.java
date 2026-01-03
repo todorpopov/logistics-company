@@ -17,21 +17,21 @@ import lombok.Setter;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long user_id;
+    Long userId;
 
     @Column(nullable = false)
-    private String first_name;
+    private String firsName;
 
     @Column(nullable = false)
-    private String last_name;
+    private String lastName;
 
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
-    private String password_hash;
+    private String passwordHash;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserRole user_type;
+    private UserRole userType;
 }

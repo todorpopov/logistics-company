@@ -16,7 +16,7 @@ import lombok.Setter;
 public class OfficeEmployee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long office_employee_id;
+    Long officeEmployeeId;
 
     @OneToOne(optional = false)
     @JoinColumn(

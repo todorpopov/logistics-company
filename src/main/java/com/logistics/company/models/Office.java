@@ -16,7 +16,7 @@ import lombok.Setter;
 public class Office {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long office_id;
+    Long officeId;
 
     @Column(nullable = false, unique = true)
     private String name;
@@ -25,5 +25,5 @@ public class Office {
     private String address;
 
     @Column(nullable = false, unique = true)
-    private String phone_number;
+    private String phoneNumber;
 }
