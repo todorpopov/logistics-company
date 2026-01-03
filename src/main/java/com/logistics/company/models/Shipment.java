@@ -10,7 +10,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
+
 
 @Getter
 @Setter
@@ -20,8 +20,8 @@ import java.util.UUID;
 @Table(name = "shipments")
 public class Shipment {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID shipment_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long shipment_id;
 
     @ManyToOne(optional = false)
     @JoinColumn(

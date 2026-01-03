@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -16,8 +15,8 @@ import java.util.UUID;
 @Table(name = "office_employees")
 public class OfficeEmployee {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID office_employee_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long office_employee_id;
 
     @OneToOne(optional = false)
     @JoinColumn(
