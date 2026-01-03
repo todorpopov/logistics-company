@@ -6,6 +6,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -18,8 +19,11 @@ import java.util.Map;
 public class JwtService {
     private static final Logger logger = LoggerFactory.getLogger(JwtService.class.getName());
 
-    private final String secret = System.getenv("JWT_SECRET");
-    private final Key key = Keys.hmacShaKeyFor(secret.getBytes());
+    private final Key key;
+
+    public JwtService(@Value("${jwt.secret}") String secret) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    }
 
     public String generateToken(int id, String firstName, String lastName, String email, UserRole role) {
         logger.info("Generating JWT token for email: {} and role: {}", email, role);
