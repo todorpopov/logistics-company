@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { validateAuthFields } from '../../utils/validateAuthFields';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './AuthForm.css';
+import './LogIn.css';
 
 const LogIn: React.FunctionComponent = () => {
   const [email, setEmail] = useState('');
@@ -46,8 +46,6 @@ const LogIn: React.FunctionComponent = () => {
         })
         .catch(() => {
           setToastType('error');
-          setEmail('');
-          setPassword('');
           setShowToast(true);
         })
         .finally(() => {
@@ -68,7 +66,7 @@ const LogIn: React.FunctionComponent = () => {
   return (
     <>
       {showToast && (
-        <div className="auth-toast">
+        <div className="login-toast">
           {toastType === 'success' && (
             <div className="alert alert-success mb-0" role="alert">
               You successfully logged in!
@@ -81,11 +79,11 @@ const LogIn: React.FunctionComponent = () => {
           )}
         </div>
       )}
-      <div className="container d-flex justify-content-center align-items-center auth-container" data-testid="login-page">
-        <div className="card auth-card">
+      <div className="container login-container" data-testid="login-page">
+        <div className="card login-card">
           <div className="card-body">
             <h2 className="card-title mb-4 text-center">Log In</h2>
-            <form noValidate onSubmit={handleSubmit}>
+            <form className="login-form" noValidate onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="email" className="form-label text-start w-100">Email address</label>
                 <input

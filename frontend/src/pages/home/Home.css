@@ -4,8 +4,11 @@
   justify-content: center;
   align-items: center;
   background-color: var(--bs-primary, #0d6efd);
-  height: 100vh;
-  gap: 2rem;
+  min-height: 100vh;
+}
+
+.home-title {
+  color: #fff;
 }
 
 .icon-row {
@@ -24,7 +27,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 12vw;
+  min-width: 22vw;
   flex: 1 1 18vw;
   transition: box-shadow 0.2s, transform 0.2s;
   cursor: pointer;
@@ -40,8 +43,6 @@
 
 .icon-feature-card i {
   font-size: 12vw;
-  min-width: 18vw;
-  max-width: 18vw;
   color: var(--bs-primary, #0d6efd);
 }
 
@@ -52,26 +53,21 @@
 }
 
 @media (max-width: 48rem) {
+  .home-title {
+    margin-top: 6rem;
+    color: #fff;
+  }
   .icon-row {
     flex-direction: column;
     gap: 2rem;
     align-items: center;
-  }
-  .icon-feature {
-    min-width: 40vw;
-    flex-basis: 40vw;
-  }
-  .icon-feature i {
-    font-size: 30vw;
-    max-width: 40vw;
   }
   .icon-card {
     padding: 1.5rem 0.5rem;
     border-radius: 1rem;
   }
   .icon-feature-card {
-    min-width: 40vw;
-    flex-basis: 40vw;
+    min-width: 60vw;
     padding: 1.5rem 0.5rem;
     border-radius: 1rem;
   }
@@ -79,8 +75,4 @@
     font-size: 30vw;
     max-width: 40vw;
   }
-}
-
-.home-title {
-  color: #fff;
 }

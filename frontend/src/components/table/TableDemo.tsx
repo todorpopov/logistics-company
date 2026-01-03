@@ -1,5 +1,5 @@
 import React from 'react';
-import Table, { Column } from '../components/Table';
+import Table, { Column } from './Table';
 
 interface User {
   id: number;

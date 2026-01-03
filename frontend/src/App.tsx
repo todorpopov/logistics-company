@@ -2,10 +2,11 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
-import Navbar from './Navbar';
+import Navbar from './components/navbar/Navbar';
 import LogIn from './pages/auth/LogIn';
 import Home from './pages/home/Home';
 import SignUp from './pages/auth/SignUp';
+import TableDemo from './components/table/TableDemo';
 
 const App: React.FunctionComponent = () => {
   return (
@@ -15,6 +16,7 @@ const App: React.FunctionComponent = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/table-demo" element={<TableDemo />} />
         {/* Add more routes here as needed */}
       </Routes>
       {/*

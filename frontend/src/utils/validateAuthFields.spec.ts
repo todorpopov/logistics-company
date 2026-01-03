@@ -36,3 +36,35 @@ describe('validateAuthFields', () => {
     expect(result.valid).toBe(false);
   });
 });
+
+describe('validateAuthFields with first and last name', () => {
+  it('should return error if firstName is missing', () => {
+    const result = validateAuthFields('user@example.com', 'password123', '', 'Smith');
+    expect(result.firstNameError).toBe('First name is required');
+    expect(result.lastNameError).toBe('');
+    expect(result.valid).toBe(false);
+  });
+
+  it('should return error if lastName is missing', () => {
+    const result = validateAuthFields('user@example.com', 'password123', 'John', '');
+    expect(result.firstNameError).toBe('');
+    expect(result.lastNameError).toBe('Last name is required');
+    expect(result.valid).toBe(false);
+  });
+
+  it('should return both errors if both names are missing', () => {
+    const result = validateAuthFields('user@example.com', 'password123', '', '');
+    expect(result.firstNameError).toBe('First name is required');
+    expect(result.lastNameError).toBe('Last name is required');
+    expect(result.valid).toBe(false);
+  });
+
+  it('should return no errors for valid email, password, firstName, and lastName', () => {
+    const result = validateAuthFields('user@example.com', 'password123', 'John', 'Smith');
+    expect(result.emailError).toBe('');
+    expect(result.passwordError).toBe('');
+    expect(result.firstNameError).toBe('');
+    expect(result.lastNameError).toBe('');
+    expect(result.valid).toBe(true);
+  });
+});

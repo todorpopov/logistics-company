@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { validateAuthFields } from '../../utils/validateAuthFields';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './AuthForm.css';
+import './SignUp.css';
 
 const SignUp: React.FunctionComponent = () => {
+  const [firstName, setFirstName] = useState('');
+  const [firstNameError, setFirstNameError] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [lastNameError, setLastNameError] = useState('');
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
@@ -27,16 +31,31 @@ const SignUp: React.FunctionComponent = () => {
     }
   };
 
+  const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFirstName(e.target.value);
+    if (firstNameError) {
+      setFirstNameError('');
+    }
+  };
+  const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLastName(e.target.value);
+    if (lastNameError) {
+      setLastNameError('');
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const { emailError, passwordError, valid } = validateAuthFields(email, password);
+    const { emailError, passwordError, firstNameError, lastNameError, valid } = validateAuthFields(email, password, firstName, lastName);
     setEmailError(emailError);
     setPasswordError(passwordError);
+    setFirstNameError(firstNameError || '');
+    setLastNameError(lastNameError || '');
     if (valid) {
       setLoading(true);
       setToastType(null);
       setShowToast(false);
-      axios.post('/signup', { email, password })
+      axios.post('/signup', { email, password, firstName, lastName })
         .then(() => {
           setToastType('success');
           setShowToast(true);
@@ -68,7 +87,7 @@ const SignUp: React.FunctionComponent = () => {
   return (
     <>
       {showToast && (
-        <div className="auth-toast">
+        <div className="signup-toast">
           {toastType === 'success' && (
             <div className="alert alert-success mb-0" role="alert">
               You have registered successfully!
@@ -81,11 +100,39 @@ const SignUp: React.FunctionComponent = () => {
           )}
         </div>
       )}
-      <div className="container d-flex justify-content-center auth-container" data-testid="login-page">
-        <div className="card auth-card">
+      <div className="container signup-container" data-testid="sign-up-page">
+        <div className="card signup-card">
           <div className="card-body">
             <h2 className="card-title mb-4 text-center">Sign Up</h2>
             <form noValidate onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label htmlFor="firstName" className="form-label text-start w-100">First Name</label>
+                <input
+                  type="text"
+                  className={`form-control${firstNameError ? ' is-invalid' : ''}`}
+                  id="firstName"
+                  placeholder="Enter first name"
+                  value={firstName}
+                  onChange={handleFirstNameChange}
+                />
+                {firstNameError && (
+                  <div className="invalid-feedback text-start w-100">{firstNameError}</div>
+                )}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="lastName" className="form-label text-start w-100">Last Name</label>
+                <input
+                  type="text"
+                  className={`form-control${lastNameError ? ' is-invalid' : ''}`}
+                  id="lastName"
+                  placeholder="Enter last name"
+                  value={lastName}
+                  onChange={handleLastNameChange}
+                />
+                {lastNameError && (
+                  <div className="invalid-feedback text-start w-100">{lastNameError}</div>
+                )}
+              </div>
               <div className="mb-3">
                 <label htmlFor="email" className="form-label text-start w-100">Email address</label>
                 <input
@@ -114,7 +161,7 @@ const SignUp: React.FunctionComponent = () => {
                   <div className="invalid-feedback text-start w-100">{passwordError}</div>
                 )}
               </div>
-              <button type="submit" className="btn btn-primary w-100" disabled={loading}>Sign Up</button>
+              <button type="submit" className="btn btn-primary w-100 mt-3" disabled={loading}>Sign Up</button>
             </form>
           </div>
         </div>

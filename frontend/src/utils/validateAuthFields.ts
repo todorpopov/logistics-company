@@ -1,12 +1,21 @@
 export interface LoginValidationResult {
   emailError: string;
   passwordError: string;
+  firstNameError?: string;
+  lastNameError?: string;
   valid: boolean;
 }
 
-export function validateAuthFields(email: string, password: string): LoginValidationResult {
+export function validateAuthFields(
+  email: string,
+  password: string,
+  firstName?: string,
+  lastName?: string
+): LoginValidationResult {
   let emailError = '';
   let passwordError = '';
+  let firstNameError = '';
+  let lastNameError = '';
   let valid = true;
 
   // Simple email regex for demonstration
@@ -25,5 +34,18 @@ export function validateAuthFields(email: string, password: string): LoginValida
     valid = false;
   }
 
-  return { emailError, passwordError, valid };
+  if (typeof firstName !== 'undefined') {
+    if (!firstName.trim()) {
+      firstNameError = 'First name is required';
+      valid = false;
+    }
+  }
+  if (typeof lastName !== 'undefined') {
+    if (!lastName.trim()) {
+      lastNameError = 'Last name is required';
+      valid = false;
+    }
+  }
+
+  return { emailError, passwordError, firstNameError, lastNameError, valid };
 }
