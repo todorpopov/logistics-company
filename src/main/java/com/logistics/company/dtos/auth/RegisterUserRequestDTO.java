@@ -16,10 +16,10 @@ public class RegisterUserRequestDTO {
     private String email;
     private String password;
 
-    public boolean isValid() {
-        return Validator.isEmailValid(this.email)
-            && Validator.isStringValid(this.password, 8, 64)
-            && Validator.isStringValid(this.firstName, 0, 255)
-            && Validator.isStringValid(this.lastName, 0, 255);
+    public boolean isInvalid() {
+        return !Validator.isEmailValid(this.email)
+            || !Validator.isStringValid(this.password, 8, 64)
+            || !Validator.isStringValid(this.firstName, 0, 255)
+            || !Validator.isStringValid(this.lastName, 0, 255);
     }
 }

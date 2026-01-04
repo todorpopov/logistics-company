@@ -1,7 +1,7 @@
 package com.logistics.company.repositories;
 
 import com.logistics.company.models.Shipment;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ShipmentRepository extends CrudRepository<Shipment, Long> {
+public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
 }

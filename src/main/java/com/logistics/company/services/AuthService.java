@@ -1,9 +1,11 @@
 package com.logistics.company.services;
 
 import com.logistics.company.dtos.auth.AuthResponseDTO;
+import com.logistics.company.dtos.auth.LogInRequestDTO;
 import com.logistics.company.dtos.auth.RegisterOfficeEmployeeRequestDTO;
 import com.logistics.company.dtos.auth.RegisterUserRequestDTO;
 import com.logistics.company.exceptions.custom.BadRequestException;
+import com.logistics.company.exceptions.custom.UnauthorizedException;
 import com.logistics.company.models.*;
 import com.logistics.company.models.enums.UserRole;
 import com.logistics.company.repositories.*;
@@ -20,6 +22,7 @@ public class AuthService {
     private static final Logger logger = LoggerFactory.getLogger(AuthService.class.getName());
 
     private final JwtService jwtService;
+    private final UserRepository userRepository;
     private final ClientRepository clientRepository;
     private final CourierEmployeeRepository courierEmployeeRepository;
     private final OfficeEmployeeRepository officeEmployeeRepository;
@@ -27,12 +30,14 @@ public class AuthService {
 
     public AuthService(
         JwtService jwtService,
+        UserRepository userRepository,
         ClientRepository clientRepository,
         CourierEmployeeRepository courierEmployeeRepository,
         OfficeEmployeeRepository officeEmployeeRepository,
         OfficeRepository officeRepository
     ) {
         this.jwtService = jwtService;
+        this.userRepository = userRepository;
         this.clientRepository = clientRepository;
         this.courierEmployeeRepository = courierEmployeeRepository;
         this.officeEmployeeRepository = officeEmployeeRepository;
@@ -41,7 +46,7 @@ public class AuthService {
 
     @Transactional
     public AuthResponseDTO registerClient(RegisterUserRequestDTO registerUserRequestDTO) {
-        if (!registerUserRequestDTO.isValid()) {
+        if (registerUserRequestDTO.isInvalid()) {
             throw new BadRequestException("Invalid request");
         }
 
@@ -64,18 +69,18 @@ public class AuthService {
             throw e;
         }
 
-        return this.generateToken(
+        return this.generateAuthResponse(
             user.getUserId(),
-            user.getEmail(),
             user.getFirstName(),
             user.getLastName(),
+            user.getEmail(),
             user.getUserRole()
         );
     }
 
     @Transactional
     public AuthResponseDTO registerCourierEmployee(RegisterUserRequestDTO registerUserRequestDTO) {
-        if (!registerUserRequestDTO.isValid()) {
+        if (registerUserRequestDTO.isInvalid()) {
             throw new BadRequestException("Invalid request");
         }
 
@@ -98,18 +103,18 @@ public class AuthService {
             throw e;
         }
 
-        return this.generateToken(
+        return this.generateAuthResponse(
             user.getUserId(),
-            user.getEmail(),
             user.getFirstName(),
             user.getLastName(),
+            user.getEmail(),
             user.getUserRole()
         );
     }
 
     @Transactional
     public AuthResponseDTO registerOfficeEmployee(RegisterOfficeEmployeeRequestDTO registerOfficeEmployeeRequestDTO) {
-        if (!registerOfficeEmployeeRequestDTO.isValid()) {
+        if (registerOfficeEmployeeRequestDTO.isInvalid()) {
             throw new BadRequestException("Invalid request");
         }
 
@@ -136,17 +141,49 @@ public class AuthService {
             throw e;
         }
 
-        return this.generateToken(
+        return this.generateAuthResponse(
             user.getUserId(),
-            user.getEmail(),
             user.getFirstName(),
             user.getLastName(),
+            user.getEmail(),
             user.getUserRole()
         );
     }
 
-    private AuthResponseDTO generateToken(Long userId, String firstName, String lastName, String email, UserRole role) {
-        String token = this.jwtService.generateToken( userId, firstName, lastName, email, role);
-        return new AuthResponseDTO( userId, token, email, firstName, lastName, role);
+    public AuthResponseDTO logUserIn(LogInRequestDTO logInRequestDTO) {
+        if (logInRequestDTO.isInvalid()) {
+            throw new BadRequestException("Invalid request");
+        }
+
+        try {
+            User user = this.userRepository.findByEmail(logInRequestDTO.getEmail()).orElseThrow();
+            if (!BcryptUtils.checkPassword(logInRequestDTO.getPassword(), user.getPasswordHash())) {
+                throw new UnauthorizedException("Invalid credentials");
+            }
+            return this.generateAuthResponse(
+                user.getUserId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getUserRole()
+            );
+        } catch (NoSuchElementException e) {
+            logger.error(e.getMessage());
+            throw new BadRequestException("User not found");
+        } catch (DataAccessException | UnauthorizedException e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
+    }
+
+    private AuthResponseDTO generateAuthResponse(
+        Long userId,
+        String firstName,
+        String lastName,
+        String email,
+        UserRole role)
+    {
+        String token = this.jwtService.generateToken(userId, firstName, lastName, email, role);
+        return new AuthResponseDTO(userId, token, email, firstName, lastName, role);
     }
 }
