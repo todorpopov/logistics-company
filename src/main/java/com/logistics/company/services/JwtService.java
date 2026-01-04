@@ -86,13 +86,14 @@ public class JwtService {
         Claims claims = claimsJws.getBody();
 
         Long id = Long.parseLong(claims.get("id", String.class));
+        UserRole role = UserRole.valueOf(claims.get("role", String.class));
 
         return new TokenDataDTO(
             id,
             claims.get("firstName", String.class),
             claims.get("lastName", String.class),
             claims.getSubject(),
-            claims.get("role", UserRole.class)
+            role
         );
     }
 }
