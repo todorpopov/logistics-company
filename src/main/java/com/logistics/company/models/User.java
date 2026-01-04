@@ -2,12 +2,10 @@ package com.logistics.company.models;
 
 import com.logistics.company.models.enums.UserRole;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -20,7 +18,7 @@ public class User {
     Long userId;
 
     @Column(nullable = false)
-    private String firsName;
+    private String firstName;
 
     @Column(nullable = false)
     private String lastName;
@@ -33,5 +31,5 @@ public class User {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserRole userType;
+    private UserRole userRole;
 }

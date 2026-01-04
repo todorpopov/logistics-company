@@ -25,7 +25,7 @@ public class JwtService {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generateToken(int id, String firstName, String lastName, String email, UserRole role) {
+    public String generateToken(Long id, String firstName, String lastName, String email, UserRole role) {
         logger.info("Generating JWT token for email: {} and role: {}", email, role);
 
         Date now = new Date();
