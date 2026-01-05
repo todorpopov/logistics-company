@@ -9,15 +9,13 @@ import com.logistics.company.exceptions.custom.UnauthorizedException;
 import com.logistics.company.models.*;
 import com.logistics.company.models.enums.UserRole;
 import com.logistics.company.repositories.*;
-import io.jsonwebtoken.security.Keys;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service

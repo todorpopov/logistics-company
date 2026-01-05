@@ -1,6 +1,7 @@
 package com.logistics.company.dtos.auth;
 
 
+import com.logistics.company.dtos.Validatable;
 import com.logistics.company.util.Validator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,11 +12,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterOfficeEmployeeRequestDTO extends RegisterUserRequestDTO {
+public class RegisterOfficeEmployeeRequestDTO extends RegisterUserRequestDTO implements Validatable {
     private Long officeId;
 
     @Override
     public boolean isInvalid() {
-        return super.isInvalid() || !Validator.isIdValid(this.officeId);
+        return super.isInvalid() || !Validator.isIdValid(this.officeId, true);
     }
 }
