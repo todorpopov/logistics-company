@@ -53,4 +53,12 @@ public class AuthController {
         }
         return ResponseEntity.ok(this.authService.logUserIn(dto));
     }
+
+    @PostMapping("log-admin-in")
+    public ResponseEntity<AuthResponseDTO> logAdminIn(@RequestBody LogInRequestDTO dto) {
+        if (dto.isInvalid()) {
+            throw new BadRequestException("Invalid request");
+        }
+        return ResponseEntity.ok(this.authService.logAdminIn(dto));
+    }
 }

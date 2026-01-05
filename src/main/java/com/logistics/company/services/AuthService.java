@@ -9,9 +9,11 @@ import com.logistics.company.exceptions.custom.UnauthorizedException;
 import com.logistics.company.models.*;
 import com.logistics.company.models.enums.UserRole;
 import com.logistics.company.repositories.*;
+import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ import java.util.NoSuchElementException;
 @Service
 public class AuthService {
     private static final Logger logger = LoggerFactory.getLogger(AuthService.class.getName());
+    private final String adminEmail;
+    private final String adminPassword;
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
@@ -35,7 +39,9 @@ public class AuthService {
         ClientRepository clientRepository,
         CourierEmployeeRepository courierEmployeeRepository,
         OfficeEmployeeRepository officeEmployeeRepository,
-        OfficeRepository officeRepository
+        OfficeRepository officeRepository,
+        @Value("${admin.email}") String adminEmail,
+        @Value("${admin.password}") String adminPassword
     ) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
@@ -43,6 +49,8 @@ public class AuthService {
         this.courierEmployeeRepository = courierEmployeeRepository;
         this.officeEmployeeRepository = officeEmployeeRepository;
         this.officeRepository = officeRepository;
+        this.adminEmail = adminEmail;
+        this.adminPassword = adminPassword;
     }
 
     @Transactional
@@ -174,6 +182,24 @@ public class AuthService {
         } catch (DataAccessException | UnauthorizedException e) {
             logger.error(e.getMessage());
             throw e;
+        }
+    }
+
+    public AuthResponseDTO logAdminIn(LogInRequestDTO logInRequestDTO) {
+        if (logInRequestDTO.isInvalid()) {
+            throw new BadRequestException("Invalid request");
+        }
+
+        if (logInRequestDTO.getEmail().equals(adminEmail) && logInRequestDTO.getPassword().equals(adminPassword)) {
+            return this.generateAuthResponse(
+                1L,
+                "Admin",
+                "Admin",
+                logInRequestDTO.getEmail(),
+                UserRole.ADMIN
+            );
+        } else {
+            throw new UnauthorizedException("Invalid credentials");
         }
     }
 
