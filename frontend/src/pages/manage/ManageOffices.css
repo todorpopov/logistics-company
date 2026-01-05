@@ -1,0 +1,59 @@
+.manage-offices-container {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.manage-offices-actions {
+  min-width: 12rem;
+  max-width: 16rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.manage-offices-actions .btn {
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.125rem 0.5rem rgba(37,99,235,0.08);
+  transition: box-shadow 0.2s, background 0.2s;
+}
+
+.manage-offices-actions .btn-primary,
+.manage-offices-actions .btn-outline-primary {
+  margin-bottom: 0.75rem;
+}
+
+.manage-offices-actions .btn:focus {
+  box-shadow: 0 0.25rem 1rem rgba(37,99,235,0.18);
+}
+
+.manage-offices-content {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 0.25rem 1.5rem rgba(0,0,0,0.10);
+  padding: 2rem 2.5rem;
+  min-width: 40rem;
+}
+
+@media (max-width: 48rem) {
+  .manage-offices-container {
+    flex-direction: column;
+    max-width: 100%;
+  }
+  .manage-offices-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: 90%;
+  }
+
+  .manage-offices-content {
+    padding: 1.5rem 1rem;
+    min-width: unset;
+  }
+}
