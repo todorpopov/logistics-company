@@ -2,8 +2,7 @@ package com.logistics.company.controllers;
 
 import com.logistics.company.dtos.auth.AuthResponseDTO;
 import com.logistics.company.dtos.auth.LogInRequestDTO;
-import com.logistics.company.dtos.auth.RegisterOfficeEmployeeRequestDTO;
-import com.logistics.company.dtos.auth.RegisterUserRequestDTO;
+import com.logistics.company.dtos.auth.RegisterClientRequestDTO;
 import com.logistics.company.exceptions.custom.BadRequestException;
 import com.logistics.company.services.AuthService;
 
@@ -23,27 +22,11 @@ public class AuthController {
     }
 
     @PostMapping("register-client")
-    public ResponseEntity<AuthResponseDTO> registerClient(@RequestBody RegisterUserRequestDTO dto) {
+    public ResponseEntity<AuthResponseDTO> registerClient(@RequestBody RegisterClientRequestDTO dto) {
         if (dto.isInvalid()) {
             throw new BadRequestException("Invalid request");
         }
         return ResponseEntity.ok(this.authService.registerClient(dto));
-    }
-
-    @PostMapping("register-courier-employee")
-    public ResponseEntity<AuthResponseDTO> registerCourierEmployee(@RequestBody RegisterUserRequestDTO dto) {
-        if (dto.isInvalid()) {
-            throw new BadRequestException("Invalid request");
-        }
-        return ResponseEntity.ok(this.authService.registerCourierEmployee(dto));
-    }
-
-    @PostMapping("register-office-employee")
-    public ResponseEntity<AuthResponseDTO> registerOfficeEmployee(@RequestBody RegisterOfficeEmployeeRequestDTO dto) {
-        if (dto.isInvalid()) {
-            throw new BadRequestException("Invalid request");
-        }
-        return ResponseEntity.ok(this.authService.registerOfficeEmployee(dto));
     }
 
     @PostMapping("log-in")

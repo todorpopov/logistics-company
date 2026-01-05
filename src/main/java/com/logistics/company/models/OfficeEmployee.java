@@ -25,11 +25,10 @@ public class OfficeEmployee {
     )
     private User user;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(
         name = "office_id",
         nullable = false,
-        unique = true,
         foreignKey = @ForeignKey(name = "fk_office_employee_office")
     )
     private Office office;

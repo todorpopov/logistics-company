@@ -1,5 +1,12 @@
 package com.logistics.company.util;
 
+import com.logistics.company.dtos.client.ClientDTO;
+import com.logistics.company.dtos.courier_employee.CourierEmployeeDTO;
+import com.logistics.company.dtos.office.OfficeDTO;
+import com.logistics.company.dtos.office_employee.OfficeEmployeeDTO;
+import com.logistics.company.models.Client;
+import com.logistics.company.models.CourierEmployee;
+import com.logistics.company.models.OfficeEmployee;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
@@ -16,5 +23,37 @@ public class DtoMapper {
         return sourceList.stream()
                 .map(element -> modelMapper.map(element, targetClass))
                 .collect(Collectors.toList());
+    }
+
+    public static ClientDTO clientEntityToDto(Client client) {
+        return ClientDTO.builder()
+            .clientId(client.getClientId())
+            .userId(client.getUser().getUserId())
+            .firstName(client.getUser().getFirstName())
+            .lastName(client.getUser().getLastName())
+            .email(client.getUser().getEmail())
+            .build();
+    }
+
+    public static OfficeEmployeeDTO officeEmployeeEntityToDto(OfficeEmployee officeEmployee) {
+        OfficeDTO officeDto = map(officeEmployee.getOffice(), OfficeDTO.class);
+        return OfficeEmployeeDTO.builder()
+            .userId(officeEmployee.getUser().getUserId())
+            .officeEmployeeId(officeEmployee.getOfficeEmployeeId())
+            .office(officeDto)
+            .email(officeEmployee.getUser().getEmail())
+            .firstName(officeEmployee.getUser().getFirstName())
+            .lastName(officeEmployee.getUser().getLastName())
+            .build();
+    }
+
+    public static CourierEmployeeDTO courierEmployeeEntityToDto(CourierEmployee courierEmployee) {
+        return CourierEmployeeDTO.builder()
+            .userId(courierEmployee.getUser().getUserId())
+            .courierEmployeeId(courierEmployee.getCourierEmployeeId())
+            .email(courierEmployee.getUser().getEmail())
+            .firstName(courierEmployee.getUser().getFirstName())
+            .lastName(courierEmployee.getUser().getLastName())
+            .build();
     }
 }
