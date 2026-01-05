@@ -6,6 +6,11 @@ import Navbar from './components/navbar/Navbar';
 import LogIn from './pages/auth/LogIn';
 import Home from './pages/home/Home';
 import SignUp from './pages/auth/SignUp';
+import Manage from './pages/manage/Manage';
+import ManageOffices from './pages/manage/ManageOffices';
+import ManageOfficeWorkers from './pages/manage/ManageOfficeWorkers';
+import ManageCouriers from './pages/manage/ManageCouriers';
+import ManagePackages from './pages/manage/ManagePackages';
 import TableDemo from './components/table/TableDemo';
 
 const App: React.FunctionComponent = () => {
@@ -16,6 +21,11 @@ const App: React.FunctionComponent = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/manage" element={<Manage />} />
+        <Route path="/manage/offices" element={<ManageOffices />} />
+        <Route path="/manage/workers" element={<ManageOfficeWorkers />} />
+        <Route path="/manage/couriers" element={<ManageCouriers />} />
+        <Route path="/manage/packages" element={<ManagePackages />} />
         <Route path="/table-demo" element={<TableDemo />} />
         {/* Add more routes here as needed */}
       </Routes>

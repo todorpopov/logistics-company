@@ -7,7 +7,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">LC</Link>
+        <Link className="navbar-brand" to="/">A*</Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -31,6 +31,9 @@ const Navbar: React.FC = () => {
             </li>
             <li className="nav-item">
               <a className="nav-link disabled" aria-disabled="true">Disabled</a>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/manage" onClick={() => setExpanded(false)}>Manage</Link>
             </li>
           </ul>
           <ul className="navbar-nav ms-auto">
