@@ -59,4 +59,12 @@ public class UserController {
         }
         return ResponseEntity.ok(this.userService.updateClient(dto));
     }
+
+    @PutMapping("courier-employee")
+    public ResponseEntity<CourierEmployeeDTO> updateCourierEmployee(@RequestBody UpdateUserRequestDTO dto) {
+        if (dto.isInvalid()) {
+            throw new BadRequestException("Invalid request");
+        }
+        return ResponseEntity.ok(this.userService.updateCourierEmployee(dto));
+    }
 }

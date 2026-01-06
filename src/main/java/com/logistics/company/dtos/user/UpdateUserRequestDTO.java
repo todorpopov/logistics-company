@@ -23,9 +23,6 @@ public class UpdateUserRequestDTO implements Validatable {
         if (this.entityId == null && this.userId == null) {
             return true;
         }
-        if ((this.entityId != null && this.userId != null) && !this.entityId.equals(this.userId)) {
-            return true;
-        }
         return !Validator.isIdValid(this.entityId, false)
             || !Validator.isIdValid(this.userId, false)
             || !Validator.isStringValid(this.firstName, 3, 255, false)

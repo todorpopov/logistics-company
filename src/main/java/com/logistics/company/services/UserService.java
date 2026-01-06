@@ -179,4 +179,43 @@ public class UserService {
             throw e;
         }
     }
+
+    public CourierEmployeeDTO updateCourierEmployee(UpdateUserRequestDTO updateUserRequestDTO) {
+        if (updateUserRequestDTO.isInvalid()) {
+            throw new BadRequestException("Invalid request");
+        }
+
+        try {
+            CourierEmployee courierEmployee = null;
+            if (updateUserRequestDTO.getEntityId() != null) {
+                courierEmployee = this.courierEmployeeRepository.findById(updateUserRequestDTO.getEntityId()).orElseThrow();
+            } else if (updateUserRequestDTO.getUserId() != null) {
+                courierEmployee = this.courierEmployeeRepository.findByUser_UserId(updateUserRequestDTO.getUserId()).orElseThrow();
+            }
+            if (courierEmployee == null) {
+                throw new BadRequestException("Courier employee not found");
+            }
+
+            User user = courierEmployee.getUser();
+
+            if (updateUserRequestDTO.getFirstName() != null) {
+                user.setFirstName(updateUserRequestDTO.getFirstName());
+            }
+            if (updateUserRequestDTO.getLastName() != null) {
+                user.setLastName(updateUserRequestDTO.getLastName());
+            }
+            if (updateUserRequestDTO.getEmail() != null) {
+                user.setEmail(updateUserRequestDTO.getEmail());
+            }
+
+            CourierEmployee updatedCourierEmployee = this.courierEmployeeRepository.save(courierEmployee);
+            return DtoMapper.courierEmployeeEntityToDto(updatedCourierEmployee);
+        } catch (NoSuchElementException e) {
+            logger.error(e.getMessage());
+            throw new BadRequestException("Courier employee not found");
+        } catch (DataAccessException e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
+    }
 }
