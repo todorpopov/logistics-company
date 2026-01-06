@@ -3,6 +3,7 @@ package com.logistics.company.services;
 import com.logistics.company.dtos.client.ClientDTO;
 import com.logistics.company.dtos.courier_employee.CourierEmployeeDTO;
 import com.logistics.company.dtos.office_employee.OfficeEmployeeDTO;
+import com.logistics.company.dtos.office_employee.UpdateOfficeEmployeeRequestDTO;
 import com.logistics.company.dtos.user.CreateUserRequestDTO;
 import com.logistics.company.dtos.user.UpdateUserRequestDTO;
 import com.logistics.company.exceptions.custom.BadRequestException;
@@ -180,6 +181,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public CourierEmployeeDTO updateCourierEmployee(UpdateUserRequestDTO updateUserRequestDTO) {
         if (updateUserRequestDTO.isInvalid()) {
             throw new BadRequestException("Invalid request");
@@ -216,6 +218,52 @@ public class UserService {
         } catch (DataAccessException e) {
             logger.error(e.getMessage());
             throw e;
+        }
+    }
+
+    @Transactional
+    public OfficeEmployeeDTO updateOfficeEmployee(UpdateOfficeEmployeeRequestDTO updateOfficeEmployeeRequestDTO) {
+        if (updateOfficeEmployeeRequestDTO.isInvalid()) {
+            throw new BadRequestException("Invalid request");
+        }
+
+        try {
+            OfficeEmployee officeEmployee = null;
+            if (updateOfficeEmployeeRequestDTO.getEntityId() != null) {
+                officeEmployee = this.officeEmployeeRepository.findById(updateOfficeEmployeeRequestDTO.getEntityId()).orElseThrow();
+            } else if (updateOfficeEmployeeRequestDTO.getUserId() != null) {
+                officeEmployee = this.officeEmployeeRepository.findByUser_UserId(updateOfficeEmployeeRequestDTO.getUserId()).orElseThrow();
+            }
+            if (officeEmployee == null) {
+                throw new BadRequestException("Office employee not found");
+            }
+
+            User user = officeEmployee.getUser();
+
+            if (updateOfficeEmployeeRequestDTO.getFirstName() != null) {
+                user.setFirstName(updateOfficeEmployeeRequestDTO.getFirstName());
+            }
+            if (updateOfficeEmployeeRequestDTO.getLastName() != null) {
+                user.setLastName(updateOfficeEmployeeRequestDTO.getLastName());
+            }
+            if (updateOfficeEmployeeRequestDTO.getEmail() != null) {
+                user.setEmail(updateOfficeEmployeeRequestDTO.getEmail());
+            }
+            if (updateOfficeEmployeeRequestDTO.getOfficeId() != null) {
+                Office office = this.officeRepository.findById(updateOfficeEmployeeRequestDTO.getOfficeId()).orElseThrow(
+                    () -> new BadRequestException("Office not found")
+                );
+                officeEmployee.setOffice(office);
+            }
+
+            OfficeEmployee updatedOfficeEmployee = this.officeEmployeeRepository.save(officeEmployee);
+            return DtoMapper.officeEmployeeEntityToDto(updatedOfficeEmployee);
+        } catch (BadRequestException | DataAccessException e) {
+            logger.error(e.getMessage());
+            throw e;
+        } catch (NoSuchElementException e) {
+            logger.error(e.getMessage());
+            throw new BadRequestException("Courier employee not found");
         }
     }
 }

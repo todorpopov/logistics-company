@@ -3,6 +3,7 @@ package com.logistics.company.controllers;
 import com.logistics.company.dtos.client.ClientDTO;
 import com.logistics.company.dtos.courier_employee.CourierEmployeeDTO;
 import com.logistics.company.dtos.office_employee.OfficeEmployeeDTO;
+import com.logistics.company.dtos.office_employee.UpdateOfficeEmployeeRequestDTO;
 import com.logistics.company.dtos.user.CreateUserRequestDTO;
 import com.logistics.company.dtos.user.UpdateUserRequestDTO;
 import com.logistics.company.exceptions.custom.BadRequestException;
@@ -66,5 +67,13 @@ public class UserController {
             throw new BadRequestException("Invalid request");
         }
         return ResponseEntity.ok(this.userService.updateCourierEmployee(dto));
+    }
+
+    @PutMapping("office-employee")
+    public ResponseEntity<OfficeEmployeeDTO> updateOfficeEmployee(@RequestBody UpdateOfficeEmployeeRequestDTO dto) {
+        if (dto.isInvalid()) {
+            throw new BadRequestException("Invalid request");
+        }
+        return ResponseEntity.ok(this.userService.updateOfficeEmployee(dto));
     }
 }
