@@ -9,11 +9,9 @@ import com.logistics.company.dtos.user.UpdateUserRequestDTO;
 import com.logistics.company.exceptions.custom.BadRequestException;
 import com.logistics.company.models.*;
 import com.logistics.company.models.enums.UserRole;
-import com.logistics.company.repositories.ClientRepository;
-import com.logistics.company.repositories.CourierEmployeeRepository;
-import com.logistics.company.repositories.OfficeEmployeeRepository;
-import com.logistics.company.repositories.OfficeRepository;
+import com.logistics.company.repositories.*;
 import com.logistics.company.util.DtoMapper;
+import com.logistics.company.util.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -32,18 +30,21 @@ public class UserService {
     private final OfficeEmployeeRepository officeEmployeeRepository;
     private final CourierEmployeeRepository courierEmployeeRepository;
     private final OfficeRepository officeRepository;
+    private final UserRepository userRepository;
 
     public UserService(
         ClientRepository clientRepository,
         OfficeEmployeeRepository officeEmployeeRepository,
         CourierEmployeeRepository courierEmployeeRepository,
-        OfficeRepository officeRepository
+        OfficeRepository officeRepository,
+        UserRepository userRepository
 
     ) {
         this.clientRepository = clientRepository;
         this.officeEmployeeRepository = officeEmployeeRepository;
         this.courierEmployeeRepository = courierEmployeeRepository;
         this.officeRepository = officeRepository;
+        this.userRepository = userRepository;
     }
 
     public List<ClientDTO> getAllClients() {
@@ -264,6 +265,31 @@ public class UserService {
         } catch (NoSuchElementException e) {
             logger.error(e.getMessage());
             throw new BadRequestException("Courier employee not found");
+        }
+    }
+
+    @Transactional
+    public void deleteUser(Long userId) {
+        if (!Validator.isIdValid(userId, true)) {
+            throw new BadRequestException("Invalid request");
+        }
+
+        try {
+            User user = this.userRepository.findById(userId).orElseThrow();
+
+            switch (user.getUserRole()) {
+                case CLIENT -> this.clientRepository.deleteByUser_UserId(userId);
+                case OFFICE_EMPLOYEE -> this.officeEmployeeRepository.deleteByUser_UserId(userId);
+                case COURIER_EMPLOYEE -> this.courierEmployeeRepository.deleteByUser_UserId(userId);
+            }
+
+            this.userRepository.delete(user);
+        } catch (NoSuchElementException e) {
+            logger.error(e.getMessage());
+            throw new BadRequestException("User not found");
+        } catch (DataAccessException e) {
+            logger.error(e.getMessage());
+            throw e;
         }
     }
 }

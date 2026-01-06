@@ -8,6 +8,7 @@ import com.logistics.company.dtos.user.CreateUserRequestDTO;
 import com.logistics.company.dtos.user.UpdateUserRequestDTO;
 import com.logistics.company.exceptions.custom.BadRequestException;
 import com.logistics.company.services.UserService;
+import com.logistics.company.util.Validator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,5 +76,13 @@ public class UserController {
             throw new BadRequestException("Invalid request");
         }
         return ResponseEntity.ok(this.userService.updateOfficeEmployee(dto));
+    }
+
+    @DeleteMapping("{userId}")
+    public void deleteUser(@PathVariable Long userId){
+        if(!Validator.isIdValid(userId, true)){
+            throw new BadRequestException("Invalid request");
+        }
+        this.userService.deleteUser(userId);
     }
 }
