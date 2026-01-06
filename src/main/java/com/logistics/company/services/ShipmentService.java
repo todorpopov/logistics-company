@@ -7,6 +7,7 @@ import com.logistics.company.models.*;
 import com.logistics.company.models.enums.ShipmentStatus;
 import com.logistics.company.repositories.*;
 import com.logistics.company.util.DtoMapper;
+import com.logistics.company.util.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class ShipmentService {
@@ -76,6 +78,35 @@ public class ShipmentService {
         } catch (DataAccessException e) {
             logger.error(e.getMessage());
             throw new BadRequestException("Cannot create shipment");
+        }
+    }
+
+    public List<ShipmentDTO> getAllShipments() {
+        try {
+            List<Shipment> shipments = this.shipmentRepository.findAll();
+            return shipments.stream()
+                .map(DtoMapper::shipmentEntityToDto)
+                .toList();
+        } catch (DataAccessException e) {
+            logger.error(e.getMessage());
+            throw new BadRequestException("Cannot create shipment");
+        }
+    }
+
+    public void deleteShipment(Long shipmentId) {
+        if (!Validator.isIdValid(shipmentId, true)) {
+            throw new BadRequestException("Invalid request");
+        }
+
+        if (!this.shipmentRepository.existsById(shipmentId)) {
+            throw new BadRequestException("Shipment not found");
+        }
+
+        try {
+            this.shipmentRepository.deleteById(shipmentId);
+        } catch (DataAccessException e) {
+            logger.error(e.getMessage());
+            throw new BadRequestException("Cannot delete shipment");
         }
     }
 }

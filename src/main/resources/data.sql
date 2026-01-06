@@ -2,8 +2,6 @@ INSERT INTO offices (office_id, address, name, phone_number)
     VALUES (1, 'Main Address', 'Head Office', 1234567890);
 INSERT INTO offices (office_id, address, name, phone_number)
     VALUES (2, 'Secondary Address', 'Branch Office 1', 0987654321);
-INSERT INTO offices (office_id, address, name, phone_number)
-    VALUES (3, 'Tertiary Address', 'Branch Office 2', 1234512345);
 
 INSERT INTO users (user_id, first_name, last_name, email, password_hash, user_role)
     VALUES (1, 'John', 'Doe', 'jdoe@gmail.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'CLIENT');
@@ -23,7 +21,7 @@ INSERT INTO office_employees (office_employee_id, user_id, office_id) VALUES (1,
 
 INSERT INTO users (user_id, first_name, last_name, email, password_hash, user_role)
     VALUES (5, 'Tom', 'Rogan', 'trogan@gmail.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'OFFICE_EMPLOYEE');
-INSERT INTO office_employees (office_employee_id, user_id, office_id) VALUES (2, 5, 3);
+INSERT INTO office_employees (office_employee_id, user_id, office_id) VALUES (2, 5, 2);
 
 INSERT INTO users (user_id, first_name, last_name, email, password_hash, user_role)
     VALUES (6, 'Joana', 'Max', 'jmax@gmail.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'COURIER_EMPLOYEE');
@@ -33,3 +31,58 @@ INSERT INTO users (user_id, first_name, last_name, email, password_hash, user_ro
     VALUES (7, 'Jay', 'Parks', 'jparks@gmail.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'COURIER_EMPLOYEE');
 INSERT INTO courier_employees (courier_employee_id, user_id) VALUES (2, 7);
 
+INSERT INTO shipments (
+    shipment_id,
+    sender_id,
+    registered_by,
+    delivery_office_id,
+    courier_employee_id,
+    delivery_type,
+    price,
+    weight_gram,
+    status,
+    phone_number,
+    sent_date,
+    delivered_date
+) VALUES (
+    1,
+    1,
+    1,
+    2,
+    1,
+    'OFFICE',
+    100,
+    1000,
+    'PENDING',
+    '0987654321',
+    '2021-01-01',
+    NULL
+);
+
+INSERT INTO shipments (
+    shipment_id,
+    sender_id,
+    registered_by,
+    delivery_office_id,
+    courier_employee_id,
+    delivery_type,
+    price,
+    weight_gram,
+    status,
+    phone_number,
+    sent_date,
+    delivered_date
+) VALUES (
+    2,
+    3,
+    2,
+    1,
+    2,
+    'ADDRESS',
+    13.45,
+    1242,
+    'REGISTERED',
+    '1234567890',
+    '2021-01-01',
+    NULL
+);
