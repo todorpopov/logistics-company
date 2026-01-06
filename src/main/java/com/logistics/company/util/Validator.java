@@ -1,5 +1,6 @@
 package com.logistics.company.util;
 
+import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
 public class Validator {
@@ -43,5 +44,19 @@ public class Validator {
         return Pattern.compile(phoneRegex)
                 .matcher(phoneNumber)
                 .matches();
+    }
+
+    public static boolean isWeightValid(Integer integer, boolean isRequired) {
+        if (integer == null) {
+            return !isRequired;
+        }
+        return integer > 0 && integer <= Integer.MAX_VALUE - 1;
+    }
+
+    public static boolean isPriceValid(BigDecimal decimal, boolean isRequired) {
+        if (decimal == null) {
+            return !isRequired;
+        }
+        return decimal.compareTo(BigDecimal.ZERO) > 0;
     }
 }

@@ -4,9 +4,11 @@ import com.logistics.company.dtos.client.ClientDTO;
 import com.logistics.company.dtos.courier_employee.CourierEmployeeDTO;
 import com.logistics.company.dtos.office.OfficeDTO;
 import com.logistics.company.dtos.office_employee.OfficeEmployeeDTO;
+import com.logistics.company.dtos.shipment.ShipmentDTO;
 import com.logistics.company.models.Client;
 import com.logistics.company.models.CourierEmployee;
 import com.logistics.company.models.OfficeEmployee;
+import com.logistics.company.models.Shipment;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
@@ -54,6 +56,23 @@ public class DtoMapper {
             .email(courierEmployee.getUser().getEmail())
             .firstName(courierEmployee.getUser().getFirstName())
             .lastName(courierEmployee.getUser().getLastName())
+            .build();
+    }
+
+    public static ShipmentDTO shipmentEntityToDto(Shipment shipment) {
+        return ShipmentDTO.builder()
+            .shipmentId(shipment.getShipmentId())
+            .sender(clientEntityToDto(shipment.getSender()))
+            .registeredBy(officeEmployeeEntityToDto(shipment.getRegisteredBy()))
+            .deliveryOffice(map(shipment.getDeliveryOffice(), OfficeDTO.class))
+            .courierEmployee(courierEmployeeEntityToDto(shipment.getCourierEmployee()))
+            .price(shipment.getPrice())
+            .weightGram(shipment.getWeightGram())
+            .phoneNumber(shipment.getPhoneNumber())
+            .status(shipment.getStatus())
+            .deliveryType(shipment.getDeliveryType())
+            .sentDate(shipment.getSentDate())
+            .deliveredDate(shipment.getDeliveredDate())
             .build();
     }
 }
