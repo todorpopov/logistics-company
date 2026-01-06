@@ -4,6 +4,7 @@ import com.logistics.company.dtos.client.ClientDTO;
 import com.logistics.company.dtos.courier_employee.CourierEmployeeDTO;
 import com.logistics.company.dtos.office_employee.OfficeEmployeeDTO;
 import com.logistics.company.dtos.user.CreateUserRequestDTO;
+import com.logistics.company.dtos.user.UpdateUserRequestDTO;
 import com.logistics.company.exceptions.custom.BadRequestException;
 import com.logistics.company.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -49,5 +50,13 @@ public class UserController {
             throw new BadRequestException("Invalid request");
         }
         return ResponseEntity.ok(this.userService.createCourierEmployee(dto));
+    }
+
+    @PutMapping("client")
+    public ResponseEntity<ClientDTO> updateClient(@RequestBody UpdateUserRequestDTO dto) {
+        if (dto.isInvalid()) {
+            throw new BadRequestException("Invalid request");
+        }
+        return ResponseEntity.ok(this.userService.updateClient(dto));
     }
 }

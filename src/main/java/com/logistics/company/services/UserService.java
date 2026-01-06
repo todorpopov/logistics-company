@@ -4,6 +4,7 @@ import com.logistics.company.dtos.client.ClientDTO;
 import com.logistics.company.dtos.courier_employee.CourierEmployeeDTO;
 import com.logistics.company.dtos.office_employee.OfficeEmployeeDTO;
 import com.logistics.company.dtos.user.CreateUserRequestDTO;
+import com.logistics.company.dtos.user.UpdateUserRequestDTO;
 import com.logistics.company.exceptions.custom.BadRequestException;
 import com.logistics.company.models.*;
 import com.logistics.company.models.enums.UserRole;
@@ -134,6 +135,45 @@ public class UserService {
         try {
             this.courierEmployeeRepository.save(courierEmployee);
             return DtoMapper.courierEmployeeEntityToDto(courierEmployee);
+        } catch (DataAccessException e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
+    }
+
+    @Transactional
+    public ClientDTO updateClient(UpdateUserRequestDTO updateUserRequestDTO) {
+        if (updateUserRequestDTO.isInvalid()) {
+            throw new BadRequestException("Invalid request");
+        }
+
+        try {
+            Client client = null;
+            if (updateUserRequestDTO.getEntityId() != null) {
+                client = this.clientRepository.findById(updateUserRequestDTO.getEntityId()).orElseThrow();
+            } else if (updateUserRequestDTO.getUserId() != null) {
+                client = this.clientRepository.findByUser_UserId(updateUserRequestDTO.getUserId()).orElseThrow();
+            }
+            if (client == null) {
+                throw new BadRequestException("Client not found");
+            }
+            User user = client.getUser();
+
+            if (updateUserRequestDTO.getFirstName() != null) {
+                user.setFirstName(updateUserRequestDTO.getFirstName());
+            }
+            if (updateUserRequestDTO.getLastName() != null) {
+                user.setLastName(updateUserRequestDTO.getLastName());
+            }
+            if (updateUserRequestDTO.getEmail() != null) {
+                user.setEmail(updateUserRequestDTO.getEmail());
+            }
+
+            Client updatedClient = this.clientRepository.save(client);
+            return DtoMapper.clientEntityToDto(updatedClient);
+        } catch (NoSuchElementException e) {
+            logger.error(e.getMessage());
+            throw new BadRequestException("Client not found");
         } catch (DataAccessException e) {
             logger.error(e.getMessage());
             throw e;
