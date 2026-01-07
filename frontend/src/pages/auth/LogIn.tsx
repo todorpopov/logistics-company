@@ -3,6 +3,7 @@ import { validateAuthFields } from '../../utils/validateAuthFields';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './LogIn.css';
+import {API_URL} from '../../App';
 
 const LogIn: React.FunctionComponent = () => {
   const [email, setEmail] = useState('');
@@ -36,7 +37,7 @@ const LogIn: React.FunctionComponent = () => {
       setLoading(true);
       setToastType(null);
       setShowToast(false);
-      axios.post('/login', { email, password })
+      axios.post(`${API_URL}`, { email, password })
         .then(() => {
           setToastType('success');
           setShowToast(true);

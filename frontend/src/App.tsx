@@ -12,6 +12,8 @@ import ManageCouriers from './pages/manage/ManageCouriers';
 import ManagePackages from './pages/manage/ManagePackages';
 import TableDemo from './components/table/TableDemo';
 
+export const API_URL = process.env.REACT_APP_API_URL;
+
 const App: React.FunctionComponent = () => {
   return (
     <div className="App">
