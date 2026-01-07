@@ -9,22 +9,22 @@ function Manage<T extends object>() {
         <div className="icon-feature-card clickable" tabIndex={0} role="button" onClick={() => window.location.href='/manage/offices'}>
           <i className="bi bi-pin-map"></i>
           <hr className="icon-divider" />
-          <div>Menage offices</div>
+          <div>Manage offices</div>
         </div>
         <div className="icon-feature-card clickable" tabIndex={0} role="button" onClick={() => window.location.href='/manage/workers'}>
           <i className="bi bi-person"></i>
           <hr className="icon-divider" />
-          <div>Menage office workers</div>
+          <div>Manage office employees</div>
         </div>
         <div className="icon-feature-card clickable" tabIndex={0} role="button" onClick={() => window.location.href='/manage/couriers'}>
           <i className="bi bi-truck"></i>
           <hr className="icon-divider" />
-          <div>Menage couriers</div>
+          <div>Manage couriers</div>
         </div>
         <div className="icon-feature-card clickable" tabIndex={0} role="button" onClick={() => window.location.href='/manage/packages'}>
           <i className="bi bi-box-seam"></i>
           <hr className="icon-divider" />
-          <div>Menage packages</div>
+          <div>Manage packages</div>
         </div>
       </div>
     </div>
