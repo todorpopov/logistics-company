@@ -1,24 +1,86 @@
 import React, { useState } from 'react';
 import './Table.css';
 
+export interface Config {
+    enableCreation: boolean;
+    enableEdition: boolean;
+    enableDeletion: boolean;
+}
+
 export interface Column<T> {
   header: string;
   accessor: keyof T;
+  mandatoryForCreation?: boolean;
 }
 
 interface TableProps<T> {
+  config: Config;
   columns: Column<T>[];
   data: T[];
   pageSize?: number;
+  onEdit?: (row: T, rowIndex: number) => void;
+  onDelete?: (row: T, rowIndex: number) => void;
+  onCreate?: (row: T) => void;
 }
 
-function Table<T extends object>({ columns, data, pageSize = 5 }: TableProps<T>) {
+function Table<T extends object>({ config, columns, data, pageSize = 5, onEdit, onDelete, onCreate }: TableProps<T>) {
   const [page, setPage] = useState(1);
+  const [createData, setCreateData] = useState<Partial<T>>({});
+  const [editRow, setEditRow] = useState<number | null>(null);
+  const [editData, setEditData] = useState<Partial<T>>({});
+  const [deleteRow, setDeleteRow] = useState<number | null>(null);
   const totalPages = Math.ceil(data.length / pageSize);
   const paginatedData = data.slice((page - 1) * pageSize, page * pageSize);
 
-  const handlePrev = () => setPage((p) => Math.max(1, p - 1));
-  const handleNext = () => setPage((p) => Math.min(totalPages, p + 1));
+  const handleEditClick = (row: T, idx: number) => {
+    setEditRow(idx);
+    setEditData({ ...row });
+  };
+
+  const handleEditChange = (accessor: keyof T, value: any) => {
+    setEditData(prev => ({ ...prev, [accessor]: value }));
+  };
+
+  const handleEditSubmit = (rowIndex: number) => {
+    if (onEdit && editData) {
+      onEdit(editData as T, rowIndex + (page - 1) * pageSize);
+    }
+    setEditRow(null);
+    setEditData({});
+  };
+
+  const handleDeleteClick = (idx: number) => {
+    setDeleteRow(idx);
+  };
+
+  const handleDeleteConfirm = (rowIndex: number) => {
+    if (onDelete) {
+      onDelete(paginatedData[rowIndex], rowIndex + (page - 1) * pageSize);
+    }
+    setDeleteRow(null);
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteRow(null);
+  };
+
+  const handleCreateChange = (accessor: keyof T, value: any) => {
+    setCreateData(prev => ({ ...prev, [accessor]: value }));
+  };
+  const isCreateDisabled = columns.some(col => col.mandatoryForCreation && (createData[col.accessor] === undefined || createData[col.accessor] === ''));
+  const handleCreate = () => {
+    if (onCreate && !isCreateDisabled) {
+      onCreate(createData as T);
+      setCreateData({});
+    }
+  };
+
+  const handlePrev = () => {
+    setPage((p) => Math.max(1, p - 1));
+  };
+  const handleNext = () => {
+    setPage((p) => Math.min(totalPages, p + 1));
+  };
 
   return (
     <div>
@@ -29,14 +91,87 @@ function Table<T extends object>({ columns, data, pageSize = 5 }: TableProps<T>)
               {columns.map((column) => (
                 <th key={column.header}>{column.header}</th>
               ))}
+              {config.enableEdition && <th>Edit</th>}
+              {config.enableDeletion && <th>Delete</th>}
             </tr>
           </thead>
           <tbody>
+            <tr>
+              {columns.map((column) => column.accessor === 'id' && (
+                <td key={String(column.accessor)}/>
+              ))}
+              {columns.map((column) => column.accessor !== 'id' && (
+                <td key={String(column.accessor)}>
+                  <input
+                    className="editable-table-input"
+                    value={createData[column.accessor] !== undefined ? String(createData[column.accessor]) : ''}
+                    onChange={e => handleCreateChange(column.accessor, e.target.value)}
+                    placeholder={column.header + (column.mandatoryForCreation ? ' *' : '')}
+                  />
+                </td>
+              ))}
+              {config.enableCreation && (
+                <td colSpan={(config.enableEdition && config.enableDeletion) ? 2 : 1} className="editable-table-center-cell">
+                  <button
+                    className="btn btn-success btn-sm"
+                    onClick={handleCreate}
+                    disabled={isCreateDisabled}
+                  >
+                    Create
+                  </button>
+                </td>
+              )}
+            </tr>
             {paginatedData.map((row, rowIndex) => (
               <tr key={rowIndex + (page - 1) * pageSize}>
                 {columns.map((column) => (
-                  <td key={String(column.accessor)}>{String(row[column.accessor])}</td>
+                  <td key={String(column.accessor)}>
+                    {editRow === rowIndex && column.accessor !== 'id' ? (
+                      <input
+                        className="editable-table-input"
+                        value={editData[column.accessor] !== undefined ? String(editData[column.accessor]) : ''}
+                        onChange={e => handleEditChange(column.accessor, e.target.value)}
+                      />
+                    ) : (
+                      String(row[column.accessor])
+                    )}
+                  </td>
                 ))}
+                {config.enableEdition && (
+                  <td>
+                    {editRow === rowIndex ? (
+                      <button className="btn btn-success btn-sm" onClick={() => handleEditSubmit(rowIndex)}>
+                        Submit
+                      </button>
+                    ) : (
+                      <button className="btn btn-primary btn-sm" onClick={() => handleEditClick(row, rowIndex)}>
+                        Edit
+                      </button>
+                    )}
+                  </td>
+                )}
+                {config.enableDeletion && (
+                  <td>
+                    <button className="btn btn-danger btn-sm" onClick={() => handleDeleteClick(rowIndex)}>
+                      Delete
+                    </button>
+                    {deleteRow === rowIndex && (
+                      <div className="modal-backdrop">
+                        <div className="modal-confirm">
+                          <div>Are you sure you want to delete this row?</div>
+                          <div className="editable-table-modal-actions">
+                            <button className="btn btn-danger btn-sm" onClick={() => handleDeleteConfirm(rowIndex)}>
+                              Submit
+                            </button>
+                            <button className="btn btn-secondary btn-sm editable-table-cancel-btn" onClick={handleDeleteCancel}>
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

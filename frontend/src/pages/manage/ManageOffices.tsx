@@ -1,197 +1,56 @@
 import React, { useState } from 'react';
-import TableDemo from '../../components/table/TableDemo';
+import Table, { Column, Config } from '../../components/table/Table';
 import './ManageOffices.css';
-import { Action, ACTIONS } from './Actions';
 
-const CreateOfficeForm: React.FC = () => {
-  const [officeName, setOfficeName] = useState('');
-  const [officeAddress, setOfficeAddress] = useState('');
-  const [errors, setErrors] = useState<{ officeName?: string; officeAddress?: string }>({});
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newErrors: { officeName?: string; officeAddress?: string } = {};
-    if (!officeName.trim()) {
-      newErrors.officeName = 'Office name is required';
-    }
-    if (!officeAddress.trim()) {
-      newErrors.officeAddress = 'Address is required';
-    }
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      // Submit logic here
-    }
-  };
+interface Office {
+  id: number;
+  name: string;
+  address: string;
+}
 
-  return (
-    <form className="p-4 rounded shadow bg-white" onSubmit={handleSubmit} noValidate>
-      <h5 className="mb-4 text-capitalize">Create Office</h5>
-      <div className="mb-3 text-start">
-        <label htmlFor="officeName" className="form-label">Office Name</label>
-        <input
-          type="text"
-          className={`form-control${errors.officeName ? ' is-invalid' : ''}`}
-          id="officeName"
-          placeholder="Enter office name"
-          value={officeName}
-          onChange={e => setOfficeName(e.target.value)}
-        />
-        {errors.officeName && <div className="invalid-feedback text-start">{errors.officeName}</div>}
-      </div>
-      <div className="mb-3 text-start">
-        <label htmlFor="officeAddress" className="form-label">Address</label>
-        <input
-          type="text"
-          className={`form-control${errors.officeAddress ? ' is-invalid' : ''}`}
-          id="officeAddress"
-          placeholder="Enter location"
-          value={officeAddress}
-          onChange={e => setOfficeAddress(e.target.value)}
-        />
-        {errors.officeAddress && <div className="invalid-feedback text-start">{errors.officeAddress}</div>}
-      </div>
-      <button type="submit" className="btn btn-primary w-100">Create</button>
-    </form>
-  );
+const config: Config = {
+  enableCreation: true,
+  enableEdition: true,
+  enableDeletion: true,
 };
 
-const UpdateOfficeForm: React.FC = () => {
-  const [officeId, setOfficeId] = useState('');
-  const [officeName, setOfficeName] = useState('');
-  const [officeAddress, setOfficeAddress] = useState('');
-  const [errors, setErrors] = useState<{ officeId?: string; officeName?: string; officeAddress?: string }>({});
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newErrors: { officeId?: string; officeName?: string; officeAddress?: string } = {};
-    if (!officeId.trim()) {
-      newErrors.officeId = 'Office ID is required';
-    }
-    if (!officeName.trim()) {
-      newErrors.officeName = 'Office name is required';
-    }
-    if (!officeAddress.trim()) {
-      newErrors.officeAddress = 'Address is required';
-    }
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      // Submit logic here
-    }
-  };
+const officeColumns: Column<Office>[] = [
+  { header: 'ID', accessor: 'id' },
+  { header: 'Name', accessor: 'name', mandatoryForCreation: true },
+  { header: 'Address', accessor: 'address', mandatoryForCreation: true },
+];
 
-  return (
-    <form className="p-4 rounded shadow bg-white" onSubmit={handleSubmit} noValidate>
-      <h5 className="mb-4 text-capitalize">Update Office</h5>
-      <div className="mb-3 text-start">
-        <label htmlFor="officeId" className="form-label">Office ID</label>
-        <input
-          type="text"
-          className={`form-control${errors.officeId ? ' is-invalid' : ''}`}
-          id="officeId"
-          placeholder="Enter office ID"
-          value={officeId}
-          onChange={e => setOfficeId(e.target.value)}
-        />
-        {errors.officeId && <div className="invalid-feedback text-start">{errors.officeId}</div>}
-      </div>
-      <div className="mb-3 text-start">
-        <label htmlFor="officeName" className="form-label">Office Name</label>
-        <input
-          type="text"
-          className={`form-control${errors.officeName ? ' is-invalid' : ''}`}
-          id="officeName"
-          placeholder="Enter office name"
-          value={officeName}
-          onChange={e => setOfficeName(e.target.value)}
-        />
-        {errors.officeName && <div className="invalid-feedback text-start">{errors.officeName}</div>}
-      </div>
-      <div className="mb-3 text-start">
-        <label htmlFor="officeAddress" className="form-label">Address</label>
-        <input
-          type="text"
-          className={`form-control${errors.officeAddress ? ' is-invalid' : ''}`}
-          id="officeAddress"
-          placeholder="Enter location"
-          value={officeAddress}
-          onChange={e => setOfficeAddress(e.target.value)}
-        />
-        {errors.officeAddress && <div className="invalid-feedback text-start">{errors.officeAddress}</div>}
-      </div>
-      <button type="submit" className="btn btn-primary w-100">Update</button>
-    </form>
-  );
-};
-
-const DeleteOfficeForm: React.FC = () => {
-  const [officeId, setOfficeId] = useState('');
-  const [errors, setErrors] = useState<{ officeId?: string }>({});
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newErrors: { officeId?: string } = {};
-    if (!officeId.trim()) {
-      newErrors.officeId = 'Office ID is required';
-    }
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      // Submit logic here
-    }
-  };
-
-  return (
-    <form className="p-4 rounded shadow bg-white" onSubmit={handleSubmit} noValidate>
-      <h5 className="mb-4 text-capitalize">Delete Office</h5>
-      <div className="mb-3 text-start">
-        <label htmlFor="officeId" className="form-label">Office ID</label>
-        <input
-          type="text"
-          className={`form-control${errors.officeId ? ' is-invalid' : ''}`}
-          id="officeId"
-          placeholder="Enter office ID"
-          value={officeId}
-          onChange={e => setOfficeId(e.target.value)}
-        />
-        {errors.officeId && <div className="invalid-feedback text-start">{errors.officeId}</div>}
-      </div>
-      <button type="submit" className="btn btn-danger w-100">Delete</button>
-    </form>
-  );
-};
+const initialOffices: Office[] = [
+  { id: 1, name: 'Central Office', address: '123 Main St' },
+  { id: 2, name: 'Branch Office', address: '456 Side St' },
+];
 
 const ManageOffices: React.FC = () => {
-  const [selectedAction, setSelectedAction] = useState<Action>(Action.Read);
+  const [offices, setOffices] = useState<Office[]>(initialOffices);
 
-  let content: React.ReactNode;
-  switch (selectedAction) {
-  case Action.Read:
-    content = <TableDemo />;
-    break;
-  case Action.Create:
-    content = <CreateOfficeForm />;
-    break;
-  case Action.Update:
-    content = <UpdateOfficeForm />;
-    break;
-  case Action.Delete:
-    content = <DeleteOfficeForm />;
-    break;
-  default:
-    content = null;
-  }
+  const handleCreate = (office: Office) => {
+    setOffices(prev => [{ ...office }, ...prev]);
+  };
+
+  const handleEdit = (office: Office, rowIndex: number) => {
+    setOffices(prev => prev.map((item, idx) => idx === rowIndex ? { ...item, ...office } : item));
+  };
+
+  const handleDelete = (_office: Office, rowIndex: number) => {
+    setOffices(prev => prev.filter((_item, idx) => idx !== rowIndex));
+  };
 
   return (
     <div className="manage-offices-container">
-      <div className="manage-offices-actions">
-        {ACTIONS.map(action => (
-          <button
-            key={action}
-            className={`btn btn-${selectedAction === action ? 'primary' : 'outline-primary'} w-100`}
-            onClick={() => setSelectedAction(action)}
-          >
-            {action.charAt(0).toUpperCase() + action.slice(1)}
-          </button>
-        ))}
-      </div>
       <div className="manage-offices-content">
-        {content}
+        <Table
+          config={config}
+          columns={officeColumns}
+          data={offices}
+          onCreate={handleCreate}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       </div>
     </div>
   );
