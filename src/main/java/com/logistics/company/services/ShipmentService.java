@@ -2,6 +2,7 @@ package com.logistics.company.services;
 
 import com.logistics.company.dtos.shipment.CreateShipmentRequestDTO;
 import com.logistics.company.dtos.shipment.ShipmentDTO;
+import com.logistics.company.dtos.shipment.UpdateShipmentRequestDTO;
 import com.logistics.company.exceptions.custom.BadRequestException;
 import com.logistics.company.models.*;
 import com.logistics.company.models.enums.ShipmentStatus;
@@ -90,6 +91,56 @@ public class ShipmentService {
         } catch (DataAccessException e) {
             logger.error(e.getMessage());
             throw new BadRequestException("Cannot create shipment");
+        }
+    }
+
+    @Transactional
+    public ShipmentDTO updateShipment(UpdateShipmentRequestDTO updateShipmentRequestDTO) {
+        if (updateShipmentRequestDTO.isInvalid()) {
+            throw new BadRequestException("Invalid request");
+        }
+
+        try {
+            Shipment shipment = this.shipmentRepository.findById(updateShipmentRequestDTO.getShipmentId())
+                .orElseThrow(() -> new BadRequestException("Shipment not found"));
+
+            if (updateShipmentRequestDTO.getDeliveryOfficeId() != null) {
+                Office deliveryOffice = this.officeRepository.findById(updateShipmentRequestDTO.getDeliveryOfficeId())
+                    .orElseThrow(() -> new BadRequestException("Office not found"));
+                shipment.setDeliveryOffice(deliveryOffice);
+            }
+
+            if (updateShipmentRequestDTO.getCourierEmployeeId() != null) {
+                CourierEmployee courierEmployee = this.courierEmployeeRepository.findById(updateShipmentRequestDTO.getCourierEmployeeId())
+                    .orElseThrow(() -> new BadRequestException("Courier not found"));
+                shipment.setCourierEmployee(courierEmployee);
+            }
+
+            if (updateShipmentRequestDTO.getDeliveryType() != null) {
+                shipment.setDeliveryType(updateShipmentRequestDTO.getDeliveryType());
+            }
+
+            if (updateShipmentRequestDTO.getPhoneNumber() != null) {
+                shipment.setPhoneNumber(updateShipmentRequestDTO.getPhoneNumber());
+            }
+
+            if (updateShipmentRequestDTO.getPrice() != null) {
+                shipment.setPrice(updateShipmentRequestDTO.getPrice());
+            }
+
+            if (updateShipmentRequestDTO.getStatus() != null) {
+                shipment.setStatus(updateShipmentRequestDTO.getStatus());
+            }
+
+            if (updateShipmentRequestDTO.getDeliveredDate() != null) {
+                shipment.setDeliveredDate(updateShipmentRequestDTO.getDeliveredDate());
+            }
+
+            Shipment updatedShipment = this.shipmentRepository.save(shipment);
+            return DtoMapper.shipmentEntityToDto(updatedShipment);
+        } catch (DataAccessException e) {
+            logger.error(e.getMessage());
+            throw new BadRequestException("Cannot update shipment");
         }
     }
 

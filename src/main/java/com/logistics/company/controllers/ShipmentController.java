@@ -2,6 +2,7 @@ package com.logistics.company.controllers;
 
 import com.logistics.company.dtos.shipment.CreateShipmentRequestDTO;
 import com.logistics.company.dtos.shipment.ShipmentDTO;
+import com.logistics.company.dtos.shipment.UpdateShipmentRequestDTO;
 import com.logistics.company.exceptions.custom.BadRequestException;
 import com.logistics.company.services.ShipmentService;
 import com.logistics.company.util.Validator;
@@ -28,6 +29,14 @@ public class ShipmentController {
     @GetMapping("all")
     public ResponseEntity<Iterable<ShipmentDTO>> getAllShipments(){
         return ResponseEntity.ok(this.shipmentService.getAllShipments());
+    }
+
+    @PutMapping()
+    public ResponseEntity<ShipmentDTO> updateShipment(@RequestBody UpdateShipmentRequestDTO dto) {
+        if (dto.isInvalid()) {
+            throw new BadRequestException("Invalid request");
+        }
+        return ResponseEntity.ok(this.shipmentService.updateShipment(dto));
     }
 
     @DeleteMapping("{shipmentId}")

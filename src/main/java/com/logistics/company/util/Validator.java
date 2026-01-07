@@ -1,6 +1,9 @@
 package com.logistics.company.util;
 
+import com.logistics.company.models.enums.ShipmentDeliveryType;
+
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.regex.Pattern;
 
 public class Validator {
@@ -58,5 +61,15 @@ public class Validator {
             return !isRequired;
         }
         return decimal.compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    public static boolean isLocalDateValid(LocalDate date, boolean canBeInThePast, boolean isRequired) {
+        if (date == null) {
+            return !isRequired;
+        }
+        if (!canBeInThePast) {
+            return !date.isBefore(LocalDate.now());
+        }
+        return true;
     }
 }
