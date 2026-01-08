@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -144,32 +145,20 @@ public class UserService {
     }
 
     @Transactional
-    public ClientDTO updateClient(UpdateUserRequestDTO updateUserRequestDTO) {
-        if (updateUserRequestDTO.isInvalid()) {
+    public ClientDTO updateClient(Long clientId, UpdateUserRequestDTO updateUserRequestDTO) {
+        if (updateUserRequestDTO.isInvalid() || !Validator.isIdValid(clientId, true)) {
             throw new BadRequestException("Invalid request");
         }
 
         try {
-            Client client = null;
-            if (updateUserRequestDTO.getEntityId() != null) {
-                client = this.clientRepository.findById(updateUserRequestDTO.getEntityId()).orElseThrow();
-            } else if (updateUserRequestDTO.getUserId() != null) {
-                client = this.clientRepository.findByUser_UserId(updateUserRequestDTO.getUserId()).orElseThrow();
-            }
-            if (client == null) {
-                throw new BadRequestException("Client not found");
-            }
+            Client client = this.clientRepository.findById(clientId).orElseThrow(
+                () -> new BadRequestException("Client not found")
+            );
             User user = client.getUser();
 
-            if (updateUserRequestDTO.getFirstName() != null) {
-                user.setFirstName(updateUserRequestDTO.getFirstName());
-            }
-            if (updateUserRequestDTO.getLastName() != null) {
-                user.setLastName(updateUserRequestDTO.getLastName());
-            }
-            if (updateUserRequestDTO.getEmail() != null) {
-                user.setEmail(updateUserRequestDTO.getEmail());
-            }
+            user.setFirstName(updateUserRequestDTO.getFirstName());
+            user.setLastName(updateUserRequestDTO.getLastName());
+            user.setEmail(updateUserRequestDTO.getEmail());
 
             Client updatedClient = this.clientRepository.save(client);
             return DtoMapper.clientEntityToDto(updatedClient);
@@ -183,33 +172,20 @@ public class UserService {
     }
 
     @Transactional
-    public CourierEmployeeDTO updateCourierEmployee(UpdateUserRequestDTO updateUserRequestDTO) {
-        if (updateUserRequestDTO.isInvalid()) {
+    public CourierEmployeeDTO updateCourierEmployee(Long courierEmployeeId, UpdateUserRequestDTO updateUserRequestDTO) {
+        if (updateUserRequestDTO.isInvalid() || !Validator.isIdValid(courierEmployeeId, true)) {
             throw new BadRequestException("Invalid request");
         }
 
         try {
-            CourierEmployee courierEmployee = null;
-            if (updateUserRequestDTO.getEntityId() != null) {
-                courierEmployee = this.courierEmployeeRepository.findById(updateUserRequestDTO.getEntityId()).orElseThrow();
-            } else if (updateUserRequestDTO.getUserId() != null) {
-                courierEmployee = this.courierEmployeeRepository.findByUser_UserId(updateUserRequestDTO.getUserId()).orElseThrow();
-            }
-            if (courierEmployee == null) {
-                throw new BadRequestException("Courier employee not found");
-            }
-
+            CourierEmployee courierEmployee = this.courierEmployeeRepository.findById(courierEmployeeId).orElseThrow(
+                () -> new BadRequestException("Courier employee not found")
+            );
             User user = courierEmployee.getUser();
 
-            if (updateUserRequestDTO.getFirstName() != null) {
-                user.setFirstName(updateUserRequestDTO.getFirstName());
-            }
-            if (updateUserRequestDTO.getLastName() != null) {
-                user.setLastName(updateUserRequestDTO.getLastName());
-            }
-            if (updateUserRequestDTO.getEmail() != null) {
-                user.setEmail(updateUserRequestDTO.getEmail());
-            }
+            user.setFirstName(updateUserRequestDTO.getFirstName());
+            user.setLastName(updateUserRequestDTO.getLastName());
+            user.setEmail(updateUserRequestDTO.getEmail());
 
             CourierEmployee updatedCourierEmployee = this.courierEmployeeRepository.save(courierEmployee);
             return DtoMapper.courierEmployeeEntityToDto(updatedCourierEmployee);
@@ -223,34 +199,25 @@ public class UserService {
     }
 
     @Transactional
-    public OfficeEmployeeDTO updateOfficeEmployee(UpdateOfficeEmployeeRequestDTO updateOfficeEmployeeRequestDTO) {
-        if (updateOfficeEmployeeRequestDTO.isInvalid()) {
+    public OfficeEmployeeDTO updateOfficeEmployee(
+        Long officeEmployeeId,
+        UpdateOfficeEmployeeRequestDTO updateOfficeEmployeeRequestDTO
+    ) {
+        if (updateOfficeEmployeeRequestDTO.isInvalid() || !Validator.isIdValid(officeEmployeeId, true)) {
             throw new BadRequestException("Invalid request");
         }
 
         try {
-            OfficeEmployee officeEmployee = null;
-            if (updateOfficeEmployeeRequestDTO.getEntityId() != null) {
-                officeEmployee = this.officeEmployeeRepository.findById(updateOfficeEmployeeRequestDTO.getEntityId()).orElseThrow();
-            } else if (updateOfficeEmployeeRequestDTO.getUserId() != null) {
-                officeEmployee = this.officeEmployeeRepository.findByUser_UserId(updateOfficeEmployeeRequestDTO.getUserId()).orElseThrow();
-            }
-            if (officeEmployee == null) {
-                throw new BadRequestException("Office employee not found");
-            }
-
+            OfficeEmployee officeEmployee = this.officeEmployeeRepository.findById(officeEmployeeId).orElseThrow(
+                () -> new BadRequestException("Courier employee not found")
+            );
             User user = officeEmployee.getUser();
 
-            if (updateOfficeEmployeeRequestDTO.getFirstName() != null) {
-                user.setFirstName(updateOfficeEmployeeRequestDTO.getFirstName());
-            }
-            if (updateOfficeEmployeeRequestDTO.getLastName() != null) {
-                user.setLastName(updateOfficeEmployeeRequestDTO.getLastName());
-            }
-            if (updateOfficeEmployeeRequestDTO.getEmail() != null) {
-                user.setEmail(updateOfficeEmployeeRequestDTO.getEmail());
-            }
-            if (updateOfficeEmployeeRequestDTO.getOfficeId() != null) {
+            user.setFirstName(updateOfficeEmployeeRequestDTO.getFirstName());
+            user.setLastName(updateOfficeEmployeeRequestDTO.getLastName());
+            user.setEmail(updateOfficeEmployeeRequestDTO.getEmail());
+
+            if (!Objects.equals(updateOfficeEmployeeRequestDTO.getOfficeId(), officeEmployee.getOffice().getOfficeId())) {
                 Office office = this.officeRepository.findById(updateOfficeEmployeeRequestDTO.getOfficeId()).orElseThrow(
                     () -> new BadRequestException("Office not found")
                 );
@@ -269,21 +236,18 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(Long userId) {
-        if (!Validator.isIdValid(userId, true)) {
+    public void deleteUser(Long entityId, UserRole userRole) {
+        if (!Validator.isIdValid(entityId, true)) {
             throw new BadRequestException("Invalid request");
         }
 
         try {
-            User user = this.userRepository.findById(userId).orElseThrow();
-
-            switch (user.getUserRole()) {
-                case CLIENT -> this.clientRepository.deleteByUser_UserId(userId);
-                case OFFICE_EMPLOYEE -> this.officeEmployeeRepository.deleteByUser_UserId(userId);
-                case COURIER_EMPLOYEE -> this.courierEmployeeRepository.deleteByUser_UserId(userId);
+            switch (userRole) {
+                case CLIENT -> this.clientRepository.deleteById(entityId);
+                case OFFICE_EMPLOYEE -> this.officeEmployeeRepository.deleteById(entityId);
+                case COURIER_EMPLOYEE -> this.courierEmployeeRepository.deleteById(entityId);
             }
 
-            this.userRepository.delete(user);
         } catch (NoSuchElementException e) {
             logger.error(e.getMessage());
             throw new BadRequestException("User not found");

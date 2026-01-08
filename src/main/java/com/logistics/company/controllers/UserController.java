@@ -7,6 +7,7 @@ import com.logistics.company.dtos.office_employee.UpdateOfficeEmployeeRequestDTO
 import com.logistics.company.dtos.user.CreateUserRequestDTO;
 import com.logistics.company.dtos.user.UpdateUserRequestDTO;
 import com.logistics.company.exceptions.custom.BadRequestException;
+import com.logistics.company.models.enums.UserRole;
 import com.logistics.company.services.UserService;
 import com.logistics.company.util.Validator;
 import org.springframework.http.ResponseEntity;
@@ -54,35 +55,57 @@ public class UserController {
         return ResponseEntity.ok(this.userService.createCourierEmployee(dto));
     }
 
-    @PutMapping("client")
-    public ResponseEntity<ClientDTO> updateClient(@RequestBody UpdateUserRequestDTO dto) {
+    @PutMapping("client/{clientId}")
+    public ResponseEntity<ClientDTO> updateClient(@PathVariable Long clientId, @RequestBody UpdateUserRequestDTO dto) {
         if (dto.isInvalid()) {
             throw new BadRequestException("Invalid request");
         }
-        return ResponseEntity.ok(this.userService.updateClient(dto));
+        return ResponseEntity.ok(this.userService.updateClient(clientId, dto));
     }
 
-    @PutMapping("courier-employee")
-    public ResponseEntity<CourierEmployeeDTO> updateCourierEmployee(@RequestBody UpdateUserRequestDTO dto) {
+    @PutMapping("courier-employee/{courierEmployeeId}")
+    public ResponseEntity<CourierEmployeeDTO> updateCourierEmployee(
+        @PathVariable Long courierEmployeeId,
+        @RequestBody UpdateUserRequestDTO dto
+    ) {
         if (dto.isInvalid()) {
             throw new BadRequestException("Invalid request");
         }
-        return ResponseEntity.ok(this.userService.updateCourierEmployee(dto));
+        return ResponseEntity.ok(this.userService.updateCourierEmployee(courierEmployeeId, dto));
     }
 
-    @PutMapping("office-employee")
-    public ResponseEntity<OfficeEmployeeDTO> updateOfficeEmployee(@RequestBody UpdateOfficeEmployeeRequestDTO dto) {
+    @PutMapping("office-employee/{officeEmployeeId}")
+    public ResponseEntity<OfficeEmployeeDTO> updateOfficeEmployee(
+        @PathVariable Long officeEmployeeId,
+        @RequestBody UpdateOfficeEmployeeRequestDTO dto
+    ) {
         if (dto.isInvalid()) {
             throw new BadRequestException("Invalid request");
         }
-        return ResponseEntity.ok(this.userService.updateOfficeEmployee(dto));
+        return ResponseEntity.ok(this.userService.updateOfficeEmployee(officeEmployeeId, dto));
     }
 
-    @DeleteMapping("{userId}")
-    public void deleteUser(@PathVariable Long userId){
-        if(!Validator.isIdValid(userId, true)){
+    @DeleteMapping("client/{clientId}")
+    public void deleteClient(@PathVariable Long clientId){
+        if(!Validator.isIdValid(clientId, true)){
             throw new BadRequestException("Invalid request");
         }
-        this.userService.deleteUser(userId);
+        this.userService.deleteUser(clientId, UserRole.CLIENT);
+    }
+
+    @DeleteMapping("courier-employee/{courierEmployeeId}")
+    public void deleteCourierEmployee(@PathVariable Long courierEmployeeId){
+        if(!Validator.isIdValid(courierEmployeeId, true)){
+            throw new BadRequestException("Invalid request");
+        }
+        this.userService.deleteUser(courierEmployeeId, UserRole.COURIER_EMPLOYEE);
+    }
+
+    @DeleteMapping("office-employee/{officeEmployeeId}")
+    public void deleteOfficeEmployee(@PathVariable Long officeEmployeeId){
+        if(!Validator.isIdValid(officeEmployeeId, true)){
+            throw new BadRequestException("Invalid request");
+        }
+        this.userService.deleteUser(officeEmployeeId, UserRole.OFFICE_EMPLOYEE);
     }
 }

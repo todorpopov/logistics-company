@@ -13,20 +13,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateUserRequestDTO implements Validatable {
-    private Long userId;
-    private Long entityId;
     private String firstName;
     private String lastName;
     private String email;
 
     public boolean isInvalid() {
-        if (this.entityId == null && this.userId == null) {
-            return true;
-        }
-        return !Validator.isIdValid(this.entityId, false)
-            || !Validator.isIdValid(this.userId, false)
-            || !Validator.isStringValid(this.firstName, 3, 255, false)
-            || !Validator.isStringValid(this.lastName, 3, 255, false)
-            || !Validator.isEmailValid(this.email, false);
+        return !Validator.isStringValid(this.firstName, 3, 255, true)
+            || !Validator.isStringValid(this.lastName, 3, 255, true)
+            || !Validator.isEmailValid(this.email, true);
     }
 }

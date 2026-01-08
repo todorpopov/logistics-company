@@ -14,6 +14,6 @@ public class UpdateOfficeEmployeeRequestDTO extends UpdateUserRequestDTO impleme
     private Long officeId;
 
     public boolean isInvalid() {
-        return super.isInvalid() || !Validator.isIdValid(this.officeId, false);
+        return super.isInvalid() || !Validator.isIdValid(this.officeId, true);
     }
 }
