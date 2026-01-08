@@ -12,15 +12,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateOfficeRequestDTO implements Validatable {
-    private Long officeId;
     private String name;
     private String address;
     private String phoneNumber;
 
     public boolean isInvalid() {
-        return !Validator.isIdValid(this.officeId, true)
-            || !Validator.isStringValid(this.name, 3, 255, false)
-            || !Validator.isStringValid(this.address, 3, 255, false)
-            || !Validator.isPhoneNumberValid(this.phoneNumber, false);
+        return !Validator.isStringValid(this.name, 3, 255, true)
+            || !Validator.isStringValid(this.address, 3, 255, true)
+            || !Validator.isPhoneNumberValid(this.phoneNumber, true);
     }
 }

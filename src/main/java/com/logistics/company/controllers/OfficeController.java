@@ -31,12 +31,12 @@ public class OfficeController {
         return ResponseEntity.ok(this.officeService.getAllOffices());
     }
 
-    @PutMapping
-    public ResponseEntity<OfficeDTO> updateOffice(@RequestBody UpdateOfficeRequestDTO dto){
+    @PutMapping("{officeId}")
+    public ResponseEntity<OfficeDTO> updateOffice(@PathVariable Long officeId, @RequestBody UpdateOfficeRequestDTO dto){
         if (dto.isInvalid()) {
             throw new BadRequestException("Invalid request");
         }
-        return ResponseEntity.ok(this.officeService.update(dto));
+        return ResponseEntity.ok(this.officeService.update(officeId, dto));
     }
 
     @DeleteMapping("{officeId}")

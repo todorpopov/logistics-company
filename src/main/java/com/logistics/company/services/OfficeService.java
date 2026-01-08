@@ -27,7 +27,7 @@ public class OfficeService {
         this.officeRepository = officeRepository;
     }
 
-    public OfficeDTO create(CreateOfficeRequestDTO createOfficeRequestDTO) {
+    public OfficeDTO createOffice(CreateOfficeRequestDTO createOfficeRequestDTO) {
         Office office = Office.builder()
             .name(createOfficeRequestDTO.getName())
             .address(createOfficeRequestDTO.getAddress())
@@ -53,19 +53,13 @@ public class OfficeService {
     }
 
     @Transactional
-    public OfficeDTO update(UpdateOfficeRequestDTO updateOfficeRequestDTO) {
+    public OfficeDTO updateOffice(Long officeId, UpdateOfficeRequestDTO updateOfficeRequestDTO) {
         try {
-            Office office = this.officeRepository.findById(updateOfficeRequestDTO.getOfficeId()).orElseThrow();
+            Office office = this.officeRepository.findById(officeId).orElseThrow();
 
-            if (updateOfficeRequestDTO.getName() != null) {
-                office.setName(updateOfficeRequestDTO.getName());
-            }
-            if (updateOfficeRequestDTO.getAddress() != null) {
-                office.setAddress(updateOfficeRequestDTO.getAddress());
-            }
-            if (updateOfficeRequestDTO.getPhoneNumber() != null) {
-                office.setPhoneNumber(updateOfficeRequestDTO.getPhoneNumber());
-            }
+            office.setName(updateOfficeRequestDTO.getName());
+            office.setAddress(updateOfficeRequestDTO.getAddress());
+            office.setPhoneNumber(updateOfficeRequestDTO.getPhoneNumber());
 
             Office updatedOffice = this.officeRepository.save(office);
             return DtoMapper.map(updatedOffice, OfficeDTO.class);
@@ -78,7 +72,7 @@ public class OfficeService {
         }
     }
 
-    public void delete(Long officeId) {
+    public void deleteOffice(Long officeId) {
         if (!Validator.isIdValid(officeId, true)) {
             throw new BadRequestException("Invalid request");
         }
