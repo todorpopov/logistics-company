@@ -28,6 +28,9 @@ public class DtoMapper {
     }
 
     public static ClientDTO clientEntityToDto(Client client) {
+        if (client == null) {
+            return null;
+        }
         return ClientDTO.builder()
             .clientId(client.getClientId())
             .userId(client.getUser().getUserId())
@@ -38,7 +41,10 @@ public class DtoMapper {
     }
 
     public static OfficeEmployeeDTO officeEmployeeEntityToDto(OfficeEmployee officeEmployee) {
-        OfficeDTO officeDto = map(officeEmployee.getOffice(), OfficeDTO.class);
+        if (officeEmployee == null) {
+            return null;
+        }
+        OfficeDTO officeDto = officeEmployee.getOffice() != null ? map(officeEmployee.getOffice(), OfficeDTO.class) : null;
         return OfficeEmployeeDTO.builder()
             .userId(officeEmployee.getUser().getUserId())
             .officeEmployeeId(officeEmployee.getOfficeEmployeeId())
@@ -50,6 +56,9 @@ public class DtoMapper {
     }
 
     public static CourierEmployeeDTO courierEmployeeEntityToDto(CourierEmployee courierEmployee) {
+        if (courierEmployee == null) {
+            return null;
+        }
         return CourierEmployeeDTO.builder()
             .userId(courierEmployee.getUser().getUserId())
             .courierEmployeeId(courierEmployee.getCourierEmployeeId())
@@ -60,11 +69,15 @@ public class DtoMapper {
     }
 
     public static ShipmentDTO shipmentEntityToDto(Shipment shipment) {
+        if (shipment == null) {
+            return null;
+        }
+        OfficeDTO officeDto = shipment.getDeliveryOffice() != null ? map(shipment.getDeliveryOffice(), OfficeDTO.class) : null;
         return ShipmentDTO.builder()
             .shipmentId(shipment.getShipmentId())
             .sender(clientEntityToDto(shipment.getSender()))
             .registeredBy(officeEmployeeEntityToDto(shipment.getRegisteredBy()))
-            .deliveryOffice(map(shipment.getDeliveryOffice(), OfficeDTO.class))
+            .deliveryOffice(officeDto)
             .courierEmployee(courierEmployeeEntityToDto(shipment.getCourierEmployee()))
             .price(shipment.getPrice())
             .weightGram(shipment.getWeightGram())

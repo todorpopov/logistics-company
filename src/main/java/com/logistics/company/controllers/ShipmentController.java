@@ -31,12 +31,12 @@ public class ShipmentController {
         return ResponseEntity.ok(this.shipmentService.getAllShipments());
     }
 
-    @PutMapping()
-    public ResponseEntity<ShipmentDTO> updateShipment(@RequestBody UpdateShipmentRequestDTO dto) {
-        if (dto.isInvalid()) {
+    @PutMapping("{shipmentId}")
+    public ResponseEntity<ShipmentDTO> updateShipment(@PathVariable Long shipmentId, @RequestBody UpdateShipmentRequestDTO dto) {
+        if (dto.isInvalid() || !Validator.isIdValid(shipmentId, true)) {
             throw new BadRequestException("Invalid request");
         }
-        return ResponseEntity.ok(this.shipmentService.updateShipment(dto));
+        return ResponseEntity.ok(this.shipmentService.updateShipment(shipmentId, dto));
     }
 
     @DeleteMapping("{shipmentId}")

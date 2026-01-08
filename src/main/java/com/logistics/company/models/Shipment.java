@@ -43,7 +43,7 @@ public class Shipment {
     )
     private Office deliveryOffice;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(
         name = "courier_employee_id",
         foreignKey = @ForeignKey(name = "fk_shipment_courier_employee")

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ShipmentService {
@@ -95,46 +96,36 @@ public class ShipmentService {
     }
 
     @Transactional
-    public ShipmentDTO updateShipment(UpdateShipmentRequestDTO updateShipmentRequestDTO) {
+    public ShipmentDTO updateShipment(Long shipmentId, UpdateShipmentRequestDTO updateShipmentRequestDTO) {
         if (updateShipmentRequestDTO.isInvalid()) {
             throw new BadRequestException("Invalid request");
         }
 
         try {
-            Shipment shipment = this.shipmentRepository.findById(updateShipmentRequestDTO.getShipmentId())
+            Shipment shipment = this.shipmentRepository.findById(shipmentId)
                 .orElseThrow(() -> new BadRequestException("Shipment not found"));
 
-            if (updateShipmentRequestDTO.getDeliveryOfficeId() != null) {
+            if (updateShipmentRequestDTO.getDeliveryOfficeId() == null) {
+                shipment.setDeliveryOffice(null);
+            } else {
                 Office deliveryOffice = this.officeRepository.findById(updateShipmentRequestDTO.getDeliveryOfficeId())
                     .orElseThrow(() -> new BadRequestException("Office not found"));
                 shipment.setDeliveryOffice(deliveryOffice);
             }
 
-            if (updateShipmentRequestDTO.getCourierEmployeeId() != null) {
+            if (updateShipmentRequestDTO.getCourierEmployeeId() == null) {
+                shipment.setCourierEmployee(null);
+            } else {
                 CourierEmployee courierEmployee = this.courierEmployeeRepository.findById(updateShipmentRequestDTO.getCourierEmployeeId())
                     .orElseThrow(() -> new BadRequestException("Courier not found"));
                 shipment.setCourierEmployee(courierEmployee);
             }
 
-            if (updateShipmentRequestDTO.getDeliveryType() != null) {
-                shipment.setDeliveryType(updateShipmentRequestDTO.getDeliveryType());
-            }
-
-            if (updateShipmentRequestDTO.getPhoneNumber() != null) {
-                shipment.setPhoneNumber(updateShipmentRequestDTO.getPhoneNumber());
-            }
-
-            if (updateShipmentRequestDTO.getPrice() != null) {
-                shipment.setPrice(updateShipmentRequestDTO.getPrice());
-            }
-
-            if (updateShipmentRequestDTO.getStatus() != null) {
-                shipment.setStatus(updateShipmentRequestDTO.getStatus());
-            }
-
-            if (updateShipmentRequestDTO.getDeliveredDate() != null) {
-                shipment.setDeliveredDate(updateShipmentRequestDTO.getDeliveredDate());
-            }
+            shipment.setDeliveryType(updateShipmentRequestDTO.getDeliveryType());
+            shipment.setPhoneNumber(updateShipmentRequestDTO.getPhoneNumber());
+            shipment.setPrice(updateShipmentRequestDTO.getPrice());
+            shipment.setStatus(updateShipmentRequestDTO.getStatus());
+            shipment.setDeliveredDate(updateShipmentRequestDTO.getDeliveredDate());
 
             Shipment updatedShipment = this.shipmentRepository.save(shipment);
             return DtoMapper.shipmentEntityToDto(updatedShipment);

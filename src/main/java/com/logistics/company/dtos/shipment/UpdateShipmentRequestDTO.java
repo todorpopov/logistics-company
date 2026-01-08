@@ -15,7 +15,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateShipmentRequestDTO implements Validatable {
-    private Long shipmentId;
     private Long deliveryOfficeId;
     private Long courierEmployeeId;
     private ShipmentDeliveryType deliveryType;
@@ -25,11 +24,12 @@ public class UpdateShipmentRequestDTO implements Validatable {
     private LocalDate deliveredDate;
 
     public boolean isInvalid() {
-        return !Validator.isIdValid(this.shipmentId, true)
+        return !Validator.isShipmentTypeValid(this.deliveryType, this.deliveryOfficeId, this.courierEmployeeId)
             || !Validator.isIdValid(this.deliveryOfficeId, false)
             || !Validator.isIdValid(this.courierEmployeeId, false)
-            || !Validator.isPhoneNumberValid(this.phoneNumber, false)
-            || !Validator.isPriceValid(this.price, false)
-            || !Validator.isLocalDateValid(this.deliveredDate, false, false);
+            || deliveryType == null
+            || !Validator.isPhoneNumberValid(this.phoneNumber, true)
+            || !Validator.isPriceValid(this.price, true)
+            || status == null;
     }
 }

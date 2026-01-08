@@ -72,4 +72,17 @@ public class Validator {
         }
         return true;
     }
+
+    public static boolean isShipmentTypeValid(ShipmentDeliveryType deliveryType, Long deliveryOfficeId, Long courierEmployeeId) {
+        if (deliveryType != null && (deliveryType.equals(ShipmentDeliveryType.ADDRESS) && courierEmployeeId == null)) {
+            return false;
+        }
+        if (deliveryType != null && (deliveryType.equals(ShipmentDeliveryType.OFFICE) && courierEmployeeId != null)) {
+            return false;
+        }
+        if (deliveryOfficeId != null && courierEmployeeId != null) {
+            return false;
+        }
+        return !(deliveryOfficeId == null && courierEmployeeId == null);
+    }
 }

@@ -25,7 +25,8 @@ public class CreateShipmentRequestDTO implements Validatable {
     private BigDecimal price;
 
     public boolean isInvalid() {
-        return !Validator.isIdValid(this.senderId, true)
+        return !Validator.isShipmentTypeValid(this.deliveryType, this.deliveryOfficeId, this.courierEmployeeId)
+            || !Validator.isIdValid(this.senderId, true)
             || !Validator.isIdValid(this.registeredById, true)
             || !Validator.isIdValid(this.deliveryOfficeId, false)
             || !Validator.isIdValid(this.courierEmployeeId, false)

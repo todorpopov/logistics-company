@@ -23,7 +23,7 @@ public class OfficeController {
         if (dto.isInvalid()) {
             throw new BadRequestException("Invalid request");
         }
-        return ResponseEntity.ok(this.officeService.create(dto));
+        return ResponseEntity.ok(this.officeService.createOffice(dto));
     }
 
     @GetMapping("all")
@@ -33,10 +33,10 @@ public class OfficeController {
 
     @PutMapping("{officeId}")
     public ResponseEntity<OfficeDTO> updateOffice(@PathVariable Long officeId, @RequestBody UpdateOfficeRequestDTO dto){
-        if (dto.isInvalid()) {
+        if (dto.isInvalid() || !Validator.isIdValid(officeId, true)) {
             throw new BadRequestException("Invalid request");
         }
-        return ResponseEntity.ok(this.officeService.update(officeId, dto));
+        return ResponseEntity.ok(this.officeService.updateOffice(officeId, dto));
     }
 
     @DeleteMapping("{officeId}")
@@ -44,6 +44,6 @@ public class OfficeController {
         if(!Validator.isIdValid(officeId, true)){
             throw new BadRequestException("Invalid request");
         }
-        this.officeService.delete(officeId);
+        this.officeService.deleteOffice(officeId);
     }
 }
