@@ -3,7 +3,7 @@ import Table, { Column, Config } from '../../components/table/Table';
 import './ManageOffices.css';
 import axios from 'axios';
 import {API_URL} from '../../App';
-import {useGetOffices} from "./request";
+import {useGetOffices} from './request';
 import { useQueryClient } from '@tanstack/react-query';
 
 export interface Office {
