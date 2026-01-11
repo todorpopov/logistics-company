@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Table, { Column, Config } from '../../components/table/Table';
 import './ManageOffices.css';
+import axios from 'axios';
+import {API_URL} from '../../App';
+import {useGetOffices} from "./request";
+import { useQueryClient } from '@tanstack/react-query';
 
-interface Office {
+export interface Office {
   id: number;
   name: string;
   address: string;
+  phoneNumber?: string;
 }
 
 const config: Config = {
@@ -20,24 +25,47 @@ const officeColumns: Column<Office>[] = [
   { header: 'Address', accessor: 'address', mandatoryForCreation: true },
 ];
 
-const initialOffices: Office[] = [
-  { id: 1, name: 'Central Office', address: '123 Main St' },
-  { id: 2, name: 'Branch Office', address: '456 Side St' },
-];
-
 const ManageOffices: React.FC = () => {
-  const [offices, setOffices] = useState<Office[]>(initialOffices);
+  const queryClient = useQueryClient();
+  const { data: offices } = useGetOffices();
 
   const handleCreate = (office: Office) => {
-    setOffices(prev => [{ ...office }, ...prev]);
+    axios.post(`${API_URL}/api/office`, { name: office.name, address: office.address, phoneNumber: office.phoneNumber })
+      .then(() => {
+        console.log('Office created successfully');
+        queryClient.invalidateQueries({ queryKey: ['offices'] });
+        // todo add success toast
+      })
+      .catch(() => {
+        console.log('Error creating office');
+        // todo add error toast
+      });
   };
 
-  const handleEdit = (office: Office, rowIndex: number) => {
-    setOffices(prev => prev.map((item, idx) => idx === rowIndex ? { ...item, ...office } : item));
+  const handleEdit = (office: Office) => {
+    axios.put(`${API_URL}/api/office/${office.id}`, { name: office.name, address: office.address, phoneNumber: office.phoneNumber })
+      .then(() => {
+        console.log('Office updated successfully');
+        queryClient.invalidateQueries({ queryKey: ['offices'] });
+        // todo add success toast
+      })
+      .catch(() => {
+        console.log('Error updating office');
+        // todo add error toast
+      });
   };
 
-  const handleDelete = (_office: Office, rowIndex: number) => {
-    setOffices(prev => prev.filter((_item, idx) => idx !== rowIndex));
+  const handleDelete = (office: Office) => {
+    axios.delete(`${API_URL}/api/office/${office.id}`)
+      .then(() => {
+        queryClient.invalidateQueries({ queryKey: ['offices'] });
+        console.log('Office deleted successfully');
+        // todo add success toast
+      })
+      .catch(() => {
+        console.log('Error deleted office');
+        // todo add error toast
+      });
   };
 
   return (
@@ -46,7 +74,7 @@ const ManageOffices: React.FC = () => {
         <Table
           config={config}
           columns={officeColumns}
-          data={offices}
+          data={offices ?? []}
           onCreate={handleCreate}
           onEdit={handleEdit}
           onDelete={handleDelete}

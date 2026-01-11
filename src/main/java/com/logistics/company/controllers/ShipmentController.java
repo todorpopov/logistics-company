@@ -26,7 +26,7 @@ public class ShipmentController {
         return ResponseEntity.ok(this.shipmentService.createShipment(dto));
     }
 
-    @GetMapping("all")
+    @GetMapping
     public ResponseEntity<Iterable<ShipmentDTO>> getAllShipments(){
         return ResponseEntity.ok(this.shipmentService.getAllShipments());
     }
