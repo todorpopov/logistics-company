@@ -26,7 +26,7 @@ public class OfficeController {
         return ResponseEntity.ok(this.officeService.createOffice(dto));
     }
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<Iterable<OfficeDTO>> getAllOffices(){
         return ResponseEntity.ok(this.officeService.getAllOffices());
     }
