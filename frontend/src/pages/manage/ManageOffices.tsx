@@ -7,7 +7,7 @@ import {useGetOffices} from './request';
 import { useQueryClient } from '@tanstack/react-query';
 
 export interface Office {
-  id: number;
+  officeId: number;
   name: string;
   address: string;
   phoneNumber?: string;
@@ -20,9 +20,10 @@ const config: Config = {
 };
 
 const officeColumns: Column<Office>[] = [
-  { header: 'ID', accessor: 'id' },
+  { header: 'ID', accessor: 'officeId' },
   { header: 'Name', accessor: 'name', mandatoryForCreation: true },
   { header: 'Address', accessor: 'address', mandatoryForCreation: true },
+  { header: 'Phone Number', accessor: 'phoneNumber', mandatoryForCreation: true }
 ];
 
 const ManageOffices: React.FC = () => {
@@ -43,7 +44,7 @@ const ManageOffices: React.FC = () => {
   };
 
   const handleEdit = (office: Office) => {
-    axios.put(`${API_URL}/api/office/${office.id}`, { name: office.name, address: office.address, phoneNumber: office.phoneNumber })
+    axios.put(`${API_URL}/api/office/${office.officeId}`, { name: office.name, address: office.address, phoneNumber: office.phoneNumber })
       .then(() => {
         console.log('Office updated successfully');
         queryClient.invalidateQueries({ queryKey: ['offices'] });
@@ -56,7 +57,7 @@ const ManageOffices: React.FC = () => {
   };
 
   const handleDelete = (office: Office) => {
-    axios.delete(`${API_URL}/api/office/${office.id}`)
+    axios.delete(`${API_URL}/api/office/${office.officeId}`)
       .then(() => {
         queryClient.invalidateQueries({ queryKey: ['offices'] });
         console.log('Office deleted successfully');

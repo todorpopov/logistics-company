@@ -11,26 +11,31 @@ import ManageOfficeWorkers from './pages/manage/ManageOfficeWorkers';
 import ManageCouriers from './pages/manage/ManageCouriers';
 import ManagePackages from './pages/manage/ManagePackages';
 import { AuthProvider } from './context/AuthContext';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 
 export const API_URL = process.env.REACT_APP_API_URL;
 
+const queryClient = new QueryClient();
+
 const App: React.FunctionComponent = () => {
   return (
-    <AuthProvider>
-      <div className="App">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LogIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/manage" element={<Manage />} />
-          <Route path="/manage/offices" element={<ManageOffices />} />
-          <Route path="/manage/workers" element={<ManageOfficeWorkers />} />
-          <Route path="/manage/couriers" element={<ManageCouriers />} />
-          <Route path="/manage/packages" element={<ManagePackages />} />
-        </Routes>
-      </div>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <div className="App">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LogIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/manage" element={<Manage />} />
+            <Route path="/manage/offices" element={<ManageOffices />} />
+            <Route path="/manage/workers" element={<ManageOfficeWorkers />} />
+            <Route path="/manage/couriers" element={<ManageCouriers />} />
+            <Route path="/manage/packages" element={<ManagePackages />} />
+          </Routes>
+        </div>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 };
 
