@@ -1,8 +1,15 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, {useState} from 'react';
+import {Link} from 'react-router-dom';
+import {useAuth, UserRole} from '../../context/AuthContext';
 
 const Navbar: React.FC = () => {
   const [expanded, setExpanded] = useState(false);
+  const { user, login, logout } = useAuth();
+
+  // todo remove this mock
+  React.useEffect(() => {
+    login({ email: 'user@example.com', role: UserRole.ADMIN });
+  }, []);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow">
@@ -23,26 +30,32 @@ const Navbar: React.FC = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/" onClick={() => setExpanded(false)}>Home</Link>
             </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#features" onClick={() => setExpanded(false)}>Features</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#pricing" onClick={() => setExpanded(false)}>Pricing</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link disabled" aria-disabled="true">Disabled</a>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/manage" onClick={() => setExpanded(false)}>Manage</Link>
-            </li>
+            {user && (user.role === UserRole.ADMIN) && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/manage" onClick={() => setExpanded(false)}>Manage</Link>
+              </li>
+            )}
           </ul>
           <ul className="navbar-nav ms-auto">
-            <li className="nav-item">
-              <Link className="nav-link" to="/login" onClick={() => setExpanded(false)}>Login</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/signup" onClick={() => setExpanded(false)}>Signup</Link>
-            </li>
+            {user ? (
+              <>
+                <li className="nav-item d-flex align-items-center">
+                  <span className="nav-link">{user.email} ({user.role})</span>
+                </li>
+                <li className="nav-item d-flex align-items-center">
+                  <button className="nav-link btn btn-link p-0 align-middle" style={{padding:0, verticalAlign: 'middle'}} onClick={() => { logout(); setExpanded(false); }}>Logout</button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item align-items-center">
+                  <Link className="nav-link" to="/login" onClick={() => setExpanded(false)}>Login</Link>
+                </li>
+                <li className="nav-item align-items-center">
+                  <Link className="nav-link" to="/signup" onClick={() => setExpanded(false)}>Signup</Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>

@@ -18,7 +18,6 @@ export function validateAuthFields(
   let lastNameError = '';
   let valid = true;
 
-  // Simple email regex for demonstration
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!email) {

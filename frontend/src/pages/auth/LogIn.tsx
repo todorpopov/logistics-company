@@ -3,7 +3,9 @@ import { validateAuthFields } from '../../utils/validateAuthFields';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './LogIn.css';
-import {API_URL} from '../../App';
+import { API_URL } from '../../App';
+import { useAuth, UserRole } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const LogIn: React.FunctionComponent = () => {
   const [email, setEmail] = useState('');
@@ -13,6 +15,8 @@ const LogIn: React.FunctionComponent = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastType, setToastType] = useState<'success' | 'error' | null>(null);
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -37,13 +41,39 @@ const LogIn: React.FunctionComponent = () => {
       setLoading(true);
       setToastType(null);
       setShowToast(false);
-      axios.post(`${API_URL}`, { email, password })
-        .then(() => {
-          setToastType('success');
-          setShowToast(true);
-          setTimeout(() => {
-            window.location.href = '/';
-          }, 1500);
+
+      // todo handle custom error messages
+      axios.post(`${API_URL}/api/auth/log-in`, { email, password })
+        .then((response) => {
+          const { user } = response.data;
+          if (user && user.role) {
+            let roleEnum;
+            switch (user.role) {
+            case 'ADMIN':
+              roleEnum = UserRole.ADMIN;
+              break;
+            case 'CLIENT':
+              roleEnum = UserRole.CLIENT;
+              break;
+            case 'OFFICE_EMPLOYEE':
+              roleEnum = UserRole.OFFICE_EMPLOYEE;
+              break;
+            case 'COURIER_EMPLOYEE':
+              roleEnum = UserRole.COURIER_EMPLOYEE;
+              break;
+            default:
+              roleEnum = user.role;
+            }
+            login({ ...user, role: roleEnum });
+            setToastType('success');
+            setShowToast(true);
+            setTimeout(() => {
+              navigate('/');
+            }, 1500);
+          } else {
+            setToastType('error');
+            setShowToast(true);
+          }
         })
         .catch(() => {
           setToastType('error');
