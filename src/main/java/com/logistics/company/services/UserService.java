@@ -5,6 +5,8 @@ import com.logistics.company.dtos.courier_employee.CourierEmployeeDTO;
 import com.logistics.company.dtos.office_employee.OfficeEmployeeDTO;
 import com.logistics.company.dtos.office_employee.UpdateOfficeEmployeeRequestDTO;
 import com.logistics.company.dtos.user.CreateUserRequestDTO;
+import com.logistics.company.dtos.user.EmployeeDTO;
+import com.logistics.company.dtos.user.InternalEmployeeDTO;
 import com.logistics.company.dtos.user.UpdateUserRequestDTO;
 import com.logistics.company.exceptions.custom.BadRequestException;
 import com.logistics.company.models.*;
@@ -251,6 +253,30 @@ public class UserService {
         } catch (NoSuchElementException e) {
             logger.error(e.getMessage());
             throw new BadRequestException("User not found");
+        } catch (DataAccessException e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
+    }
+
+    public List<EmployeeDTO> getAllEmployees() {
+        try {
+            List< InternalEmployeeDTO> internalEmployeeDtos = this.userRepository.findAllEmployeesAsDTO();
+            return internalEmployeeDtos.stream()
+                .map(
+                internalEmployeeDTO -> {
+                    Long employeeId = internalEmployeeDTO.getOfficeEmployeeId() != null ? internalEmployeeDTO.getOfficeEmployeeId() : internalEmployeeDTO.getCourierEmployeeId();
+                    return EmployeeDTO.builder()
+                        .userId(internalEmployeeDTO.getUserId())
+                        .employeeId(employeeId)
+                        .firstName(internalEmployeeDTO.getFirstName())
+                        .lastName(internalEmployeeDTO.getLastName())
+                        .email(internalEmployeeDTO.getEmail())
+                        .officeId(internalEmployeeDTO.getOfficeId())
+                        .userRole(internalEmployeeDTO.getUserRole())
+                        .build();
+                }
+            ).toList();
         } catch (DataAccessException e) {
             logger.error(e.getMessage());
             throw e;
