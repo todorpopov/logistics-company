@@ -70,8 +70,8 @@ const ManageCouriers: React.FC = () => {
   };
 
   return (
-    <div className="manage-offices-container">
-      <div className="manage-offices-content">
+    <div className="manage-container">
+      <div className="manage-content">
         <Table
           config={config}
           columns={courierEmployeeColumns}

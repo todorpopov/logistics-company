@@ -81,7 +81,7 @@ public class DtoMapper {
             .courierEmployee(courierEmployeeEntityToDto(shipment.getCourierEmployee()))
             .price(shipment.getPrice())
             .weightGram(shipment.getWeightGram())
-            .phoneNumber(shipment.getPhoneNumber())
+            .clientPhoneNumber(shipment.getPhoneNumber())
             .status(shipment.getStatus())
             .deliveryType(shipment.getDeliveryType())
             .sentDate(shipment.getSentDate())

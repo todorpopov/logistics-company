@@ -7,9 +7,9 @@ const Navbar: React.FC = () => {
   const { user, login, logout } = useAuth();
 
   // todo remove this mock
-  React.useEffect(() => {
-    login({ role: UserRole.ADMIN });
-  }, []);
+  // React.useEffect(() => {
+  //   login({ role: UserRole.ADMIN });
+  // }, []);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow">

@@ -15,7 +15,7 @@ export interface Shipment {
   courierEmployeeId: string;
   weightGram: string;
   price: string;
-  shipmentStatus: string;
+  status: string;
   sentDate: string;
   deliveredDate: string;
   clientPhoneNumber: string
@@ -36,13 +36,13 @@ const shipmentColumns: Column<Shipment>[] = [
   { header: 'Delivered By', accessor: 'courierEmployeeId', mandatoryForCreation: true },
   { header: 'Weight', accessor: 'weightGram', mandatoryForCreation: true },
   { header: 'Price', accessor: 'price', mandatoryForCreation: true },
-  { header: 'Shipment Status', accessor: 'shipmentStatus', mandatoryForCreation: true },
+  { header: 'Shipment Status', accessor: 'status', mandatoryForCreation: true },
   { header: 'Sent Date', accessor: 'sentDate', mandatoryForCreation: true },
   { header: 'Client Phone Number', accessor: 'clientPhoneNumber', mandatoryForCreation: true },
   { header: 'Delivered Date', accessor: 'deliveredDate' },
 ];
 
-const ManagePackages: React.FC = () => {
+const ManageShipments: React.FC = () => {
   const queryClient = useQueryClient();
   const { data: shipments } = useGetShipments();
 
@@ -73,7 +73,7 @@ const ManagePackages: React.FC = () => {
       courierEmployeeId: shipment.courierEmployeeId,
       price: shipment.price,
       clientPhoneNumber: shipment.clientPhoneNumber,
-      shipmentStatus: shipment.shipmentStatus,
+      shipmentStatus: shipment.status,
       deliveredDate: shipment.deliveredDate
     })
       .then(() => {
@@ -97,8 +97,8 @@ const ManagePackages: React.FC = () => {
   };
 
   return (
-    <div className="manage-offices-container">
-      <div className="manage-offices-content">
+    <div className="manage-container">
+      <div className="manage-content">
         <Table
           config={config}
           columns={shipmentColumns}
@@ -112,4 +112,4 @@ const ManagePackages: React.FC = () => {
   );
 };
 
-export default ManagePackages;
+export default ManageShipments;

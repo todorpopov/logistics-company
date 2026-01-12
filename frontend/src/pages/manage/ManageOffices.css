@@ -1,4 +1,4 @@
-.manage-offices-container {
+.manage-container {
   display: flex;
   gap: 2rem;
   justify-content: center;
@@ -6,7 +6,7 @@
   min-height: 100vh;
 }
 
-.manage-offices-actions {
+.manage-actions {
   min-width: 12rem;
   max-width: 16rem;
   display: flex;
@@ -14,7 +14,7 @@
   gap: 1.5rem;
 }
 
-.manage-offices-actions .btn {
+.manage-actions .btn {
   font-size: 1.1rem;
   font-weight: 500;
   border-radius: 0.75rem;
@@ -22,16 +22,16 @@
   transition: box-shadow 0.2s, background 0.2s;
 }
 
-.manage-offices-actions .btn-primary,
-.manage-offices-actions .btn-outline-primary {
+.manage-actions .btn-primary,
+.manage-actions .btn-outline-primary {
   margin-bottom: 0.75rem;
 }
 
-.manage-offices-actions .btn:focus {
+.manage-actions .btn:focus {
   box-shadow: 0 0.25rem 1rem rgba(37,99,235,0.18);
 }
 
-.manage-offices-content {
+.manage-content {
   background: #fff;
   border-radius: 1rem;
   box-shadow: 0 0.25rem 1.5rem rgba(0,0,0,0.10);
@@ -40,11 +40,11 @@
 }
 
 @media (max-width: 48rem) {
-  .manage-offices-container {
+  .manage-container {
     flex-direction: column;
     max-width: 100%;
   }
-  .manage-offices-actions {
+  .manage-actions {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -52,7 +52,7 @@
     max-width: 90%;
   }
 
-  .manage-offices-content {
+  .manage-content {
     padding: 1.5rem 1rem;
     min-width: unset;
   }

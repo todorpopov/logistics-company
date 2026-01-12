@@ -9,7 +9,7 @@ import Manage from './pages/manage/Manage';
 import ManageOffices from './pages/manage/ManageOffices';
 import ManageOfficeEmployees from './pages/manage/ManageOfficeEmployees';
 import ManageCouriers from './pages/manage/ManageCouriers';
-import ManagePackages from './pages/manage/ManagePackages';
+import ManageShipments from './pages/manage/ManageShipments';
 import { AuthProvider } from './context/AuthContext';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 
@@ -31,7 +31,7 @@ const App: React.FunctionComponent = () => {
             <Route path="/manage/offices" element={<ManageOffices />} />
             <Route path="/manage/workers" element={<ManageOfficeEmployees />} />
             <Route path="/manage/couriers" element={<ManageCouriers />} />
-            <Route path="/manage/packages" element={<ManagePackages />} />
+            <Route path="/manage/shipments" element={<ManageShipments />} />
           </Routes>
         </div>
       </AuthProvider>

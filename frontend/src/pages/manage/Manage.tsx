@@ -1,7 +1,7 @@
 import React from 'react';
 import './Manage.css';
 
-function Manage<T extends object>() {
+function Manage() {
   return (
     <div data-testid="home-page" className="home-container">
       <h3 className="home-title">Manage A*</h3>
@@ -21,10 +21,10 @@ function Manage<T extends object>() {
           <hr className="icon-divider" />
           <div>Manage couriers</div>
         </div>
-        <div className="icon-feature-card clickable" tabIndex={0} role="button" onClick={() => window.location.href='/manage/packages'}>
+        <div className="icon-feature-card clickable" tabIndex={0} role="button" onClick={() => window.location.href='/manage/shipments'}>
           <i className="bi bi-box-seam"></i>
           <hr className="icon-divider" />
-          <div>Manage packages</div>
+          <div>Manage shipments</div>
         </div>
       </div>
     </div>

@@ -24,7 +24,7 @@ public class ShipmentDTO {
     private OfficeDTO deliveryOffice;
     private CourierEmployeeDTO courierEmployee;
     private ShipmentDeliveryType deliveryType;
-    private String phoneNumber;
+    private String clientPhoneNumber;
     private Integer weightGram;
     private BigDecimal price;
     private ShipmentStatus status;

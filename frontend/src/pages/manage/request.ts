@@ -4,7 +4,7 @@ import { API_URL } from '../../App';
 import type { Office } from './ManageOffices';
 import {OfficeEmployee} from './ManageOfficeEmployees';
 import { CourierEmployee } from './ManageCouriers';
-import { Shipment } from './ManagePackages';
+import { Shipment } from './ManageShipments';
 
 interface OfficeEmployeeRaw {
   officeEmployeeId: number;
@@ -12,6 +12,21 @@ interface OfficeEmployeeRaw {
   firstName: string;
   lastName: string;
   office: Office;
+}
+
+interface ShipmentRaw {
+  shipmentId: number;
+  sender: { clientId: number };
+  registeredBy: { officeEmployeeId: string };
+  deliveryType: string;
+  deliveryOffice: { officeId: string };
+  courierEmployee: { courierEmployeeId: string };
+  weightGram: string;
+  price: string;
+  status: string;
+  sentDate: string;
+  deliveredDate: string;
+  clientPhoneNumber: string;
 }
 
 export const useGetOffices = ():
@@ -53,8 +68,21 @@ export const useGetCourierEmployees = ():
 export const useGetShipments = (): UseQueryResult<Shipment[], Error> => useQuery<Shipment[], Error>({
   queryKey: ['shipments'],
   queryFn: async () => {
-    const { data } = await axios.get<Shipment[]>(`${API_URL}/api/shipment`);
-    return data;
+    const { data } = await axios.get<ShipmentRaw[]>(`${API_URL}/api/shipment`);
+    return data.map(shipment => ({
+      shipmentId: shipment.shipmentId,
+      senderId: shipment.sender?.clientId ?? 0,
+      registeredById: shipment.registeredBy?.officeEmployeeId ?? '',
+      deliveryType: shipment.deliveryType,
+      deliveryOfficeId: shipment.deliveryOffice?.officeId ?? '',
+      courierEmployeeId: shipment.courierEmployee?.courierEmployeeId ?? '',
+      weightGram: shipment.weightGram,
+      price: shipment.price,
+      status: shipment.status,
+      sentDate: shipment.sentDate,
+      deliveredDate: shipment.deliveredDate,
+      clientPhoneNumber: shipment.clientPhoneNumber
+    }));
   },
   refetchInterval: 5000
 });
