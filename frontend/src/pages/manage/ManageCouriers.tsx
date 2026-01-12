@@ -57,7 +57,7 @@ const ManageCouriers: React.FC = () => {
   };
 
   const handleDelete = (employee: CourierEmployee) => {
-    axios.delete(`${API_URL}/api/user/${employee.courierEmployeeId}`)
+    axios.delete(`${API_URL}/api/user/courier-employee/${employee.courierEmployeeId}`)
       .then(() => {
         queryClient.invalidateQueries({ queryKey: ['courierEmployees'] });
         console.log('Employee deleted successfully');

@@ -59,7 +59,7 @@ const ManageOfficeEmployees: React.FC = () => {
   };
 
   const handleDelete = (employee: OfficeEmployee) => {
-    axios.delete(`${API_URL}/api/office/${employee.officeEmployeeId}`)
+    axios.delete(`${API_URL}/api/user/office-employee/${employee.officeEmployeeId}`)
       .then(() => {
         queryClient.invalidateQueries({ queryKey: ['officeEmployees'] });
         console.log('Employee deleted successfully');

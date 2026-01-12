@@ -2,9 +2,17 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import axios from 'axios';
 import { API_URL } from '../../App';
 import type { Office } from './ManageOffices';
-import { OfficeEmployee } from './ManageOfficeEmployees';
+import {OfficeEmployee} from './ManageOfficeEmployees';
 import { CourierEmployee } from './ManageCouriers';
 import { Shipment } from './ManagePackages';
+
+interface OfficeEmployeeRaw {
+  officeEmployeeId: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  office: Office;
+}
 
 export const useGetOffices = ():
     UseQueryResult<Office[], Error> => useQuery<Office[], Error>({
@@ -20,8 +28,14 @@ export const useGetOfficeEmployees = ():
     UseQueryResult<OfficeEmployee[], Error> => useQuery<OfficeEmployee[], Error>({
       queryKey: ['officeEmployees'],
       queryFn: async () => {
-        const { data } = await axios.get<OfficeEmployee[]>(`${API_URL}/api/user/office-employee`);
-        return data;
+        const { data } = await axios.get<OfficeEmployeeRaw[]>(`${API_URL}/api/user/office-employee`);
+        return data.map(employee => ({
+          officeEmployeeId: employee.officeEmployeeId,
+          email: employee.email,
+          firstName: employee.firstName,
+          lastName: employee.lastName,
+          officeId: employee.office?.officeId ?? 0
+        }));
       },
       refetchInterval: 5000
     });

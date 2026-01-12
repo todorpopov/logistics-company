@@ -45,10 +45,10 @@ const LogIn: React.FunctionComponent = () => {
       // todo handle custom error messages
       axios.post(`${API_URL}/api/auth/log-in`, { email, password })
         .then((response) => {
-          const { user } = response.data;
-          if (user && user.role) {
+          const { role } = response.data;
+          if (role) {
             let roleEnum;
-            switch (user.role) {
+            switch (role) {
             case 'ADMIN':
               roleEnum = UserRole.ADMIN;
               break;
@@ -62,9 +62,9 @@ const LogIn: React.FunctionComponent = () => {
               roleEnum = UserRole.COURIER_EMPLOYEE;
               break;
             default:
-              roleEnum = user.role;
+              roleEnum = role;
             }
-            login({ ...user, role: roleEnum });
+            login({ role: roleEnum });
             setToastType('success');
             setShowToast(true);
             setTimeout(() => {
