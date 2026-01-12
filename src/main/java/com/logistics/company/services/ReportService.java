@@ -34,6 +34,10 @@ public class ReportService {
         return this.shipmentService.getAllRegisteredShipments();
     }
 
+    public List<ShipmentDTO> getAllShipmentsSentForDelivery() {
+        return this.shipmentService.getAllShipmentsSentForDelivery();
+    }
+
     public List<ShipmentDTO> getAllShipmentsRegisteredBy(Long officeEmployeeId) {
         if (!Validator.isIdValid(officeEmployeeId, true)) {
             throw new BadRequestException("Invalid request");

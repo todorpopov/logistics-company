@@ -36,6 +36,11 @@ public class ReportController {
         return ResponseEntity.ok(this.reportService.getAllRegisteredShipments());
     }
 
+    @GetMapping("shipments-sent-for-delivery")
+    public ResponseEntity<Iterable<ShipmentDTO>> getAllShipmentsSentForDelivery() {
+        return ResponseEntity.ok(this.reportService.getAllShipmentsSentForDelivery());
+    }
+
     @GetMapping("shipments-registered-by/{officeEmployeeId}")
     public ResponseEntity<Iterable<ShipmentDTO>> getAllShipmentsRegisteredBy(@PathVariable Long officeEmployeeId) {
         if (!Validator.isIdValid(officeEmployeeId, true)) {
