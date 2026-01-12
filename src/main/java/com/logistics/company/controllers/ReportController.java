@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("api/report")
 public class ReportController {
@@ -55,5 +58,10 @@ public class ReportController {
             throw new BadRequestException("Invalid request");
         }
         return ResponseEntity.ok(this.reportService.getAllShipmentsSentByClient(clientId));
+    }
+
+    @GetMapping("total-gross-income-for-period/{startDate}/{endDate}")
+    public BigDecimal getTotalPriceOfShipmentsBetween(@PathVariable LocalDate startDate, @PathVariable LocalDate endDate) {
+        return this.reportService.getTotalPriceOfShipmentsBetween(startDate, endDate);
     }
 }

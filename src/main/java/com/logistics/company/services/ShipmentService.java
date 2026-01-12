@@ -15,6 +15,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -201,5 +202,23 @@ public class ShipmentService {
             logger.error(e.getMessage());
             throw e;
         }
+    }
+
+    private List<ShipmentDTO> getAllDeliveredShipmentsBetween(LocalDate startDate, LocalDate endDate) {
+        try {
+            List<Shipment> shipments = this.shipmentRepository.findAllByDeliveredDateBetween(startDate, endDate);
+            return shipments.stream()
+                .map(DtoMapper::shipmentEntityToDto)
+                .toList();
+        } catch (DataAccessException e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
+    }
+
+    public BigDecimal getTotalPriceOfShipmentsBetween(LocalDate startDate, LocalDate endDate) {
+        return this.getAllDeliveredShipmentsBetween(startDate, endDate).stream()
+            .map(ShipmentDTO::getPrice)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

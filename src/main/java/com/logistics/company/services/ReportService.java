@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -50,5 +53,9 @@ public class ReportService {
             throw new BadRequestException("Invalid request");
         }
         return this.shipmentService.getAllShipmentsSentByClient(clientId);
+    }
+
+    public BigDecimal getTotalPriceOfShipmentsBetween(LocalDate startDate, LocalDate endDate) {
+        return this.shipmentService.getTotalPriceOfShipmentsBetween(startDate, endDate);
     }
 }
