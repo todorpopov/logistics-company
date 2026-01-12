@@ -21,7 +21,7 @@ const config: Config = {
 };
 
 const officeEmployeeColumns: Column<OfficeEmployee>[] = [
-  { header: 'ID', accessor: 'officeEmployeeId' },
+  { header: 'ID', accessor: 'officeEmployeeId', editable: false },
   { header: 'Email', accessor: 'email' },
   { header: 'First Name', accessor: 'firstName', mandatoryForCreation: true },
   { header: 'Last Name', accessor: 'lastName', mandatoryForCreation: true },

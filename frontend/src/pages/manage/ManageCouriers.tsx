@@ -20,7 +20,7 @@ const config: Config = {
 };
 
 const courierEmployeeColumns: Column<CourierEmployee>[] = [
-  { header: 'ID', accessor: 'courierEmployeeId', mandatoryForCreation: true },
+  { header: 'ID', accessor: 'courierEmployeeId', mandatoryForCreation: true, editable: false },
   { header: 'Email', accessor: 'email', mandatoryForCreation: true },
   { header: 'First Name', accessor: 'firstName', mandatoryForCreation: true },
   { header: 'Last Name', accessor: 'lastName', mandatoryForCreation: true },

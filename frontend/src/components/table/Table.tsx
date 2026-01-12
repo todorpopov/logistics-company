@@ -11,6 +11,7 @@ export interface Column<T> {
   header: string;
   accessor: keyof T;
   mandatoryForCreation?: boolean;
+  editable?: boolean;
 }
 
 interface TableProps<T> {
@@ -68,6 +69,7 @@ function Table<T extends object>({ config, columns, data, pageSize = 5, onEdit, 
     setCreateData(prev => ({ ...prev, [accessor]: value }));
   };
   const isCreateDisabled = columns.some(col => col.mandatoryForCreation && (createData[col.accessor] === undefined || createData[col.accessor] === ''));
+  // const isCreateDisabled = columns.some(col => col.mandatoryForCreation && col.editable !== false && (createData[col.accessor] === undefined || createData[col.accessor] === ''));
   const handleCreate = () => {
     if (onCreate && !isCreateDisabled) {
       onCreate(createData as T);
@@ -97,17 +99,18 @@ function Table<T extends object>({ config, columns, data, pageSize = 5, onEdit, 
           </thead>
           <tbody>
             <tr>
-              {columns.map((column) => column.accessor === 'id' && (
-                <td key={String(column.accessor)}/>
-              ))}
-              {columns.map((column) => column.accessor !== 'id' && (
+              {columns.map((column) => (
                 <td key={String(column.accessor)}>
-                  <input
-                    className="editable-table-input"
-                    value={createData[column.accessor] !== undefined ? String(createData[column.accessor]) : ''}
-                    onChange={e => handleCreateChange(column.accessor, e.target.value)}
-                    placeholder={column.header + (column.mandatoryForCreation ? ' *' : '')}
-                  />
+                  {config.enableCreation && (column.editable === undefined || column.editable) ? (
+                    <input
+                      className="editable-table-input"
+                      value={createData[column.accessor] !== undefined ? String(createData[column.accessor]) : ''}
+                      onChange={e => handleCreateChange(column.accessor, e.target.value)}
+                      placeholder={column.header + (column.mandatoryForCreation ? ' *' : '')}
+                    />
+                  ) : (
+                    ''
+                  )}
                 </td>
               ))}
               {config.enableCreation && (
@@ -126,7 +129,7 @@ function Table<T extends object>({ config, columns, data, pageSize = 5, onEdit, 
               <tr key={rowIndex + (page - 1) * pageSize}>
                 {columns.map((column) => (
                   <td key={String(column.accessor)}>
-                    {editRow === rowIndex && column.accessor !== 'id' ? (
+                    {editRow === rowIndex && (column.editable === undefined || column.editable) ? (
                       <input
                         className="editable-table-input"
                         value={editData[column.accessor] !== undefined ? String(editData[column.accessor]) : ''}

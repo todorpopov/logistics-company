@@ -7,9 +7,9 @@ const Navbar: React.FC = () => {
   const { user, login, logout } = useAuth();
 
   // todo remove this mock
-  // React.useEffect(() => {
-  //   login({ email: 'user@example.com', role: UserRole.ADMIN });
-  // }, []);
+  React.useEffect(() => {
+    login({ role: UserRole.ADMIN });
+  }, []);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow">
@@ -30,7 +30,6 @@ const Navbar: React.FC = () => {
             <li className="nav-item align-items-center">
               <Link className="nav-link" to="/" onClick={() => setExpanded(false)}>Home</Link>
             </li>
-            {/*{user && (*/}
             {user && (user.role === UserRole.ADMIN) && (
               <li className="nav-item align-items-center">
                 <Link className="nav-link" to="/manage" onClick={() => setExpanded(false)}>Manage</Link>

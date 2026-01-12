@@ -20,7 +20,7 @@ const config: Config = {
 };
 
 const officeColumns: Column<Office>[] = [
-  { header: 'ID', accessor: 'officeId' },
+  { header: 'ID', accessor: 'officeId', editable: false },
   { header: 'Name', accessor: 'name', mandatoryForCreation: true },
   { header: 'Address', accessor: 'address', mandatoryForCreation: true },
   { header: 'Phone Number', accessor: 'phoneNumber', mandatoryForCreation: true }

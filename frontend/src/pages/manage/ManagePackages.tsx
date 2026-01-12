@@ -28,7 +28,7 @@ const config: Config = {
 };
 
 const shipmentColumns: Column<Shipment>[] = [
-  { header: 'ID', accessor: 'shipmentId' },
+  { header: 'ID', accessor: 'shipmentId', editable: false },
   { header: 'Sender', accessor: 'senderId', mandatoryForCreation: true },
   { header: 'Registered By', accessor: 'registeredById', mandatoryForCreation: true },
   { header: 'Delivery Type', accessor: 'deliveryType', mandatoryForCreation: true },
