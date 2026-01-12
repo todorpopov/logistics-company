@@ -19,13 +19,11 @@ public class CreateUserRequestDTO implements Validatable {
     private String lastName;
     private Long officeId;
 
-    private Boolean officeEmployee;
-
     public boolean isInvalid() {
         return !Validator.isEmailValid(this.email, true)
             || !Validator.isPasswordValid(this.password, true)
-            || !Validator.isStringValid(this.firstName, 3, 255, true)
-            || !Validator.isStringValid(this.lastName, 3, 255, true)
-            || !Validator.isIdValid(this.officeId, this.officeEmployee);
+            || !Validator.isStringValid(this.firstName, 1, 255, true)
+            || !Validator.isStringValid(this.lastName, 1, 255, true)
+            || !Validator.isIdValid(this.officeId, false);
     }
 }

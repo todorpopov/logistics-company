@@ -39,7 +39,6 @@ public class UserController {
 
     @PostMapping("office-employee")
     public ResponseEntity<OfficeEmployeeDTO> createOfficeEmployee(@RequestBody CreateUserRequestDTO dto) {
-        dto.setOfficeEmployee(true);
         if (dto.isInvalid()) {
             throw new BadRequestException("Invalid request");
         }
@@ -48,7 +47,6 @@ public class UserController {
 
     @PostMapping("courier-employee")
     public ResponseEntity<CourierEmployeeDTO> createCourierEmployee(@RequestBody CreateUserRequestDTO dto) {
-        dto.setOfficeEmployee(false);
         if (dto.isInvalid()) {
             throw new BadRequestException("Invalid request");
         }

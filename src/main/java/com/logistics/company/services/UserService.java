@@ -88,7 +88,6 @@ public class UserService {
 
     @Transactional
     public OfficeEmployeeDTO createOfficeEmployee(CreateUserRequestDTO createUserRequestDTO) {
-        createUserRequestDTO.setOfficeEmployee(true);
         if (createUserRequestDTO.isInvalid()) {
             throw new BadRequestException("Invalid request");
         }
@@ -120,7 +119,6 @@ public class UserService {
 
     @Transactional
     public CourierEmployeeDTO createCourierEmployee(CreateUserRequestDTO createUserRequestDTO) {
-        createUserRequestDTO.setOfficeEmployee(false);
         if (createUserRequestDTO.isInvalid()) {
             throw new BadRequestException("Invalid request");
         }
