@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
     List<Shipment> findAllByStatusIs(ShipmentStatus status);
+
+    List<Shipment> findAllByRegisteredBy_OfficeEmployeeId(Long officeEmployeeId);
 }

@@ -3,6 +3,8 @@ package com.logistics.company.services;
 import com.logistics.company.dtos.client.ClientDTO;
 import com.logistics.company.dtos.shipment.ShipmentDTO;
 import com.logistics.company.dtos.user.EmployeeDTO;
+import com.logistics.company.exceptions.custom.BadRequestException;
+import com.logistics.company.util.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -30,5 +32,12 @@ public class ReportService {
 
     public List<ShipmentDTO> getAllRegisteredShipments() {
         return this.shipmentService.getAllRegisteredShipments();
+    }
+
+    public List<ShipmentDTO> getAllShipmentsRegisteredBy(Long officeEmployeeId) {
+        if (!Validator.isIdValid(officeEmployeeId, true)) {
+            throw new BadRequestException("Invalid request");
+        }
+        return this.shipmentService.getAllShipmentsRegisteredBy(officeEmployeeId);
     }
 }

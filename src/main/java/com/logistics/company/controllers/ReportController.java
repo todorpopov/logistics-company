@@ -3,9 +3,12 @@ package com.logistics.company.controllers;
 import com.logistics.company.dtos.client.ClientDTO;
 import com.logistics.company.dtos.shipment.ShipmentDTO;
 import com.logistics.company.dtos.user.EmployeeDTO;
+import com.logistics.company.exceptions.custom.BadRequestException;
 import com.logistics.company.services.ReportService;
+import com.logistics.company.util.Validator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,5 +34,13 @@ public class ReportController {
     @GetMapping("registered-shipments")
     public ResponseEntity<Iterable<ShipmentDTO>> getAllRegisteredShipments() {
         return ResponseEntity.ok(this.reportService.getAllRegisteredShipments());
+    }
+
+    @GetMapping("shipments-registered-by/{officeEmployeeId}")
+    public ResponseEntity<Iterable<ShipmentDTO>> getAllShipmentsRegisteredBy(@PathVariable Long officeEmployeeId) {
+        if (!Validator.isIdValid(officeEmployeeId, true)) {
+            throw new BadRequestException("Invalid request");
+        }
+        return ResponseEntity.ok(this.reportService.getAllShipmentsRegisteredBy(officeEmployeeId));
     }
 }

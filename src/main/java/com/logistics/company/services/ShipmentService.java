@@ -162,4 +162,20 @@ public class ShipmentService {
             throw e;
         }
     }
+
+    public List<ShipmentDTO> getAllShipmentsRegisteredBy(Long officeEmployeeId) {
+        if (!Validator.isIdValid(officeEmployeeId, true)) {
+            throw new BadRequestException("Invalid request");
+        }
+
+        try {
+            List<Shipment> registeredShipments = this.shipmentRepository.findAllByRegisteredBy_OfficeEmployeeId(officeEmployeeId);
+            return registeredShipments.stream()
+                .map(DtoMapper::shipmentEntityToDto)
+                .toList();
+        } catch (DataAccessException e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
+    }
 }
