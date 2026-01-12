@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -22,6 +23,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -34,11 +36,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = (user: User) => {
     setUser(user);
     localStorage.setItem('user', JSON.stringify(user));
+    navigate('/');
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    navigate('/');
   };
 
   return (

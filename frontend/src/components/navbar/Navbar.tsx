@@ -27,25 +27,20 @@ const Navbar: React.FC = () => {
         </button>
         <div className={`collapse navbar-collapse${expanded ? ' show' : ''}`} id="navbarNav">
           <ul className="navbar-nav">
-            <li className="nav-item">
+            <li className="nav-item align-items-center">
               <Link className="nav-link" to="/" onClick={() => setExpanded(false)}>Home</Link>
             </li>
             {user && (user.role === UserRole.ADMIN) && (
-              <li className="nav-item">
+              <li className="nav-item align-items-center">
                 <Link className="nav-link" to="/manage" onClick={() => setExpanded(false)}>Manage</Link>
               </li>
             )}
           </ul>
           <ul className="navbar-nav ms-auto">
             {user ? (
-              <>
-                <li className="nav-item d-flex align-items-center">
-                  <span className="nav-link">{user.email} ({user.role})</span>
-                </li>
-                <li className="nav-item d-flex align-items-center">
-                  <button className="nav-link btn btn-link p-0 align-middle" style={{padding:0, verticalAlign: 'middle'}} onClick={() => { logout(); setExpanded(false); }}>Logout</button>
-                </li>
-              </>
+              <li className="nav-item align-items-center">
+                <Link className="nav-link" to="/" onClick={() => { logout(); setExpanded(false);}}>Logout</Link>
+              </li>
             ) : (
               <>
                 <li className="nav-item align-items-center">
