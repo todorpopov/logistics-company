@@ -151,9 +151,9 @@ public class ShipmentService {
         }
     }
 
-    public List<ShipmentDTO> getAllRegisteredShipments() {
+    private List<ShipmentDTO> getShipmentsByStatus(ShipmentStatus status) {
         try {
-            List<Shipment> registeredShipments = this.shipmentRepository.findAllByStatusIs(ShipmentStatus.REGISTERED);
+            List<Shipment> registeredShipments = this.shipmentRepository.findAllByStatusIs(status);
             return registeredShipments.stream()
                 .map(DtoMapper::shipmentEntityToDto)
                 .toList();
@@ -161,6 +161,10 @@ public class ShipmentService {
             logger.error(e.getMessage());
             throw e;
         }
+    }
+
+    public List<ShipmentDTO> getAllRegisteredShipments() {
+        return this.getShipmentsByStatus(ShipmentStatus.REGISTERED);
     }
 
     public List<ShipmentDTO> getAllShipmentsRegisteredBy(Long officeEmployeeId) {
@@ -177,5 +181,9 @@ public class ShipmentService {
             logger.error(e.getMessage());
             throw e;
         }
+    }
+
+    public List<ShipmentDTO> getAllShipmentsSentForDelivery() {
+        return this.getShipmentsByStatus(ShipmentStatus.SENT_FOR_DELIVERY);
     }
 }
