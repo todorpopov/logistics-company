@@ -1,6 +1,7 @@
 package com.logistics.company.services;
 
 import com.logistics.company.dtos.client.ClientDTO;
+import com.logistics.company.dtos.shipment.ShipmentDTO;
 import com.logistics.company.dtos.user.EmployeeDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +13,11 @@ import java.util.List;
 public class ReportService {
     private final Logger logger = LoggerFactory.getLogger(ReportService.class.getName());
     private final UserService userService;
+    private final ShipmentService shipmentService;
 
-    public ReportService(UserService userService) {
+    public ReportService(UserService userService, ShipmentService shipmentService) {
         this.userService = userService;
+        this.shipmentService = shipmentService;
     }
 
     public List<EmployeeDTO> getAllEmployees() {
@@ -23,5 +26,9 @@ public class ReportService {
 
     public List<ClientDTO> getAllClients() {
         return this.userService.getAllClients();
+    }
+
+    public List<ShipmentDTO> getAllRegisteredShipments() {
+        return this.shipmentService.getAllRegisteredShipments();
     }
 }

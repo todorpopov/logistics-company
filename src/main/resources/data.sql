@@ -60,7 +60,7 @@ INSERT INTO shipments (
     'OFFICE',
     100,
     1000,
-    'PENDING',
+    'REGISTERED',
     '0987654321',
     '2021-01-01',
     NULL
