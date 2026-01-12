@@ -1,6 +1,7 @@
 package com.logistics.company.controllers;
 
 import com.logistics.company.dtos.client.ClientDTO;
+import com.logistics.company.dtos.shipment.ShipmentDTO;
 import com.logistics.company.dtos.user.EmployeeDTO;
 import com.logistics.company.services.ReportService;
 import org.springframework.http.ResponseEntity;
@@ -25,5 +26,10 @@ public class ReportController {
     @GetMapping("clients")
     public ResponseEntity<Iterable<ClientDTO>> getAllClients() {
         return ResponseEntity.ok(this.reportService.getAllClients());
+    }
+
+    @GetMapping("registered-shipments")
+    public ResponseEntity<Iterable<ShipmentDTO>> getAllRegisteredShipments() {
+        return ResponseEntity.ok(this.reportService.getAllRegisteredShipments());
     }
 }

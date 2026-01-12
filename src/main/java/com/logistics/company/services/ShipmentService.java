@@ -49,7 +49,7 @@ public class ShipmentService {
         }
 
         LocalDate today = LocalDate.now();
-        ShipmentStatus status = ShipmentStatus.PENDING;
+        ShipmentStatus status = ShipmentStatus.REGISTERED;
         try {
             Client sender = this.clientRepository.findById(createShipmentRequestDTO.getSenderId())
                 .orElseThrow(() -> new BadRequestException("Sender not found"));
@@ -148,6 +148,18 @@ public class ShipmentService {
         } catch (DataAccessException e) {
             logger.error(e.getMessage());
             throw new BadRequestException("Cannot delete shipment");
+        }
+    }
+
+    public List<ShipmentDTO> getAllRegisteredShipments() {
+        try {
+            List<Shipment> registeredShipments = this.shipmentRepository.findAllByStatusIs(ShipmentStatus.REGISTERED);
+            return registeredShipments.stream()
+                .map(DtoMapper::shipmentEntityToDto)
+                .toList();
+        } catch (DataAccessException e) {
+            logger.error(e.getMessage());
+            throw e;
         }
     }
 }
