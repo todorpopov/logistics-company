@@ -7,7 +7,7 @@ import Home from './pages/home/Home';
 import SignUp from './pages/auth/SignUp';
 import Manage from './pages/manage/Manage';
 import ManageOffices from './pages/manage/ManageOffices';
-import ManageOfficeWorkers from './pages/manage/ManageOfficeWorkers';
+import ManageOfficeEmployees from './pages/manage/ManageOfficeEmployees';
 import ManageCouriers from './pages/manage/ManageCouriers';
 import ManagePackages from './pages/manage/ManagePackages';
 import { AuthProvider } from './context/AuthContext';
@@ -29,7 +29,7 @@ const App: React.FunctionComponent = () => {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/manage" element={<Manage />} />
             <Route path="/manage/offices" element={<ManageOffices />} />
-            <Route path="/manage/workers" element={<ManageOfficeWorkers />} />
+            <Route path="/manage/workers" element={<ManageOfficeEmployees />} />
             <Route path="/manage/couriers" element={<ManageCouriers />} />
             <Route path="/manage/packages" element={<ManagePackages />} />
           </Routes>

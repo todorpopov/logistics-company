@@ -22,17 +22,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("client/all")
+    @GetMapping("client")
     public ResponseEntity<Iterable<ClientDTO>> getAllClients(){
         return ResponseEntity.ok(this.userService.getAllClients());
     }
 
-    @GetMapping("office-employee/all")
+    @GetMapping("office-employee")
     public ResponseEntity<Iterable<OfficeEmployeeDTO>> getAllOfficeEmployees(){
         return ResponseEntity.ok(this.userService.getAllOfficeEmployees());
     }
 
-    @GetMapping("courier-employee/all")
+    @GetMapping("courier-employee")
     public ResponseEntity<Iterable<CourierEmployeeDTO>> getAllCourierEmployees(){
         return ResponseEntity.ok(this.userService.getAllCourierEmployees());
     }

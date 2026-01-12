@@ -20,7 +20,7 @@ public class CreateShipmentRequestDTO implements Validatable {
     private Long deliveryOfficeId;
     private Long courierEmployeeId;
     private ShipmentDeliveryType deliveryType;
-    private String phoneNumber;
+    private String clientPhoneNumber;
     private Integer weightGram;
     private BigDecimal price;
 
@@ -30,7 +30,7 @@ public class CreateShipmentRequestDTO implements Validatable {
             || !Validator.isIdValid(this.registeredById, true)
             || !Validator.isIdValid(this.deliveryOfficeId, false)
             || !Validator.isIdValid(this.courierEmployeeId, false)
-            || !Validator.isPhoneNumberValid(this.phoneNumber,true)
+            || !Validator.isPhoneNumberValid(this.clientPhoneNumber,true)
             || !Validator.isWeightValid(this.weightGram, true)
             || !Validator.isPriceValid(this.price, true)
             || this.deliveryType == null;

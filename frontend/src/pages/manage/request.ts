@@ -1,7 +1,10 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import axios from 'axios';
-import {API_URL} from '../../App';
+import { API_URL } from '../../App';
 import type { Office } from './ManageOffices';
+import { OfficeEmployee } from './ManageOfficeEmployees';
+import { CourierEmployee } from './ManageCouriers';
+import { Shipment } from './ManagePackages';
 
 export const useGetOffices = ():
     UseQueryResult<Office[], Error> => useQuery<Office[], Error>({
@@ -12,3 +15,32 @@ export const useGetOffices = ():
       },
       refetchInterval: 5000
     });
+
+export const useGetOfficeEmployees = ():
+    UseQueryResult<OfficeEmployee[], Error> => useQuery<OfficeEmployee[], Error>({
+      queryKey: ['officeEmployees'],
+      queryFn: async () => {
+        const { data } = await axios.get<OfficeEmployee[]>(`${API_URL}/api/user/office-employee`);
+        return data;
+      },
+      refetchInterval: 5000
+    });
+
+export const useGetCourierEmployees = ():
+    UseQueryResult<CourierEmployee[], Error> => useQuery<CourierEmployee[], Error>({
+      queryKey: ['courierEmployees'],
+      queryFn: async () => {
+        const { data } = await axios.get<CourierEmployee[]>(`${API_URL}/api/user/courier-employee`);
+        return data;
+      },
+      refetchInterval: 5000
+    });
+
+export const useGetShipments = (): UseQueryResult<Shipment[], Error> => useQuery<Shipment[], Error>({
+  queryKey: ['shipments'],
+  queryFn: async () => {
+    const { data } = await axios.get<Shipment[]>(`${API_URL}/api/shipment`);
+    return data;
+  },
+  refetchInterval: 5000
+});

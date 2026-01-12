@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class ShipmentService {
@@ -68,7 +67,7 @@ public class ShipmentService {
                 .courierEmployee(courierEmployee)
                 .price(createShipmentRequestDTO.getPrice())
                 .weightGram(createShipmentRequestDTO.getWeightGram())
-                .phoneNumber(createShipmentRequestDTO.getPhoneNumber())
+                .phoneNumber(createShipmentRequestDTO.getClientPhoneNumber())
                 .status(status)
                 .deliveryType(createShipmentRequestDTO.getDeliveryType())
                 .sentDate(today)
