@@ -246,6 +246,10 @@ public class UserService {
                 case CLIENT -> this.clientRepository.deleteById(entityId);
                 case OFFICE_EMPLOYEE -> this.officeEmployeeRepository.deleteById(entityId);
                 case COURIER_EMPLOYEE -> this.courierEmployeeRepository.deleteById(entityId);
+                default -> {
+                    logger.error("Invalid user role, please check the UserRole enum");
+                    throw new BadRequestException("Invalid user role");
+                }
             }
 
         } catch (NoSuchElementException e) {
