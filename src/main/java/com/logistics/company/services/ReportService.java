@@ -44,4 +44,11 @@ public class ReportService {
         }
         return this.shipmentService.getAllShipmentsRegisteredBy(officeEmployeeId);
     }
+
+    public List<ShipmentDTO> getAllShipmentsSentByClient(Long clientId) {
+        if (!Validator.isIdValid(clientId, true)) {
+            throw new BadRequestException("Invalid request");
+        }
+        return this.shipmentService.getAllShipmentsSentByClient(clientId);
+    }
 }

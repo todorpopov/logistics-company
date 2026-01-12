@@ -48,4 +48,12 @@ public class ReportController {
         }
         return ResponseEntity.ok(this.reportService.getAllShipmentsRegisteredBy(officeEmployeeId));
     }
+
+    @GetMapping("shipments-sent-by/{clientId}")
+    public ResponseEntity<Iterable<ShipmentDTO>> getAllShipmentsSentByClient(@PathVariable Long clientId) {
+        if (!Validator.isIdValid(clientId, true)) {
+            throw new BadRequestException("Invalid request");
+        }
+        return ResponseEntity.ok(this.reportService.getAllShipmentsSentByClient(clientId));
+    }
 }

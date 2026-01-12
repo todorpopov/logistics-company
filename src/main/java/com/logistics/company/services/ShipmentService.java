@@ -186,4 +186,20 @@ public class ShipmentService {
     public List<ShipmentDTO> getAllShipmentsSentForDelivery() {
         return this.getShipmentsByStatus(ShipmentStatus.SENT_FOR_DELIVERY);
     }
+
+    public List<ShipmentDTO> getAllShipmentsSentByClient(Long clientId) {
+        if (!Validator.isIdValid(clientId, true)) {
+            throw new BadRequestException("Invalid request");
+        }
+
+        try {
+            List<Shipment> registeredShipments = this.shipmentRepository.findAllBySender_ClientId(clientId);
+            return registeredShipments.stream()
+                .map(DtoMapper::shipmentEntityToDto)
+                .toList();
+        } catch (DataAccessException e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
+    }
 }

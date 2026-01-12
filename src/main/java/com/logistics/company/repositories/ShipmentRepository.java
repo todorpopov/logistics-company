@@ -10,4 +10,5 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
     List<Shipment> findAllByStatusIs(ShipmentStatus status);
 
     List<Shipment> findAllByRegisteredBy_OfficeEmployeeId(Long officeEmployeeId);
+    List<Shipment> findAllBySender_ClientId(Long clientId);
 }
