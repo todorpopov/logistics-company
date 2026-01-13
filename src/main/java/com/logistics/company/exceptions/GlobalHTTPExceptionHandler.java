@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalHTTPExceptionHandler {
     @ExceptionHandler
-    public ResponseEntity<ErrorHTTPResponse> handleHibernateException(BadRequestException e) {
-        ErrorHTTPResponse error = new ErrorHTTPResponse("BAD_REQUEST", e.getMessage());
+    public ResponseEntity<ErrorHTTPResponse> handleBadRequestException(BadRequestException e) {
+        ErrorHTTPResponse error = new ErrorHTTPResponse("BAD_REQUEST", e.getMessage(), e.getErrors());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 

@@ -42,16 +42,14 @@ public class AuthService {
     }
 
     @Transactional
-    public AuthResponseDTO registerClient(RegisterClientRequestDTO registerClientRequestDto) {
-        if (registerClientRequestDto.isInvalid()) {
-            throw new BadRequestException("Invalid request");
-        }
+    public AuthResponseDTO registerClient(RegisterClientRequestDTO dto) {
+        dto.validate();
 
         User user = User.builder()
-            .firstName(registerClientRequestDto.getFirstName())
-            .lastName(registerClientRequestDto.getLastName())
-            .email(registerClientRequestDto.getEmail())
-            .passwordHash(BcryptUtils.hashPassword(registerClientRequestDto.getPassword()))
+            .firstName(dto.getFirstName())
+            .lastName(dto.getLastName())
+            .email(dto.getEmail())
+            .passwordHash(BcryptUtils.hashPassword(dto.getPassword()))
             .userRole(UserRole.CLIENT)
             .build();
 
@@ -75,14 +73,12 @@ public class AuthService {
         );
     }
 
-    public AuthResponseDTO logUserIn(LogInRequestDTO logInRequestDTO) {
-        if (logInRequestDTO.isInvalid()) {
-            throw new BadRequestException("Invalid request");
-        }
+    public AuthResponseDTO logUserIn(LogInRequestDTO dto) {
+        dto.validate();
 
         try {
-            User user = this.userRepository.findByEmail(logInRequestDTO.getEmail()).orElseThrow();
-            if (!BcryptUtils.checkPassword(logInRequestDTO.getPassword(), user.getPasswordHash())) {
+            User user = this.userRepository.findByEmail(dto.getEmail()).orElseThrow();
+            if (!BcryptUtils.checkPassword(dto.getPassword(), user.getPasswordHash())) {
                 throw new UnauthorizedException("Invalid credentials");
             }
             return this.generateAuthResponse(
@@ -101,17 +97,15 @@ public class AuthService {
         }
     }
 
-    public AuthResponseDTO logAdminIn(LogInRequestDTO logInRequestDTO) {
-        if (logInRequestDTO.isInvalid()) {
-            throw new BadRequestException("Invalid request");
-        }
+    public AuthResponseDTO logAdminIn(LogInRequestDTO dto) {
+        dto.validate();
 
-        if (logInRequestDTO.getEmail().equals(adminEmail) && logInRequestDTO.getPassword().equals(adminPassword)) {
+        if (dto.getEmail().equals(adminEmail) && dto.getPassword().equals(adminPassword)) {
             return this.generateAuthResponse(
                 1L,
                 "Admin",
                 "Admin",
-                logInRequestDTO.getEmail(),
+                dto.getEmail(),
                 UserRole.ADMIN
             );
         } else {

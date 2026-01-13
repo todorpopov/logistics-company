@@ -1,8 +1,7 @@
 package com.logistics.company.services;
 
-import com.logistics.company.dtos.office.CreateOfficeRequestDTO;
+import com.logistics.company.dtos.office.CreateUpdateOfficeRequestDTO;
 import com.logistics.company.dtos.office.OfficeDTO;
-import com.logistics.company.dtos.office.UpdateOfficeRequestDTO;
 import com.logistics.company.exceptions.custom.BadRequestException;
 import com.logistics.company.models.Office;
 import com.logistics.company.repositories.OfficeRepository;
@@ -27,11 +26,12 @@ public class OfficeService {
         this.officeRepository = officeRepository;
     }
 
-    public OfficeDTO createOffice(CreateOfficeRequestDTO createOfficeRequestDTO) {
+    public OfficeDTO createOffice(CreateUpdateOfficeRequestDTO dto) throws RuntimeException {
+        dto.validate();
         Office office = Office.builder()
-            .name(createOfficeRequestDTO.getName())
-            .address(createOfficeRequestDTO.getAddress())
-            .phoneNumber(createOfficeRequestDTO.getPhoneNumber())
+            .name(dto.getName())
+            .address(dto.getAddress())
+            .phoneNumber(dto.getPhoneNumber())
             .build();
         try {
             Office savedOffice = this.officeRepository.save(office);
@@ -53,13 +53,23 @@ public class OfficeService {
     }
 
     @Transactional
-    public OfficeDTO updateOffice(Long officeId, UpdateOfficeRequestDTO updateOfficeRequestDTO) {
+    public OfficeDTO updateOffice(Long officeId, CreateUpdateOfficeRequestDTO dto) {
+        try {
+            dto.validate();
+        } catch (BadRequestException e) {
+            String officeIdValidation = Validator.isIdValidMsg(officeId, true);
+            if (!officeIdValidation.isEmpty()) {
+                e.setError("officeId", "Invalid office id");
+            }
+            throw e;
+        }
+
         try {
             Office office = this.officeRepository.findById(officeId).orElseThrow();
 
-            office.setName(updateOfficeRequestDTO.getName());
-            office.setAddress(updateOfficeRequestDTO.getAddress());
-            office.setPhoneNumber(updateOfficeRequestDTO.getPhoneNumber());
+            office.setName(dto.getName());
+            office.setAddress(dto.getAddress());
+            office.setPhoneNumber(dto.getPhoneNumber());
 
             Office updatedOffice = this.officeRepository.save(office);
             return DtoMapper.map(updatedOffice, OfficeDTO.class);
@@ -73,8 +83,8 @@ public class OfficeService {
     }
 
     public void deleteOffice(Long officeId) {
-        if (!Validator.isIdValid(officeId, true)) {
-            throw new BadRequestException("Invalid request");
+        if (Validator.isIdInvalid(officeId, true)) {
+            throw new BadRequestException("Invalid office id");
         }
 
         if (!officeRepository.existsById(officeId)) {

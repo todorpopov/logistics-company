@@ -87,21 +87,19 @@ public class UserService {
     }
 
     @Transactional
-    public OfficeEmployeeDTO createOfficeEmployee(CreateUserRequestDTO createUserRequestDTO) {
-        if (createUserRequestDTO.isInvalid()) {
-            throw new BadRequestException("Invalid request");
-        }
+    public OfficeEmployeeDTO createOfficeEmployee(CreateUserRequestDTO dto) {
+        dto.validate();
 
         User user = User.builder()
-            .firstName(createUserRequestDTO.getFirstName())
-            .lastName(createUserRequestDTO.getLastName())
-            .email(createUserRequestDTO.getEmail())
-            .passwordHash(BcryptUtils.hashPassword(createUserRequestDTO.getPassword()))
+            .firstName(dto.getFirstName())
+            .lastName(dto.getLastName())
+            .email(dto.getEmail())
+            .passwordHash(BcryptUtils.hashPassword(dto.getPassword()))
             .userRole(UserRole.OFFICE_EMPLOYEE)
             .build();
 
         try {
-            Office office = this.officeRepository.findById(createUserRequestDTO.getOfficeId()).orElseThrow();
+            Office office = this.officeRepository.findById(dto.getOfficeId()).orElseThrow();
             OfficeEmployee officeEmployee = OfficeEmployee.builder()
                 .user(user)
                 .office(office)
@@ -118,16 +116,14 @@ public class UserService {
     }
 
     @Transactional
-    public CourierEmployeeDTO createCourierEmployee(CreateUserRequestDTO createUserRequestDTO) {
-        if (createUserRequestDTO.isInvalid()) {
-            throw new BadRequestException("Invalid request");
-        }
+    public CourierEmployeeDTO createCourierEmployee(CreateUserRequestDTO dto) {
+        dto.validate();
 
         User user = User.builder()
-            .firstName(createUserRequestDTO.getFirstName())
-            .lastName(createUserRequestDTO.getLastName())
-            .email(createUserRequestDTO.getEmail())
-            .passwordHash(BcryptUtils.hashPassword(createUserRequestDTO.getPassword()))
+            .firstName(dto.getFirstName())
+            .lastName(dto.getLastName())
+            .email(dto.getEmail())
+            .passwordHash(BcryptUtils.hashPassword(dto.getPassword()))
             .userRole(UserRole.COURIER_EMPLOYEE)
             .build();
 
@@ -145,9 +141,15 @@ public class UserService {
     }
 
     @Transactional
-    public ClientDTO updateClient(Long clientId, UpdateUserRequestDTO updateUserRequestDTO) {
-        if (updateUserRequestDTO.isInvalid() || !Validator.isIdValid(clientId, true)) {
-            throw new BadRequestException("Invalid request");
+    public ClientDTO updateClient(Long clientId, UpdateUserRequestDTO dto) {
+        try {
+            dto.validate();
+        } catch (BadRequestException e) {
+            String clientIdValidation = Validator.isIdValidMsg(clientId, true);
+            if (!clientIdValidation.isEmpty()) {
+                e.setError("clientId", "Invalid client id");
+            }
+            throw e;
         }
 
         try {
@@ -156,9 +158,9 @@ public class UserService {
             );
             User user = client.getUser();
 
-            user.setFirstName(updateUserRequestDTO.getFirstName());
-            user.setLastName(updateUserRequestDTO.getLastName());
-            user.setEmail(updateUserRequestDTO.getEmail());
+            user.setFirstName(dto.getFirstName());
+            user.setLastName(dto.getLastName());
+            user.setEmail(dto.getEmail());
 
             Client updatedClient = this.clientRepository.save(client);
             return DtoMapper.clientEntityToDto(updatedClient);
@@ -172,9 +174,15 @@ public class UserService {
     }
 
     @Transactional
-    public CourierEmployeeDTO updateCourierEmployee(Long courierEmployeeId, UpdateUserRequestDTO updateUserRequestDTO) {
-        if (updateUserRequestDTO.isInvalid() || !Validator.isIdValid(courierEmployeeId, true)) {
-            throw new BadRequestException("Invalid request");
+    public CourierEmployeeDTO updateCourierEmployee(Long courierEmployeeId, UpdateUserRequestDTO dto) {
+        try {
+            dto.validate();
+        } catch (BadRequestException e) {
+            String courierEmployeeIdValidation = Validator.isIdValidMsg(courierEmployeeId, true);
+            if (!courierEmployeeIdValidation.isEmpty()) {
+                e.setError("clientId", "Invalid courier employee id");
+            }
+            throw e;
         }
 
         try {
@@ -183,9 +191,9 @@ public class UserService {
             );
             User user = courierEmployee.getUser();
 
-            user.setFirstName(updateUserRequestDTO.getFirstName());
-            user.setLastName(updateUserRequestDTO.getLastName());
-            user.setEmail(updateUserRequestDTO.getEmail());
+            user.setFirstName(dto.getFirstName());
+            user.setLastName(dto.getLastName());
+            user.setEmail(dto.getEmail());
 
             CourierEmployee updatedCourierEmployee = this.courierEmployeeRepository.save(courierEmployee);
             return DtoMapper.courierEmployeeEntityToDto(updatedCourierEmployee);
@@ -201,10 +209,16 @@ public class UserService {
     @Transactional
     public OfficeEmployeeDTO updateOfficeEmployee(
         Long officeEmployeeId,
-        UpdateOfficeEmployeeRequestDTO updateOfficeEmployeeRequestDTO
+        UpdateOfficeEmployeeRequestDTO dto
     ) {
-        if (updateOfficeEmployeeRequestDTO.isInvalid() || !Validator.isIdValid(officeEmployeeId, true)) {
-            throw new BadRequestException("Invalid request");
+        try {
+            dto.validate();
+        } catch (BadRequestException e) {
+            String officeEmployeeIdValidation = Validator.isIdValidMsg(officeEmployeeId, true);
+            if (!officeEmployeeIdValidation.isEmpty()) {
+                e.setError("clientId", "Invalid office employee id");
+            }
+            throw e;
         }
 
         try {
@@ -213,12 +227,12 @@ public class UserService {
             );
             User user = officeEmployee.getUser();
 
-            user.setFirstName(updateOfficeEmployeeRequestDTO.getFirstName());
-            user.setLastName(updateOfficeEmployeeRequestDTO.getLastName());
-            user.setEmail(updateOfficeEmployeeRequestDTO.getEmail());
+            user.setFirstName(dto.getFirstName());
+            user.setLastName(dto.getLastName());
+            user.setEmail(dto.getEmail());
 
-            if (!Objects.equals(updateOfficeEmployeeRequestDTO.getOfficeId(), officeEmployee.getOffice().getOfficeId())) {
-                Office office = this.officeRepository.findById(updateOfficeEmployeeRequestDTO.getOfficeId()).orElseThrow(
+            if (!Objects.equals(dto.getOfficeId(), officeEmployee.getOffice().getOfficeId())) {
+                Office office = this.officeRepository.findById(dto.getOfficeId()).orElseThrow(
                     () -> new BadRequestException("Office not found")
                 );
                 officeEmployee.setOffice(office);
@@ -237,8 +251,8 @@ public class UserService {
 
     @Transactional
     public void deleteUser(Long entityId, UserRole userRole) {
-        if (!Validator.isIdValid(entityId, true)) {
-            throw new BadRequestException("Invalid request");
+        if (Validator.isIdInvalid(entityId, true)) {
+            throw new BadRequestException("Invalid id");
         }
 
         try {

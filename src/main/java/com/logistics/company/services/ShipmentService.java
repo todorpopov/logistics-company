@@ -45,41 +45,39 @@ public class ShipmentService {
     }
 
     @Transactional
-    public ShipmentDTO createShipment(CreateShipmentRequestDTO createShipmentRequestDTO) {
-        if (createShipmentRequestDTO.isInvalid()) {
-            throw new BadRequestException("Invalid request");
-        }
+    public ShipmentDTO createShipment(CreateShipmentRequestDTO dto) {
+        dto.validate();
 
         try {
-            Client sender = this.clientRepository.findById(createShipmentRequestDTO.getSenderId())
+            Client sender = this.clientRepository.findById(dto.getSenderId())
                 .orElseThrow(() -> new BadRequestException("Sender not found"));
-            Client receiver = this.clientRepository.findById(createShipmentRequestDTO.getReceiverId())
+            Client receiver = this.clientRepository.findById(dto.getReceiverId())
                 .orElseThrow(() -> new BadRequestException("Receiver not found"));
-            OfficeEmployee registeredBy = this.officeEmployeeRepository.findById(createShipmentRequestDTO.getRegisteredById())
+            OfficeEmployee registeredBy = this.officeEmployeeRepository.findById(dto.getRegisteredById())
                 .orElseThrow(() -> new BadRequestException("Office employee not found"));
 
             Shipment.ShipmentBuilder builder = Shipment.builder();
             builder.sender(sender);
             builder.receiver(receiver);
             builder.registeredBy(registeredBy);
-            builder.price(createShipmentRequestDTO.getPrice());
-            builder.weightGram(createShipmentRequestDTO.getWeightGram());
-            builder.phoneNumber(createShipmentRequestDTO.getClientPhoneNumber());
+            builder.price(dto.getPrice());
+            builder.weightGram(dto.getWeightGram());
+            builder.phoneNumber(dto.getClientPhoneNumber());
             builder.status(ShipmentStatus.REGISTERED);
-            builder.deliveryType(createShipmentRequestDTO.getDeliveryType());
+            builder.deliveryType(dto.getDeliveryType());
             builder.sentDate(LocalDate.now());
             builder.deliveredDate(null);
 
-            switch (createShipmentRequestDTO.getDeliveryType()) {
+            switch (dto.getDeliveryType()) {
                 case ShipmentDeliveryType.ADDRESS -> {
                     CourierEmployee courierEmployee = this.courierEmployeeRepository.findById(
-                        createShipmentRequestDTO.getCourierEmployeeId()
+                        dto.getCourierEmployeeId()
                     ).orElseThrow(() -> new BadRequestException("Courier employee not found"));
                     builder.courierEmployee(courierEmployee);
                 }
                 case ShipmentDeliveryType.OFFICE -> {
                     Office deliveryOffice = this.officeRepository.findById(
-                        createShipmentRequestDTO.getDeliveryOfficeId()
+                        dto.getDeliveryOfficeId()
                     ).orElseThrow(() -> new BadRequestException("Office not found"));
                     builder.deliveryOffice(deliveryOffice);
                 }
@@ -107,36 +105,42 @@ public class ShipmentService {
     }
 
     @Transactional
-    public ShipmentDTO updateShipment(Long shipmentId, UpdateShipmentRequestDTO updateShipmentRequestDTO) {
-        if (updateShipmentRequestDTO.isInvalid()) {
-            throw new BadRequestException("Invalid request");
+    public ShipmentDTO updateShipment(Long shipmentId, UpdateShipmentRequestDTO dto) {
+        try {
+            dto.validate();
+        } catch (BadRequestException e) {
+            String shipmentIdValidation = Validator.isIdValidMsg(shipmentId, true);
+            if (!shipmentIdValidation.isEmpty()) {
+                e.setError("shipmentId", "Invalid shipment id");
+            }
+            throw e;
         }
 
         try {
             Shipment shipment = this.shipmentRepository.findById(shipmentId)
                 .orElseThrow(() -> new BadRequestException("Shipment not found"));
 
-            if (updateShipmentRequestDTO.getDeliveryOfficeId() == null) {
+            if (dto.getDeliveryOfficeId() == null) {
                 shipment.setDeliveryOffice(null);
             } else {
-                Office deliveryOffice = this.officeRepository.findById(updateShipmentRequestDTO.getDeliveryOfficeId())
+                Office deliveryOffice = this.officeRepository.findById(dto.getDeliveryOfficeId())
                     .orElseThrow(() -> new BadRequestException("Office not found"));
                 shipment.setDeliveryOffice(deliveryOffice);
             }
 
-            if (updateShipmentRequestDTO.getCourierEmployeeId() == null) {
+            if (dto.getCourierEmployeeId() == null) {
                 shipment.setCourierEmployee(null);
             } else {
-                CourierEmployee courierEmployee = this.courierEmployeeRepository.findById(updateShipmentRequestDTO.getCourierEmployeeId())
+                CourierEmployee courierEmployee = this.courierEmployeeRepository.findById(dto.getCourierEmployeeId())
                     .orElseThrow(() -> new BadRequestException("Courier not found"));
                 shipment.setCourierEmployee(courierEmployee);
             }
 
-            shipment.setDeliveryType(updateShipmentRequestDTO.getDeliveryType());
-            shipment.setPhoneNumber(updateShipmentRequestDTO.getPhoneNumber());
-            shipment.setPrice(updateShipmentRequestDTO.getPrice());
-            shipment.setStatus(updateShipmentRequestDTO.getStatus());
-            shipment.setDeliveredDate(updateShipmentRequestDTO.getDeliveredDate());
+            shipment.setDeliveryType(dto.getDeliveryType());
+            shipment.setPhoneNumber(dto.getPhoneNumber());
+            shipment.setPrice(dto.getPrice());
+            shipment.setStatus(dto.getStatus());
+            shipment.setDeliveredDate(dto.getDeliveredDate());
 
             Shipment updatedShipment = this.shipmentRepository.save(shipment);
             return DtoMapper.shipmentEntityToDto(updatedShipment);
@@ -147,8 +151,8 @@ public class ShipmentService {
     }
 
     public void deleteShipment(Long shipmentId) {
-        if (!Validator.isIdValid(shipmentId, true)) {
-            throw new BadRequestException("Invalid request");
+        if (Validator.isIdInvalid(shipmentId, true)) {
+            throw new BadRequestException("Invalid shipment id");
         }
 
         if (!this.shipmentRepository.existsById(shipmentId)) {
@@ -180,7 +184,7 @@ public class ShipmentService {
     }
 
     public List<ShipmentDTO> getAllShipmentsRegisteredBy(Long officeEmployeeId) {
-        if (!Validator.isIdValid(officeEmployeeId, true)) {
+        if (Validator.isIdInvalid(officeEmployeeId, true)) {
             throw new BadRequestException("Invalid request");
         }
 
@@ -200,7 +204,7 @@ public class ShipmentService {
     }
 
     public List<ShipmentDTO> getAllShipmentsSentByClient(Long clientId) {
-        if (!Validator.isIdValid(clientId, true)) {
+        if (Validator.isIdInvalid(clientId, true)) {
             throw new BadRequestException("Invalid request");
         }
 

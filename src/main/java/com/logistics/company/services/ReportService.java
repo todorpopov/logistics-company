@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -42,14 +41,14 @@ public class ReportService {
     }
 
     public List<ShipmentDTO> getAllShipmentsRegisteredBy(Long officeEmployeeId) {
-        if (!Validator.isIdValid(officeEmployeeId, true)) {
+        if (Validator.isIdInvalid(officeEmployeeId, true)) {
             throw new BadRequestException("Invalid request");
         }
         return this.shipmentService.getAllShipmentsRegisteredBy(officeEmployeeId);
     }
 
     public List<ShipmentDTO> getAllShipmentsSentByClient(Long clientId) {
-        if (!Validator.isIdValid(clientId, true)) {
+        if (Validator.isIdInvalid(clientId, true)) {
             throw new BadRequestException("Invalid request");
         }
         return this.shipmentService.getAllShipmentsSentByClient(clientId);

@@ -23,25 +23,19 @@ public class AuthController {
 
     @PostMapping("register-client")
     public ResponseEntity<AuthResponseDTO> registerClient(@RequestBody RegisterClientRequestDTO dto) {
-        if (dto.isInvalid()) {
-            throw new BadRequestException("Invalid request");
-        }
+        dto.validate();
         return ResponseEntity.ok(this.authService.registerClient(dto));
     }
 
     @PostMapping("log-in")
     public ResponseEntity<AuthResponseDTO> logUserIn(@RequestBody LogInRequestDTO dto) {
-        if (dto.isInvalid()) {
-            throw new BadRequestException("Invalid request");
-        }
+        dto.validate();
         return ResponseEntity.ok(this.authService.logUserIn(dto));
     }
 
     @PostMapping("log-admin-in")
     public ResponseEntity<AuthResponseDTO> logAdminIn(@RequestBody LogInRequestDTO dto) {
-        if (dto.isInvalid()) {
-            throw new BadRequestException("Invalid request");
-        }
+        dto.validate();
         return ResponseEntity.ok(this.authService.logAdminIn(dto));
     }
 }

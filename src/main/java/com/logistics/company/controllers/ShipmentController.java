@@ -20,9 +20,7 @@ public class ShipmentController {
 
     @PostMapping()
     public ResponseEntity<ShipmentDTO> createShipment(@RequestBody CreateShipmentRequestDTO dto) {
-        if (dto.isInvalid()) {
-            throw new BadRequestException("Invalid request");
-        }
+        dto.validate();
         return ResponseEntity.ok(this.shipmentService.createShipment(dto));
     }
 
@@ -33,16 +31,22 @@ public class ShipmentController {
 
     @PutMapping("{shipmentId}")
     public ResponseEntity<ShipmentDTO> updateShipment(@PathVariable Long shipmentId, @RequestBody UpdateShipmentRequestDTO dto) {
-        if (dto.isInvalid() || !Validator.isIdValid(shipmentId, true)) {
-            throw new BadRequestException("Invalid request");
+        try {
+            dto.validate();
+        } catch (BadRequestException e) {
+            String shipmentIdValidation = Validator.isIdValidMsg(shipmentId, true);
+            if (!shipmentIdValidation.isEmpty()) {
+                e.setError("shipmentId", "Invalid shipment id");
+            }
+            throw e;
         }
         return ResponseEntity.ok(this.shipmentService.updateShipment(shipmentId, dto));
     }
 
     @DeleteMapping("{shipmentId}")
     public void deleteShipment(@PathVariable Long shipmentId){
-        if(!Validator.isIdValid(shipmentId, true)){
-            throw new BadRequestException("Invalid request");
+        if(Validator.isIdInvalid(shipmentId, true)){
+            throw new BadRequestException("Invalid shipment id");
         }
         this.shipmentService.deleteShipment(shipmentId);
     }

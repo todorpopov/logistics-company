@@ -3,86 +3,136 @@ package com.logistics.company.util;
 import com.logistics.company.models.enums.ShipmentDeliveryType;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.regex.Pattern;
 
 public class Validator {
-    public static boolean isEmailValid(String email, boolean isRequired) {
+    public static String isEmailValid(String email, boolean isRequired) {
         if(email == null || email.isBlank()) {
-            return !isRequired;
+            if (isRequired) {
+                return "Email cannot be empty";
+            } else {
+                return "";
+            }
         }
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
         + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-        return Pattern.compile(regexPattern)
-            .matcher(email)
-            .matches();
+        boolean valid = Pattern.compile(regexPattern).matcher(email).matches();
+        return valid ? "" : "Invalid email";
     }
 
-    public static boolean isStringValid(String string, int minLength, int maxLength, boolean isRequired) {
+    public static String isStringValid(String string, int minLength, int maxLength, boolean isRequired) {
         if (string == null || string.isBlank()) {
-            return !isRequired;
+            if (isRequired) {
+                return "Field cannot be empty";
+            } else {
+                return "";
+            }
         }
-        return string.length() >= minLength && string.length() <= maxLength;
+        if (string.length() < minLength || string.length() > maxLength) {
+            return "Field length must be between " + minLength + " and " + maxLength;
+        }
+        return "";
     }
 
-    public static boolean isPasswordValid(String password, boolean isRequired) {
+    public static String isPasswordValid(String password, boolean isRequired) {
         if (password == null || password.isBlank()) {
-            return !isRequired;
+            if (isRequired) {
+                return "Password cannot be empty";
+            } else {
+                return "";
+            }
         }
-        return password.length() >= 8 && password.length() <= 64;
+        if (password.length() < 8 || password.length() > 64) {
+            return "Password length must be between 8 and 64";
+        }
+        return "";
     }
 
-    public static boolean isIdValid(Long id, boolean isRequired) {
+    public static boolean isIdInvalid(Long id, boolean isRequired) {
         if (id == null) {
-            return !isRequired;
+            return isRequired;
         }
-        return id > 0;
+        return id <= 0;
+    }
+    
+    public static String isIdValidMsg(Long id, boolean isRequired) {
+        if (id == null) {
+            if (isRequired) {
+                return "Id cannot be empty";
+            } else {
+                return "";
+            }
+        }
+        if (id <= 0) {
+            return "Invalid id";
+        }
+        return "";
     }
 
-    public static boolean isPhoneNumberValid(String phoneNumber, boolean isRequired) {
+    public static String isPhoneNumberValid(String phoneNumber, boolean isRequired) {
         if (phoneNumber == null || phoneNumber.isBlank()) {
-            return !isRequired;
+            if (isRequired) {
+                return "Phone number cannot be empty";
+            } else {
+                return "";
+            }
         }
         String phoneRegex = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$";
-        return Pattern.compile(phoneRegex)
-                .matcher(phoneNumber)
-                .matches();
+        boolean valid = Pattern.compile(phoneRegex).matcher(phoneNumber).matches();
+        return valid ? "" : "Invalid phone number";
     }
 
-    public static boolean isWeightValid(Integer integer, boolean isRequired) {
+    public static String isWeightValid(Integer integer, boolean isRequired) {
         if (integer == null) {
-            return !isRequired;
+            if (isRequired) {
+                return "Weight cannot be empty";
+            } else {
+                return "";
+            }
         }
-        return integer > 0 && integer <= Integer.MAX_VALUE - 1;
+        if (integer <= 0) {
+            return "Weight must be positive";
+        }
+        if (integer >= Integer.MAX_VALUE - 1) {
+            return "Weight must be less than " + Integer.MAX_VALUE;
+        }
+        return "";
     }
 
-    public static boolean isPriceValid(BigDecimal decimal, boolean isRequired) {
+    public static String isPriceValid(BigDecimal decimal, boolean isRequired) {
         if (decimal == null) {
-            return !isRequired;
+            if (isRequired) {
+                return "Price cannot be empty";
+            } else {
+                return "";
+            }
         }
-        return decimal.compareTo(BigDecimal.ZERO) > 0;
+        if (decimal.compareTo(BigDecimal.ZERO) <= 0) {
+            return "Price must be positive";
+        }
+        return "";
     }
 
-    public static boolean isLocalDateValid(LocalDate date, boolean canBeInThePast, boolean isRequired) {
-        if (date == null) {
-            return !isRequired;
+    public static String isShipmentTypeValid(
+        ShipmentDeliveryType deliveryType,
+        Long deliveryOfficeId,
+        Long courierEmployeeId
+    ) {
+        if (deliveryType == null) {
+            return "Shipment delivery type cannot be empty";
         }
-        if (!canBeInThePast) {
-            return !date.isBefore(LocalDate.now());
+        if (deliveryType.equals(ShipmentDeliveryType.ADDRESS) && courierEmployeeId == null && deliveryOfficeId != null) {
+            return "Shipments to address must not have a delivery office";
         }
-        return true;
-    }
-
-    public static boolean isShipmentTypeValid(ShipmentDeliveryType deliveryType, Long deliveryOfficeId, Long courierEmployeeId) {
-        if (deliveryType != null && (deliveryType.equals(ShipmentDeliveryType.ADDRESS) && courierEmployeeId == null)) {
-            return false;
-        }
-        if (deliveryType != null && (deliveryType.equals(ShipmentDeliveryType.OFFICE) && courierEmployeeId != null)) {
-            return false;
+        if (deliveryType.equals(ShipmentDeliveryType.OFFICE) && courierEmployeeId != null && deliveryOfficeId == null) {
+            return "Shipments to office must not have a courier";
         }
         if (deliveryOfficeId != null && courierEmployeeId != null) {
-            return false;
+            return "Shipments to office and address cannot have both a delivery office and courier";
         }
-        return !(deliveryOfficeId == null && courierEmployeeId == null);
+        if (deliveryOfficeId == null && courierEmployeeId == null) {
+            return "Shipment must have a delivery office or courier";
+        }
+        return "";
     }
 }

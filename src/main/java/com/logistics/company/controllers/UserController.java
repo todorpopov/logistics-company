@@ -39,24 +39,26 @@ public class UserController {
 
     @PostMapping("office-employee")
     public ResponseEntity<OfficeEmployeeDTO> createOfficeEmployee(@RequestBody CreateUserRequestDTO dto) {
-        if (dto.isInvalid()) {
-            throw new BadRequestException("Invalid request");
-        }
+        dto.validate();
         return ResponseEntity.ok(this.userService.createOfficeEmployee(dto));
     }
 
     @PostMapping("courier-employee")
     public ResponseEntity<CourierEmployeeDTO> createCourierEmployee(@RequestBody CreateUserRequestDTO dto) {
-        if (dto.isInvalid()) {
-            throw new BadRequestException("Invalid request");
-        }
+        dto.validate();
         return ResponseEntity.ok(this.userService.createCourierEmployee(dto));
     }
 
     @PutMapping("client/{clientId}")
     public ResponseEntity<ClientDTO> updateClient(@PathVariable Long clientId, @RequestBody UpdateUserRequestDTO dto) {
-        if (dto.isInvalid()) {
-            throw new BadRequestException("Invalid request");
+        try {
+            dto.validate();
+        } catch (BadRequestException e) {
+            String clientIdValidation = Validator.isIdValidMsg(clientId, true);
+            if (!clientIdValidation.isEmpty()) {
+                e.setError("clientId", "Invalid client id");
+            }
+            throw e;
         }
         return ResponseEntity.ok(this.userService.updateClient(clientId, dto));
     }
@@ -66,8 +68,14 @@ public class UserController {
         @PathVariable Long courierEmployeeId,
         @RequestBody UpdateUserRequestDTO dto
     ) {
-        if (dto.isInvalid()) {
-            throw new BadRequestException("Invalid request");
+        try {
+            dto.validate();
+        } catch (BadRequestException e) {
+            String courierEmployeeIdValidation = Validator.isIdValidMsg(courierEmployeeId, true);
+            if (!courierEmployeeIdValidation.isEmpty()) {
+                e.setError("clientId", "Invalid courier employee id");
+            }
+            throw e;
         }
         return ResponseEntity.ok(this.userService.updateCourierEmployee(courierEmployeeId, dto));
     }
@@ -77,32 +85,38 @@ public class UserController {
         @PathVariable Long officeEmployeeId,
         @RequestBody UpdateOfficeEmployeeRequestDTO dto
     ) {
-        if (dto.isInvalid()) {
-            throw new BadRequestException("Invalid request");
+        try {
+            dto.validate();
+        } catch (BadRequestException e) {
+            String officeEmployeeIdValidation = Validator.isIdValidMsg(officeEmployeeId, true);
+            if (!officeEmployeeIdValidation.isEmpty()) {
+                e.setError("officeEmployeeId", "Invalid office employee id");
+            }
+            throw e;
         }
         return ResponseEntity.ok(this.userService.updateOfficeEmployee(officeEmployeeId, dto));
     }
 
     @DeleteMapping("client/{clientId}")
     public void deleteClient(@PathVariable Long clientId){
-        if(!Validator.isIdValid(clientId, true)){
-            throw new BadRequestException("Invalid request");
+        if(Validator.isIdInvalid(clientId, true)){
+            throw new BadRequestException("Invalid client id");
         }
         this.userService.deleteUser(clientId, UserRole.CLIENT);
     }
 
     @DeleteMapping("courier-employee/{courierEmployeeId}")
     public void deleteCourierEmployee(@PathVariable Long courierEmployeeId){
-        if(!Validator.isIdValid(courierEmployeeId, true)){
-            throw new BadRequestException("Invalid request");
+        if(Validator.isIdInvalid(courierEmployeeId, true)){
+            throw new BadRequestException("Invalid courier employee id");
         }
         this.userService.deleteUser(courierEmployeeId, UserRole.COURIER_EMPLOYEE);
     }
 
     @DeleteMapping("office-employee/{officeEmployeeId}")
     public void deleteOfficeEmployee(@PathVariable Long officeEmployeeId){
-        if(!Validator.isIdValid(officeEmployeeId, true)){
-            throw new BadRequestException("Invalid request");
+        if(Validator.isIdInvalid(officeEmployeeId, true)){
+            throw new BadRequestException("Invalid office employee id");
         }
         this.userService.deleteUser(officeEmployeeId, UserRole.OFFICE_EMPLOYEE);
     }

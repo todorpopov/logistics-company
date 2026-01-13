@@ -46,7 +46,7 @@ public class ReportController {
 
     @GetMapping("shipments-registered-by/{officeEmployeeId}")
     public ResponseEntity<Iterable<ShipmentDTO>> getAllShipmentsRegisteredBy(@PathVariable Long officeEmployeeId) {
-        if (!Validator.isIdValid(officeEmployeeId, true)) {
+        if (Validator.isIdInvalid(officeEmployeeId, true)) {
             throw new BadRequestException("Invalid request");
         }
         return ResponseEntity.ok(this.reportService.getAllShipmentsRegisteredBy(officeEmployeeId));
@@ -54,7 +54,7 @@ public class ReportController {
 
     @GetMapping("shipments-sent-by/{clientId}")
     public ResponseEntity<Iterable<ShipmentDTO>> getAllShipmentsSentByClient(@PathVariable Long clientId) {
-        if (!Validator.isIdValid(clientId, true)) {
+        if (Validator.isIdInvalid(clientId, true)) {
             throw new BadRequestException("Invalid request");
         }
         return ResponseEntity.ok(this.reportService.getAllShipmentsSentByClient(clientId));

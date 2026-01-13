@@ -1,8 +1,7 @@
 package com.logistics.company.controllers;
 
-import com.logistics.company.dtos.office.CreateOfficeRequestDTO;
+import com.logistics.company.dtos.office.CreateUpdateOfficeRequestDTO;
 import com.logistics.company.dtos.office.OfficeDTO;
-import com.logistics.company.dtos.office.UpdateOfficeRequestDTO;
 import com.logistics.company.exceptions.custom.BadRequestException;
 import com.logistics.company.services.OfficeService;
 import com.logistics.company.util.Validator;
@@ -19,10 +18,8 @@ public class OfficeController {
     }
 
     @PostMapping()
-    public ResponseEntity<OfficeDTO> createOffice(@RequestBody CreateOfficeRequestDTO dto) {
-        if (dto.isInvalid()) {
-            throw new BadRequestException("Invalid request");
-        }
+    public ResponseEntity<OfficeDTO> createOffice(@RequestBody CreateUpdateOfficeRequestDTO dto) {
+        dto.validate();
         return ResponseEntity.ok(this.officeService.createOffice(dto));
     }
 
@@ -32,17 +29,26 @@ public class OfficeController {
     }
 
     @PutMapping("{officeId}")
-    public ResponseEntity<OfficeDTO> updateOffice(@PathVariable Long officeId, @RequestBody UpdateOfficeRequestDTO dto){
-        if (dto.isInvalid() || !Validator.isIdValid(officeId, true)) {
-            throw new BadRequestException("Invalid request");
+    public ResponseEntity<OfficeDTO> updateOffice(
+        @PathVariable Long officeId,
+        @RequestBody CreateUpdateOfficeRequestDTO dto
+    ){
+        try {
+            dto.validate();
+        } catch (BadRequestException e) {
+            String officeIdValidation = Validator.isIdValidMsg(officeId, true);
+            if (!officeIdValidation.isEmpty()) {
+                e.setError("officeId", "Invalid office id");
+            }
+            throw e;
         }
         return ResponseEntity.ok(this.officeService.updateOffice(officeId, dto));
     }
 
     @DeleteMapping("{officeId}")
     public void deleteOffice(@PathVariable Long officeId){
-        if(!Validator.isIdValid(officeId, true)){
-            throw new BadRequestException("Invalid request");
+        if(Validator.isIdInvalid(officeId, true)){
+            throw new BadRequestException("Invalid office id");
         }
         this.officeService.deleteOffice(officeId);
     }
