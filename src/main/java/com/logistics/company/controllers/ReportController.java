@@ -47,7 +47,7 @@ public class ReportController {
     @GetMapping("shipments-registered-by/{officeEmployeeId}")
     public ResponseEntity<Iterable<ShipmentDTO>> getAllShipmentsRegisteredBy(@PathVariable Long officeEmployeeId) {
         if (Validator.isIdInvalid(officeEmployeeId, true)) {
-            throw new BadRequestException("Invalid request");
+            throw new BadRequestException("Invalid office employee id");
         }
         return ResponseEntity.ok(this.reportService.getAllShipmentsRegisteredBy(officeEmployeeId));
     }
@@ -55,9 +55,17 @@ public class ReportController {
     @GetMapping("shipments-sent-by/{clientId}")
     public ResponseEntity<Iterable<ShipmentDTO>> getAllShipmentsSentByClient(@PathVariable Long clientId) {
         if (Validator.isIdInvalid(clientId, true)) {
-            throw new BadRequestException("Invalid request");
+            throw new BadRequestException("Invalid client id");
         }
         return ResponseEntity.ok(this.reportService.getAllShipmentsSentByClient(clientId));
+    }
+
+    @GetMapping("shipments-received-by/{clientId}")
+    public ResponseEntity<Iterable<ShipmentDTO>> getAllShipmentsReceivedByClient(@PathVariable Long clientId) {
+        if (Validator.isIdInvalid(clientId, true)) {
+            throw new BadRequestException("Invalid client id");
+        }
+        return ResponseEntity.ok(this.reportService.getAllShipmentsReceivedByClient(clientId));
     }
 
     @GetMapping("total-gross-income-for-period/{startDate}/{endDate}")

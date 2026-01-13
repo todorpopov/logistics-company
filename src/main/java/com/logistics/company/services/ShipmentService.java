@@ -185,7 +185,7 @@ public class ShipmentService {
 
     public List<ShipmentDTO> getAllShipmentsRegisteredBy(Long officeEmployeeId) {
         if (Validator.isIdInvalid(officeEmployeeId, true)) {
-            throw new BadRequestException("Invalid request");
+            throw new BadRequestException("Invalid office employee id");
         }
 
         try {
@@ -205,11 +205,27 @@ public class ShipmentService {
 
     public List<ShipmentDTO> getAllShipmentsSentByClient(Long clientId) {
         if (Validator.isIdInvalid(clientId, true)) {
-            throw new BadRequestException("Invalid request");
+            throw new BadRequestException("Invalid client id");
         }
 
         try {
             List<Shipment> registeredShipments = this.shipmentRepository.findAllBySender_ClientId(clientId);
+            return registeredShipments.stream()
+                .map(DtoMapper::shipmentEntityToDto)
+                .toList();
+        } catch (DataAccessException e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
+    }
+
+    public List<ShipmentDTO> getAllShipmentsReceivedByClient(Long clientId) {
+        if (Validator.isIdInvalid(clientId, true)) {
+            throw new BadRequestException("Invalid client id");
+        }
+
+        try {
+            List<Shipment> registeredShipments = this.shipmentRepository.findAllByReceiver_ClientId(clientId);
             return registeredShipments.stream()
                 .map(DtoMapper::shipmentEntityToDto)
                 .toList();

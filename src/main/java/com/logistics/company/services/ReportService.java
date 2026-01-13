@@ -42,16 +42,23 @@ public class ReportService {
 
     public List<ShipmentDTO> getAllShipmentsRegisteredBy(Long officeEmployeeId) {
         if (Validator.isIdInvalid(officeEmployeeId, true)) {
-            throw new BadRequestException("Invalid request");
+            throw new BadRequestException("Invalid office employee id");
         }
         return this.shipmentService.getAllShipmentsRegisteredBy(officeEmployeeId);
     }
 
     public List<ShipmentDTO> getAllShipmentsSentByClient(Long clientId) {
         if (Validator.isIdInvalid(clientId, true)) {
-            throw new BadRequestException("Invalid request");
+            throw new BadRequestException("Invalid client id");
         }
         return this.shipmentService.getAllShipmentsSentByClient(clientId);
+    }
+
+    public List<ShipmentDTO> getAllShipmentsReceivedByClient(Long clientId) {
+        if (Validator.isIdInvalid(clientId, true)) {
+            throw new BadRequestException("Invalid client id");
+        }
+        return this.shipmentService.getAllShipmentsReceivedByClient(clientId);
     }
 
     public BigDecimal getTotalPriceOfShipmentsBetween(LocalDate startDate, LocalDate endDate) {

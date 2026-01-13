@@ -8,9 +8,4 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 public interface OfficeEmployeeRepository extends JpaRepository<OfficeEmployee, Long> {
-    Optional<OfficeEmployee> findByUser_UserId(Long userId);
-
-    @Modifying
-    @Transactional
-    void deleteByUser_UserId(Long userId);
 }

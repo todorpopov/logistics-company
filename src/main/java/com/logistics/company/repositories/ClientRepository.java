@@ -8,9 +8,4 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 public interface ClientRepository extends JpaRepository<Client, Long> {
-    Optional<Client> findByUser_UserId(Long userId);
-
-    @Modifying
-    @Transactional
-    void deleteByUser_UserId(Long userId);
 }
