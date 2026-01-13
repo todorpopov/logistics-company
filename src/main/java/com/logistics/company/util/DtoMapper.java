@@ -76,6 +76,7 @@ public class DtoMapper {
         return ShipmentDTO.builder()
             .shipmentId(shipment.getShipmentId())
             .sender(clientEntityToDto(shipment.getSender()))
+            .receiver(clientEntityToDto(shipment.getReceiver()))
             .registeredBy(officeEmployeeEntityToDto(shipment.getRegisteredBy()))
             .deliveryOffice(officeDto)
             .courierEmployee(courierEmployeeEntityToDto(shipment.getCourierEmployee()))

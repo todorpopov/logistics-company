@@ -20,6 +20,7 @@ import java.time.LocalDate;
 public class ShipmentDTO {
     private Long shipmentId;
     private ClientDTO sender;
+    private ClientDTO receiver;
     private OfficeEmployeeDTO registeredBy;
     private OfficeDTO deliveryOffice;
     private CourierEmployeeDTO courierEmployee;

@@ -16,6 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CreateShipmentRequestDTO implements Validatable {
     private Long senderId;
+    private Long receiverId;
     private Long registeredById;
     private Long deliveryOfficeId;
     private Long courierEmployeeId;
@@ -27,6 +28,7 @@ public class CreateShipmentRequestDTO implements Validatable {
     public boolean isInvalid() {
         return !Validator.isShipmentTypeValid(this.deliveryType, this.deliveryOfficeId, this.courierEmployeeId)
             || !Validator.isIdValid(this.senderId, true)
+            || !Validator.isIdValid(this.receiverId, true)
             || !Validator.isIdValid(this.registeredById, true)
             || !Validator.isIdValid(this.deliveryOfficeId, false)
             || !Validator.isIdValid(this.courierEmployeeId, false)

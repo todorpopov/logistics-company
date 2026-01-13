@@ -5,6 +5,7 @@ import com.logistics.company.dtos.shipment.ShipmentDTO;
 import com.logistics.company.dtos.shipment.UpdateShipmentRequestDTO;
 import com.logistics.company.exceptions.custom.BadRequestException;
 import com.logistics.company.models.*;
+import com.logistics.company.models.enums.ShipmentDeliveryType;
 import com.logistics.company.models.enums.ShipmentStatus;
 import com.logistics.company.repositories.*;
 import com.logistics.company.util.DtoMapper;
@@ -49,32 +50,42 @@ public class ShipmentService {
             throw new BadRequestException("Invalid request");
         }
 
-        LocalDate today = LocalDate.now();
-        ShipmentStatus status = ShipmentStatus.REGISTERED;
         try {
             Client sender = this.clientRepository.findById(createShipmentRequestDTO.getSenderId())
                 .orElseThrow(() -> new BadRequestException("Sender not found"));
+            Client receiver = this.clientRepository.findById(createShipmentRequestDTO.getReceiverId())
+                .orElseThrow(() -> new BadRequestException("Receiver not found"));
             OfficeEmployee registeredBy = this.officeEmployeeRepository.findById(createShipmentRequestDTO.getRegisteredById())
                 .orElseThrow(() -> new BadRequestException("Office employee not found"));
-            Office deliveryOffice = this.officeRepository.findById(createShipmentRequestDTO.getDeliveryOfficeId())
-                .orElseThrow(() -> new BadRequestException("Office not found"));
-            CourierEmployee courierEmployee = this.courierEmployeeRepository.findById(createShipmentRequestDTO.getCourierEmployeeId())
-                .orElseThrow(() -> new BadRequestException("Courier employee not found"));
 
-            Shipment shipment = Shipment.builder()
-                .sender(sender)
-                .registeredBy(registeredBy)
-                .deliveryOffice(deliveryOffice)
-                .courierEmployee(courierEmployee)
-                .price(createShipmentRequestDTO.getPrice())
-                .weightGram(createShipmentRequestDTO.getWeightGram())
-                .phoneNumber(createShipmentRequestDTO.getClientPhoneNumber())
-                .status(status)
-                .deliveryType(createShipmentRequestDTO.getDeliveryType())
-                .sentDate(today)
-                .deliveredDate(null)
-                .build();
+            Shipment.ShipmentBuilder builder = Shipment.builder();
+            builder.sender(sender);
+            builder.receiver(receiver);
+            builder.registeredBy(registeredBy);
+            builder.price(createShipmentRequestDTO.getPrice());
+            builder.weightGram(createShipmentRequestDTO.getWeightGram());
+            builder.phoneNumber(createShipmentRequestDTO.getClientPhoneNumber());
+            builder.status(ShipmentStatus.REGISTERED);
+            builder.deliveryType(createShipmentRequestDTO.getDeliveryType());
+            builder.sentDate(LocalDate.now());
+            builder.deliveredDate(null);
 
+            switch (createShipmentRequestDTO.getDeliveryType()) {
+                case ShipmentDeliveryType.ADDRESS -> {
+                    CourierEmployee courierEmployee = this.courierEmployeeRepository.findById(
+                        createShipmentRequestDTO.getCourierEmployeeId()
+                    ).orElseThrow(() -> new BadRequestException("Courier employee not found"));
+                    builder.courierEmployee(courierEmployee);
+                }
+                case ShipmentDeliveryType.OFFICE -> {
+                    Office deliveryOffice = this.officeRepository.findById(
+                        createShipmentRequestDTO.getDeliveryOfficeId()
+                    ).orElseThrow(() -> new BadRequestException("Office not found"));
+                    builder.deliveryOffice(deliveryOffice);
+                }
+            }
+
+            Shipment shipment = builder.build();
             this.shipmentRepository.save(shipment);
             return DtoMapper.shipmentEntityToDto(shipment);
         } catch (DataAccessException e) {

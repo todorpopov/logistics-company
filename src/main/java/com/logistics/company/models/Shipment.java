@@ -31,6 +31,14 @@ public class Shipment {
 
     @ManyToOne(optional = false)
     @JoinColumn(
+        name = "receiver_id",
+        nullable = false,
+        foreignKey = @ForeignKey(name = "fk_shipment_receiver")
+    )
+    private Client receiver;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(
         name = "registered_by",
         foreignKey = @ForeignKey(name = "fk_shipment_office_employee")
     )

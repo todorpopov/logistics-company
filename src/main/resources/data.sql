@@ -41,6 +41,7 @@ SELECT setval(pg_get_serial_sequence('courier_employees', 'courier_employee_id')
 INSERT INTO shipments (
     shipment_id,
     sender_id,
+    receiver_id,
     registered_by,
     delivery_office_id,
     courier_employee_id,
@@ -54,6 +55,7 @@ INSERT INTO shipments (
 ) VALUES (
     1,
     1,
+    2,
     1,
     2,
     1,
@@ -69,6 +71,7 @@ INSERT INTO shipments (
 INSERT INTO shipments (
     shipment_id,
     sender_id,
+    receiver_id,
     registered_by,
     delivery_office_id,
     courier_employee_id,
@@ -82,6 +85,7 @@ INSERT INTO shipments (
 ) VALUES (
     2,
     3,
+    1,
     2,
     1,
     2,
