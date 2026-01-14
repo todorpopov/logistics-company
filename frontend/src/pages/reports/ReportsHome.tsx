@@ -46,7 +46,7 @@ const ReportsHome: React.FC = () => {
 
   const handleModalSubmit = async () => {
     const queryParams = Object.values(modalFieldValues);
-    let url = API_URL + '/api/report';
+    let url = API_URL + '/api/report' + cards.find((card) => card.label === modalTitle)?.path;
     queryParams.forEach(param => { url = url + `/${param}`; });
 
     axios.get(url)
