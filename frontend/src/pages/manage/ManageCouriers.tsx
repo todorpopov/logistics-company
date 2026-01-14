@@ -5,6 +5,7 @@ import './ManageOffices.css';
 import { useGetCourierEmployees } from './request';
 import axios from 'axios';
 import {API_URL} from '../../App';
+import Toast from '../../components/toast/Toast';
 
 export interface CourierEmployee {
   courierEmployeeId: number;
@@ -29,48 +30,46 @@ const courierEmployeeColumns: Column<CourierEmployee>[] = [
 const ManageCouriers: React.FC = () => {
   const queryClient = useQueryClient();
   const { data: couriers } = useGetCourierEmployees();
+  const [toast, setToast] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleCreate = (employee: CourierEmployee) => {
     axios.post(`${API_URL}/api/user/courier-employee`, { email: employee.email, firstName: employee.firstName, lastName: employee.lastName, password: employee.lastName })
       .then(() => {
-        console.log('Employee added successfully');
+        setToast({ type: 'success', text: 'Employee added successfully' });
         queryClient.invalidateQueries({ queryKey: ['courierEmployees'] });
-        // todo add success toast
       })
       .catch(() => {
-        console.log('Error adding employee');
-        // todo add error toast
+        setToast({ type: 'error', text: 'Error adding employee' });
       });
   };
 
   const handleEdit = (employee: CourierEmployee) => {
     axios.put(`${API_URL}/api/user/courier-employee/${employee.courierEmployeeId}`, { email: employee.email, firstName: employee.firstName, lastName: employee.lastName })
       .then(() => {
-        console.log('Employee updated successfully');
+        setToast({ type: 'success', text: 'Employee updated successfully' });
         queryClient.invalidateQueries({ queryKey: ['courierEmployees'] });
-        // todo add success toast
       })
       .catch(() => {
-        console.log('Error updating employee');
-        // todo add error toast
+        setToast({ type: 'error', text: 'Error updating employee' });
       });
   };
 
   const handleDelete = (employee: CourierEmployee) => {
     axios.delete(`${API_URL}/api/user/courier-employee/${employee.courierEmployeeId}`)
       .then(() => {
+        setToast({ type: 'success', text: 'Employee deleted successfully' });
         queryClient.invalidateQueries({ queryKey: ['courierEmployees'] });
-        console.log('Employee deleted successfully');
-        // todo add success toast
       })
       .catch(() => {
-        console.log('Error deleted employee');
-        // todo add error toast
+        setToast({ type: 'error', text: 'Error deleting employee' });
       });
   };
 
   return (
     <div className="manage-container">
+      {toast && (
+        <Toast type={toast.type} text={toast.text} onClose={() => setToast(null)} />
+      )}
       <div className="manage-content">
         <Table
           config={config}

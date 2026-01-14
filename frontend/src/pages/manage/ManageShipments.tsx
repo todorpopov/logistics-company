@@ -5,6 +5,7 @@ import axios from 'axios';
 import { API_URL } from '../../App';
 import { useQueryClient } from '@tanstack/react-query';
 import { useGetShipments } from './request';
+import Toast from '../../components/toast/Toast';
 
 export interface Shipment {
   shipmentId: number;
@@ -45,6 +46,7 @@ const shipmentColumns: Column<Shipment>[] = [
 const ManageShipments: React.FC = () => {
   const queryClient = useQueryClient();
   const { data: shipments } = useGetShipments();
+  const [toast, setToast] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleCreate = (shipment: Shipment) => {
     axios.post(`${API_URL}/api/shipment`, {
@@ -58,11 +60,11 @@ const ManageShipments: React.FC = () => {
       clientPhoneNumber: shipment.clientPhoneNumber
     })
       .then(() => {
+        setToast({ type: 'success', text: 'Shipment created successfully' });
         queryClient.invalidateQueries({ queryKey: ['shipments'] });
-        // todo add success toast
       })
       .catch(() => {
-        // todo add error toast
+        setToast({ type: 'error', text: 'Error creating shipment' });
       });
   };
 
@@ -77,27 +79,30 @@ const ManageShipments: React.FC = () => {
       deliveredDate: shipment.deliveredDate
     })
       .then(() => {
+        setToast({ type: 'success', text: 'Shipment updated successfully' });
         queryClient.invalidateQueries({ queryKey: ['shipments'] });
-        // todo add success toast
       })
       .catch(() => {
-        // todo add error toast
+        setToast({ type: 'error', text: 'Error updating shipment' });
       });
   };
 
   const handleDelete = (shipment: Shipment) => {
     axios.delete(`${API_URL}/api/shipment/${shipment.shipmentId}`)
       .then(() => {
+        setToast({ type: 'success', text: 'Shipment deleted successfully' });
         queryClient.invalidateQueries({ queryKey: ['shipments'] });
-        // todo add success toast
       })
       .catch(() => {
-        // todo add error toast
+        setToast({ type: 'error', text: 'Error deleting shipment' });
       });
   };
 
   return (
     <div className="manage-container">
+      {toast && (
+        <Toast type={toast.type} text={toast.text} onClose={() => setToast(null)} />
+      )}
       <div className="manage-content">
         <Table
           config={config}

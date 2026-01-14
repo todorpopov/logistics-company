@@ -5,6 +5,7 @@ import axios from 'axios';
 import {API_URL} from '../../App';
 import {useGetOffices} from './request';
 import { useQueryClient } from '@tanstack/react-query';
+import Toast from '../../components/toast/Toast';
 
 export interface Office {
   officeId: number;
@@ -29,48 +30,46 @@ const officeColumns: Column<Office>[] = [
 const ManageOffices: React.FC = () => {
   const queryClient = useQueryClient();
   const { data: offices } = useGetOffices();
+  const [toast, setToast] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleCreate = (office: Office) => {
     axios.post(`${API_URL}/api/office`, { name: office.name, address: office.address, phoneNumber: office.phoneNumber })
       .then(() => {
-        console.log('Office created successfully');
+        setToast({ type: 'success', text: 'Office created successfully' });
         queryClient.invalidateQueries({ queryKey: ['offices'] });
-        // todo add success toast
       })
       .catch(() => {
-        console.log('Error creating office');
-        // todo add error toast
+        setToast({ type: 'error', text: 'Error creating office' });
       });
   };
 
   const handleEdit = (office: Office) => {
     axios.put(`${API_URL}/api/office/${office.officeId}`, { name: office.name, address: office.address, phoneNumber: office.phoneNumber })
       .then(() => {
-        console.log('Office updated successfully');
+        setToast({ type: 'success', text: 'Office updated successfully' });
         queryClient.invalidateQueries({ queryKey: ['offices'] });
-        // todo add success toast
       })
       .catch(() => {
-        console.log('Error updating office');
-        // todo add error toast
+        setToast({ type: 'error', text: 'Error updating office' });
       });
   };
 
   const handleDelete = (office: Office) => {
     axios.delete(`${API_URL}/api/office/${office.officeId}`)
       .then(() => {
+        setToast({ type: 'success', text: 'Office deleted successfully' });
         queryClient.invalidateQueries({ queryKey: ['offices'] });
-        console.log('Office deleted successfully');
-        // todo add success toast
       })
       .catch(() => {
-        console.log('Error deleted office');
-        // todo add error toast
+        setToast({ type: 'error', text: 'Error deleting office' });
       });
   };
 
   return (
     <div className="manage-container">
+      {toast && (
+        <Toast type={toast.type} text={toast.text} onClose={() => setToast(null)} />
+      )}
       <div className="manage-content">
         <Table
           config={config}

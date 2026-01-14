@@ -6,6 +6,7 @@ import './LogIn.css';
 import { API_URL } from '../../App';
 import { useAuth, UserRole } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Toast from '../../components/toast/Toast';
 
 const LogIn: React.FunctionComponent = () => {
   const [email, setEmail] = useState('');
@@ -96,19 +97,11 @@ const LogIn: React.FunctionComponent = () => {
 
   return (
     <>
-      {showToast && (
-        <div className="login-toast">
-          {toastType === 'success' && (
-            <div className="alert alert-success mb-0" role="alert">
-              You successfully logged in!
-            </div>
-          )}
-          {toastType === 'error' && (
-            <div className="alert alert-danger mb-0" role="alert">
-              Invalid credentials!
-            </div>
-          )}
-        </div>
+      {showToast && toastType && (
+        <Toast
+          type={toastType}
+          text={toastType === 'success' ? 'You successfully logged in!' : 'Invalid credentials!'}
+        />
       )}
       <div className="container login-container" data-testid="login-page">
         <div className="card login-card">

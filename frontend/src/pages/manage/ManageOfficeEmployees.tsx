@@ -5,6 +5,7 @@ import { useGetOfficeEmployees } from './request';
 import { useQueryClient } from '@tanstack/react-query';
 import {API_URL} from '../../App';
 import axios from 'axios';
+import Toast from '../../components/toast/Toast';
 
 export interface OfficeEmployee {
   officeEmployeeId: number;
@@ -31,48 +32,46 @@ const officeEmployeeColumns: Column<OfficeEmployee>[] = [
 const ManageOfficeEmployees: React.FC = () => {
   const queryClient = useQueryClient();
   const { data: officeEmployees } = useGetOfficeEmployees();
+  const [toast, setToast] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleCreate = (employee: OfficeEmployee) => {
     axios.post(`${API_URL}/api/user/office-employee`, { email: employee.email, firstName: employee.firstName, lastName: employee.lastName, officeId: employee.officeId, password: employee.lastName })
       .then(() => {
-        console.log('Employee added successfully');
+        setToast({ type: 'success', text: 'Employee added successfully' });
         queryClient.invalidateQueries({ queryKey: ['officeEmployees'] });
-        // todo add success toast
       })
       .catch(() => {
-        console.log('Error adding employee');
-        // todo add error toast
+        setToast({ type: 'error', text: 'Error adding employee' });
       });
   };
 
   const handleEdit = (employee: OfficeEmployee) => {
     axios.put(`${API_URL}/api/user/office-employee/${employee.officeEmployeeId}`, { email: employee.email, firstName: employee.firstName, lastName: employee.lastName, officeId: employee.officeId })
       .then(() => {
-        console.log('Employee updated successfully');
+        setToast({ type: 'success', text: 'Employee updated successfully' });
         queryClient.invalidateQueries({ queryKey: ['officeEmployees'] });
-        // todo add success toast
       })
       .catch(() => {
-        console.log('Error updating employee');
-        // todo add error toast
+        setToast({ type: 'error', text: 'Error updating employee' });
       });
   };
 
   const handleDelete = (employee: OfficeEmployee) => {
     axios.delete(`${API_URL}/api/user/office-employee/${employee.officeEmployeeId}`)
       .then(() => {
+        setToast({ type: 'success', text: 'Employee deleted successfully' });
         queryClient.invalidateQueries({ queryKey: ['officeEmployees'] });
-        console.log('Employee deleted successfully');
-        // todo add success toast
       })
       .catch(() => {
-        console.log('Error deleted employee');
-        // todo add error toast
+        setToast({ type: 'error', text: 'Error deleting employee' });
       });
   };
 
   return (
     <div className="manage-container">
+      {toast && (
+        <Toast type={toast.type} text={toast.text} onClose={() => setToast(null)} />
+      )}
       <div className="manage-content">
         <Table
           config={config}
