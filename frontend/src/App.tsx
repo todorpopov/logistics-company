@@ -12,6 +12,7 @@ import ManageCouriers from './pages/manage/ManageCouriers';
 import ManageShipments from './pages/manage/ManageShipments';
 import { AuthProvider } from './context/AuthContext';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import ReportsHome from './pages/reports/ReportsHome';
 
 export const API_URL = process.env.REACT_APP_API_URL;
 
@@ -32,6 +33,7 @@ const App: React.FunctionComponent = () => {
             <Route path="/manage/workers" element={<ManageOfficeEmployees />} />
             <Route path="/manage/couriers" element={<ManageCouriers />} />
             <Route path="/manage/shipments" element={<ManageShipments />} />
+            <Route path="/reports" element={<ReportsHome />} />
           </Routes>
         </div>
       </AuthProvider>
