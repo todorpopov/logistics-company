@@ -32,20 +32,21 @@ const LogIn: React.FunctionComponent = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const performLogin = (isAdmin: boolean) => {
     const { emailError, passwordError, valid } = validateAuthFields(email, password);
     setEmailError(emailError);
     setPasswordError(passwordError);
+
     if (valid) {
       setLoading(true);
       setToastType(null);
       setShowToast(false);
 
-      // todo handle custom error messages
-      axios.post(`${API_URL}/api/auth/log-in`, { email, password })
+      const endpoint = isAdmin ? `${API_URL}/api/auth/log-admin-in` : `${API_URL}/api/auth/log-in`;
+
+      axios.post(endpoint, { email, password })
         .then((response) => {
-          const { role } = response.data;
+          const {role} = response.data;
           if (role) {
             let roleEnum;
             switch (role) {
@@ -64,7 +65,7 @@ const LogIn: React.FunctionComponent = () => {
             default:
               roleEnum = role;
             }
-            login({ role: roleEnum });
+            login({role: roleEnum});
             setToastType('success');
             setShowToast(true);
             setTimeout(() => {
@@ -83,6 +84,16 @@ const LogIn: React.FunctionComponent = () => {
           setLoading(false);
         });
     }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    performLogin(false);
+  };
+
+  const handleAdminSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    performLogin(true);
   };
 
   useEffect(() => {
@@ -144,6 +155,14 @@ const LogIn: React.FunctionComponent = () => {
                 )}
               </div>
               <button type="submit" className="btn btn-primary w-100" disabled={loading}>Log In</button>
+              <button
+                type="button"
+                className="btn btn-secondary w-100 mt-2"
+                disabled={loading}
+                onClick={handleAdminSubmit}
+              >
+                Log In as Admin
+              </button>
             </form>
           </div>
         </div>
