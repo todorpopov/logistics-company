@@ -68,8 +68,8 @@ function Table<T extends object>({ config, columns, data, pageSize = 5, onEdit, 
   const handleCreateChange = (accessor: keyof T, value: any) => {
     setCreateData(prev => ({ ...prev, [accessor]: value }));
   };
+
   const isCreateDisabled = columns.some(col => col.mandatoryForCreation && (createData[col.accessor] === undefined || createData[col.accessor] === ''));
-  // const isCreateDisabled = columns.some(col => col.mandatoryForCreation && col.editable !== false && (createData[col.accessor] === undefined || createData[col.accessor] === ''));
   const handleCreate = () => {
     if (onCreate && !isCreateDisabled) {
       onCreate(createData as T);
@@ -80,6 +80,7 @@ function Table<T extends object>({ config, columns, data, pageSize = 5, onEdit, 
   const handlePrev = () => {
     setPage((p) => Math.max(1, p - 1));
   };
+
   const handleNext = () => {
     setPage((p) => Math.min(totalPages, p + 1));
   };

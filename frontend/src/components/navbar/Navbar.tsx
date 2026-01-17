@@ -31,9 +31,14 @@ const Navbar: React.FC = () => {
               <Link className="nav-link" to="/" onClick={() => setExpanded(false)}>Home</Link>
             </li>
             {user && (user.role === UserRole.ADMIN) && (
-              <li className="nav-item align-items-center">
-                <Link className="nav-link" to="/manage" onClick={() => setExpanded(false)}>Manage</Link>
-              </li>
+              <>
+                <li className="nav-item align-items-center">
+                  <Link className="nav-link" to="/manage" onClick={() => setExpanded(false)}>Manage</Link>
+                </li>
+                <li className="nav-item align-items-center">
+                  <Link className="nav-link" to="/reports" onClick={() => setExpanded(false)}>Reports</Link>
+                </li>
+              </>
             )}
           </ul>
           <ul className="navbar-nav ms-auto">

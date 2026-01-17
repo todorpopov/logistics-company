@@ -1,3 +1,8 @@
+.custom-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
 .custom-table {
   background: #f8fafc;
   border-radius: 12px;

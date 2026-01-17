@@ -5,6 +5,7 @@ import { modalFieldsConfigMap, ModalFieldConfig } from './FormConfig';
 import {API_URL} from '../../App';
 import axios from 'axios';
 import Toast from '../../components/toast/Toast';
+import { useNavigate } from 'react-router-dom';
 
 const cards = [
   { icon: 'bi bi-person-badge', label: 'Employees', path: '/employees' },
@@ -17,12 +18,15 @@ const cards = [
   { icon: 'bi bi-person-down', label: 'Shipments Received By', path: '/shipments-received-by' },
 ];
 
+const USE_MOCK = false;
+
 const ReportsHome: React.FC = () => {
   const [modalOpen, setModalOpen] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState('');
   const [modalFields, setModalFields] = React.useState<ModalInputField[]>([]);
   const [modalFieldValues, setModalFieldValues] = React.useState<Record<string, string>>({});
   const [toast, setToast] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const navigate = useNavigate();
 
   const handleFieldChange = (name: string, value: string) => {
     setModalFieldValues((prev) => ({ ...prev, [name]: value }));
@@ -49,8 +53,64 @@ const ReportsHome: React.FC = () => {
     let url = API_URL + '/api/report' + cards.find((card) => card.label === modalTitle)?.path;
     queryParams.forEach(param => { url = url + `/${param}`; });
 
+    if (USE_MOCK) {
+      const mockData = [
+        {
+          shipmentId: 1,
+          senderId: 101,
+          registeredById: 'E001',
+          deliveryType: 'Express',
+          deliveryOfficeId: 'O100',
+          courierEmployeeId: 'C200',
+          weightGram: '1500',
+          price: '25.00',
+          status: 'Delivered',
+          sentDate: '2026-01-10',
+          deliveredDate: '2026-01-12',
+          clientPhoneNumber: '+1234567890',
+        },
+        {
+          shipmentId: 2,
+          senderId: 102,
+          registeredById: 'E002',
+          deliveryType: 'Standard',
+          deliveryOfficeId: 'O101',
+          courierEmployeeId: 'C201',
+          weightGram: '2000',
+          price: '18.50',
+          status: 'In Transit',
+          sentDate: '2026-01-13',
+          deliveredDate: '',
+          clientPhoneNumber: '+1987654321',
+        },
+        {
+          shipmentId: 3,
+          senderId: 103,
+          registeredById: 'E003',
+          deliveryType: 'Economy',
+          deliveryOfficeId: 'O102',
+          courierEmployeeId: 'C202',
+          weightGram: '500',
+          price: '10.00',
+          status: 'Pending',
+          sentDate: '2026-01-15',
+          deliveredDate: '',
+          clientPhoneNumber: '+1122334455',
+        },
+      ];
+      setToast({ type: 'success', text: 'Report generated successfully (mocked)' });
+      setModalOpen(false);
+      setTimeout(() => {
+        navigate('/report', { state: { reportData: mockData, reportTitle: modalTitle } });
+      }, 1500);
+      return;
+    }
+
     axios.get(url)
-      .then(() => setToast({ type: 'success', text: 'Report generated successfully' }))
+      .then((response) => {
+        setToast({ type: 'success', text: 'Report generated successfully' });
+        navigate('/report', { state: { reportData: response.data, reportTitle: modalTitle } });
+      })
       .catch(() => setToast({ type: 'error', text: 'Error generating report' }))
       .finally(() => setModalOpen(false));
   };
