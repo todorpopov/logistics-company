@@ -10,6 +10,7 @@ export enum UserRole {
 
 interface User {
   role: UserRole;
+  token?: string;
 }
 
 interface AuthContextType {
@@ -34,12 +35,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = (user: User) => {
     setUser(user);
     localStorage.setItem('user', JSON.stringify(user));
+    if (user.token) {
+      localStorage.setItem('token', user.token);
+    }
     navigate('/');
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     navigate('/');
   };
 

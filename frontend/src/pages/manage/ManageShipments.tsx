@@ -1,11 +1,11 @@
 import React from 'react';
 import Table, { Column, Config } from '../../components/table/Table';
 import './ManageOffices.css';
-import axios from 'axios';
 import { API_URL } from '../../App';
 import { useQueryClient } from '@tanstack/react-query';
 import { useGetShipments } from './request';
 import Toast from '../../components/toast/Toast';
+import axiosInstance from  '../../utils/axiosConfig';
 
 export interface Shipment {
   shipmentId: number;
@@ -49,7 +49,7 @@ const ManageShipments: React.FC = () => {
   const [toast, setToast] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleCreate = (shipment: Shipment) => {
-    axios.post(`${API_URL}/api/shipment`, {
+    axiosInstance.post(`${API_URL}/api/shipment`, {
       senderId: shipment.senderId,
       registeredById: shipment.registeredById,
       deliveryType: shipment.deliveryType,
@@ -69,7 +69,7 @@ const ManageShipments: React.FC = () => {
   };
 
   const handleEdit = (shipment: Shipment) => {
-    axios.put(`${API_URL}/api/shipment/${shipment.shipmentId}`, {
+    axiosInstance.put(`${API_URL}/api/shipment/${shipment.shipmentId}`, {
       deliveryType: shipment.deliveryType,
       deliveryOfficeId: shipment.deliveryOfficeId,
       courierEmployeeId: shipment.courierEmployeeId,
@@ -88,7 +88,7 @@ const ManageShipments: React.FC = () => {
   };
 
   const handleDelete = (shipment: Shipment) => {
-    axios.delete(`${API_URL}/api/shipment/${shipment.shipmentId}`)
+    axiosInstance.delete(`${API_URL}/api/shipment/${shipment.shipmentId}`)
       .then(() => {
         setToast({ type: 'success', text: 'Shipment deleted successfully' });
         queryClient.invalidateQueries({ queryKey: ['shipments'] });

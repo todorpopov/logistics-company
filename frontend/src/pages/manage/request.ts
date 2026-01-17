@@ -1,10 +1,10 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import axios from 'axios';
 import { API_URL } from '../../App';
 import type { Office } from './ManageOffices';
 import {OfficeEmployee} from './ManageOfficeEmployees';
 import { CourierEmployee } from './ManageCouriers';
 import { Shipment } from './ManageShipments';
+import axiosInstance from '../../utils/axiosConfig';
 
 interface OfficeEmployeeRaw {
   officeEmployeeId: number;
@@ -33,7 +33,7 @@ export const useGetOffices = ():
     UseQueryResult<Office[], Error> => useQuery<Office[], Error>({
       queryKey: ['offices'],
       queryFn: async () => {
-        const { data } = await axios.get<Office[]>(`${API_URL}/api/office`);
+        const { data } = await axiosInstance.get<Office[]>(`${API_URL}/api/office`);
         return data;
       },
       refetchInterval: 5000
@@ -43,7 +43,7 @@ export const useGetOfficeEmployees = ():
     UseQueryResult<OfficeEmployee[], Error> => useQuery<OfficeEmployee[], Error>({
       queryKey: ['officeEmployees'],
       queryFn: async () => {
-        const { data } = await axios.get<OfficeEmployeeRaw[]>(`${API_URL}/api/user/office-employee`);
+        const { data } = await axiosInstance.get<OfficeEmployeeRaw[]>(`${API_URL}/api/user/office-employee`);
         return data.map(employee => ({
           officeEmployeeId: employee.officeEmployeeId,
           email: employee.email,
@@ -59,7 +59,7 @@ export const useGetCourierEmployees = ():
     UseQueryResult<CourierEmployee[], Error> => useQuery<CourierEmployee[], Error>({
       queryKey: ['courierEmployees'],
       queryFn: async () => {
-        const { data } = await axios.get<CourierEmployee[]>(`${API_URL}/api/user/courier-employee`);
+        const { data } = await axiosInstance.get<CourierEmployee[]>(`${API_URL}/api/user/courier-employee`);
         return data;
       },
       refetchInterval: 5000
@@ -68,7 +68,7 @@ export const useGetCourierEmployees = ():
 export const useGetShipments = (): UseQueryResult<Shipment[], Error> => useQuery<Shipment[], Error>({
   queryKey: ['shipments'],
   queryFn: async () => {
-    const { data } = await axios.get<ShipmentRaw[]>(`${API_URL}/api/shipment`);
+    const { data } = await axiosInstance.get<ShipmentRaw[]>(`${API_URL}/api/shipment`);
     return data.map(shipment => ({
       shipmentId: shipment.shipmentId,
       senderId: shipment.sender?.clientId ?? 0,

@@ -13,7 +13,7 @@
 
 .icon-row {
   display: flex;
-  gap: 8vw;
+  gap: 4vw;
   margin-top: 2rem;
   justify-content: center;
 }

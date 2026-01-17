@@ -4,8 +4,8 @@ import './ManageOffices.css';
 import { useGetOfficeEmployees } from './request';
 import { useQueryClient } from '@tanstack/react-query';
 import {API_URL} from '../../App';
-import axios from 'axios';
 import Toast from '../../components/toast/Toast';
+import axiosInstance from '../../utils/axiosConfig';
 
 export interface OfficeEmployee {
   officeEmployeeId: number;
@@ -35,7 +35,7 @@ const ManageOfficeEmployees: React.FC = () => {
   const [toast, setToast] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleCreate = (employee: OfficeEmployee) => {
-    axios.post(`${API_URL}/api/user/office-employee`, { email: employee.email, firstName: employee.firstName, lastName: employee.lastName, officeId: employee.officeId, password: employee.lastName })
+    axiosInstance.post(`${API_URL}/api/user/office-employee`, { email: employee.email, firstName: employee.firstName, lastName: employee.lastName, officeId: employee.officeId, password: employee.lastName })
       .then(() => {
         setToast({ type: 'success', text: 'Employee added successfully' });
         queryClient.invalidateQueries({ queryKey: ['officeEmployees'] });
@@ -46,7 +46,7 @@ const ManageOfficeEmployees: React.FC = () => {
   };
 
   const handleEdit = (employee: OfficeEmployee) => {
-    axios.put(`${API_URL}/api/user/office-employee/${employee.officeEmployeeId}`, { email: employee.email, firstName: employee.firstName, lastName: employee.lastName, officeId: employee.officeId })
+    axiosInstance.put(`${API_URL}/api/user/office-employee/${employee.officeEmployeeId}`, { email: employee.email, firstName: employee.firstName, lastName: employee.lastName, officeId: employee.officeId })
       .then(() => {
         setToast({ type: 'success', text: 'Employee updated successfully' });
         queryClient.invalidateQueries({ queryKey: ['officeEmployees'] });
@@ -57,7 +57,7 @@ const ManageOfficeEmployees: React.FC = () => {
   };
 
   const handleDelete = (employee: OfficeEmployee) => {
-    axios.delete(`${API_URL}/api/user/office-employee/${employee.officeEmployeeId}`)
+    axiosInstance.delete(`${API_URL}/api/user/office-employee/${employee.officeEmployeeId}`)
       .then(() => {
         setToast({ type: 'success', text: 'Employee deleted successfully' });
         queryClient.invalidateQueries({ queryKey: ['officeEmployees'] });

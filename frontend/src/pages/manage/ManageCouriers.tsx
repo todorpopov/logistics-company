@@ -3,9 +3,9 @@ import React from 'react';
 import Table, { Column, Config } from '../../components/table/Table';
 import './ManageOffices.css';
 import { useGetCourierEmployees } from './request';
-import axios from 'axios';
 import {API_URL} from '../../App';
 import Toast from '../../components/toast/Toast';
+import axiosInstance from "../../utils/axiosConfig";
 
 export interface CourierEmployee {
   courierEmployeeId: number;
@@ -33,7 +33,7 @@ const ManageCouriers: React.FC = () => {
   const [toast, setToast] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleCreate = (employee: CourierEmployee) => {
-    axios.post(`${API_URL}/api/user/courier-employee`, { email: employee.email, firstName: employee.firstName, lastName: employee.lastName, password: employee.lastName })
+    axiosInstance.post(`${API_URL}/api/user/courier-employee`, { email: employee.email, firstName: employee.firstName, lastName: employee.lastName, password: employee.lastName })
       .then(() => {
         setToast({ type: 'success', text: 'Employee added successfully' });
         queryClient.invalidateQueries({ queryKey: ['courierEmployees'] });
@@ -44,7 +44,7 @@ const ManageCouriers: React.FC = () => {
   };
 
   const handleEdit = (employee: CourierEmployee) => {
-    axios.put(`${API_URL}/api/user/courier-employee/${employee.courierEmployeeId}`, { email: employee.email, firstName: employee.firstName, lastName: employee.lastName })
+    axiosInstance.put(`${API_URL}/api/user/courier-employee/${employee.courierEmployeeId}`, { email: employee.email, firstName: employee.firstName, lastName: employee.lastName })
       .then(() => {
         setToast({ type: 'success', text: 'Employee updated successfully' });
         queryClient.invalidateQueries({ queryKey: ['courierEmployees'] });
@@ -55,7 +55,7 @@ const ManageCouriers: React.FC = () => {
   };
 
   const handleDelete = (employee: CourierEmployee) => {
-    axios.delete(`${API_URL}/api/user/courier-employee/${employee.courierEmployeeId}`)
+    axiosInstance.delete(`${API_URL}/api/user/courier-employee/${employee.courierEmployeeId}`)
       .then(() => {
         setToast({ type: 'success', text: 'Employee deleted successfully' });
         queryClient.invalidateQueries({ queryKey: ['courierEmployees'] });

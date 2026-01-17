@@ -1,11 +1,11 @@
 import React from 'react';
 import Table, { Column, Config } from '../../components/table/Table';
 import './ManageOffices.css';
-import axios from 'axios';
 import {API_URL} from '../../App';
 import {useGetOffices} from './request';
 import { useQueryClient } from '@tanstack/react-query';
 import Toast from '../../components/toast/Toast';
+import axiosInstance from '../../utils/axiosConfig';
 
 export interface Office {
   officeId: number;
@@ -33,7 +33,7 @@ const ManageOffices: React.FC = () => {
   const [toast, setToast] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleCreate = (office: Office) => {
-    axios.post(`${API_URL}/api/office`, { name: office.name, address: office.address, phoneNumber: office.phoneNumber })
+    axiosInstance.post(`${API_URL}/api/office`, { name: office.name, address: office.address, phoneNumber: office.phoneNumber })
       .then(() => {
         setToast({ type: 'success', text: 'Office created successfully' });
         queryClient.invalidateQueries({ queryKey: ['offices'] });
@@ -44,7 +44,7 @@ const ManageOffices: React.FC = () => {
   };
 
   const handleEdit = (office: Office) => {
-    axios.put(`${API_URL}/api/office/${office.officeId}`, { name: office.name, address: office.address, phoneNumber: office.phoneNumber })
+    axiosInstance.put(`${API_URL}/api/office/${office.officeId}`, { name: office.name, address: office.address, phoneNumber: office.phoneNumber })
       .then(() => {
         setToast({ type: 'success', text: 'Office updated successfully' });
         queryClient.invalidateQueries({ queryKey: ['offices'] });
@@ -55,7 +55,7 @@ const ManageOffices: React.FC = () => {
   };
 
   const handleDelete = (office: Office) => {
-    axios.delete(`${API_URL}/api/office/${office.officeId}`)
+    axiosInstance.delete(`${API_URL}/api/office/${office.officeId}`)
       .then(() => {
         setToast({ type: 'success', text: 'Office deleted successfully' });
         queryClient.invalidateQueries({ queryKey: ['offices'] });

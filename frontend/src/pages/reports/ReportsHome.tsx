@@ -2,8 +2,8 @@ import React from 'react';
 import './ReportsHome.css';
 import FormModal, { ModalInputField } from '../../components/FormModal';
 import { modalFieldsConfigMap, ModalFieldConfig } from './FormConfig';
-import {API_URL} from '../../App';
-import axios from 'axios';
+import { API_URL } from '../../App';
+import axiosInstance from '../../utils/axiosConfig';
 import Toast from '../../components/toast/Toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,7 +18,7 @@ const cards = [
   { icon: 'bi bi-person-down', label: 'Shipments Received By', path: '/shipments-received-by' },
 ];
 
-const USE_MOCK = false;
+const USE_MOCK = true;
 
 const ReportsHome: React.FC = () => {
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -98,15 +98,15 @@ const ReportsHome: React.FC = () => {
           clientPhoneNumber: '+1122334455',
         },
       ];
-      setToast({ type: 'success', text: 'Report generated successfully (mocked)' });
+      setToast({ type: 'success', text: 'MOCKED Report generated successfully' });
       setModalOpen(false);
       setTimeout(() => {
         navigate('/report', { state: { reportData: mockData, reportTitle: modalTitle } });
-      }, 1500);
+      }, 1000);
       return;
     }
 
-    axios.get(url)
+    axiosInstance.get(url)
       .then((response) => {
         setToast({ type: 'success', text: 'Report generated successfully' });
         navigate('/report', { state: { reportData: response.data, reportTitle: modalTitle } });

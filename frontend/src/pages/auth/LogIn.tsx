@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { validateAuthFields } from '../../utils/validateAuthFields';
-import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './LogIn.css';
 import { API_URL } from '../../App';
 import { useAuth, UserRole } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Toast from '../../components/toast/Toast';
+import axiosInstance from '../../utils/axiosConfig';
 
 const LogIn: React.FunctionComponent = () => {
   const [email, setEmail] = useState('');
@@ -45,10 +45,10 @@ const LogIn: React.FunctionComponent = () => {
 
       const endpoint = isAdmin ? `${API_URL}/api/auth/log-admin-in` : `${API_URL}/api/auth/log-in`;
 
-      axios.post(endpoint, { email, password })
+      axiosInstance.post(endpoint, { email, password })
         .then((response) => {
-          const {role} = response.data;
-          if (role) {
+          const {role, token} = response.data;
+          if (role && token) {
             let roleEnum;
             switch (role) {
             case 'ADMIN':
@@ -66,7 +66,7 @@ const LogIn: React.FunctionComponent = () => {
             default:
               roleEnum = role;
             }
-            login({role: roleEnum});
+            login({role: roleEnum, token});
             setToastType('success');
             setShowToast(true);
             setTimeout(() => {

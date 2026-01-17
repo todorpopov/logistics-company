@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { validateAuthFields } from '../../utils/validateAuthFields';
-import axios from 'axios';
+import { API_URL } from '../../App';
+import { useAuth, UserRole } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './SignUp.css';
+import axiosInstance from '../../utils/axiosConfig';
 
 const SignUp: React.FunctionComponent = () => {
   const [firstName, setFirstName] = useState('');
@@ -16,6 +19,8 @@ const SignUp: React.FunctionComponent = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastType, setToastType] = useState<'success' | 'error' | null>(null);
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -55,13 +60,41 @@ const SignUp: React.FunctionComponent = () => {
       setLoading(true);
       setToastType(null);
       setShowToast(false);
-      axios.post('/signup', { email, password, firstName, lastName })
-        .then(() => {
-          setToastType('success');
-          setShowToast(true);
-          setTimeout(() => {
-            window.location.href = '/';
-          }, 1500);
+      axiosInstance.post(`${API_URL}/api/auth/sign-up`, { email, password, firstName, lastName })
+        .then((response) => {
+          // If backend returns a token and role, log the user in automatically
+          const { role, token } = response.data;
+          if (role && token) {
+            let roleEnum;
+            switch (role) {
+            case 'ADMIN':
+              roleEnum = UserRole.ADMIN;
+              break;
+            case 'CLIENT':
+              roleEnum = UserRole.CLIENT;
+              break;
+            case 'OFFICE_EMPLOYEE':
+              roleEnum = UserRole.OFFICE_EMPLOYEE;
+              break;
+            case 'COURIER_EMPLOYEE':
+              roleEnum = UserRole.COURIER_EMPLOYEE;
+              break;
+            default:
+              roleEnum = role;
+            }
+            login({ role: roleEnum, token });
+            setToastType('success');
+            setShowToast(true);
+            setTimeout(() => {
+              navigate('/');
+            }, 1500);
+          } else {
+            setToastType('success');
+            setShowToast(true);
+            setTimeout(() => {
+              window.location.href = '/';
+            }, 1500);
+          }
         })
         .catch(() => {
           setToastType('error');
