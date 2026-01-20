@@ -1,7 +1,7 @@
 INSERT INTO offices (office_id, address, name, phone_number)
-    VALUES (1, 'Main Address', 'Head Office', 1234567890);
+    VALUES (1, 'Main Address', 'Head Office', '1234567890');
 INSERT INTO offices (office_id, address, name, phone_number)
-    VALUES (2, 'Secondary Address', 'Branch Office 1', 0987654321);
+    VALUES (2, 'Secondary Address', 'Branch Office 1', '9876543210');
 
 SELECT setval(pg_get_serial_sequence('offices', 'office_id'), (SELECT MAX(office_id) FROM offices));
 
