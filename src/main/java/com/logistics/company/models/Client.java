@@ -16,7 +16,7 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long clientId;
 
-    @OneToOne(optional = false, cascade = CascadeType.PERSIST)
+    @OneToOne(optional = false, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(
         name = "user_id",
         nullable = false,

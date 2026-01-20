@@ -16,7 +16,7 @@ public class OfficeEmployee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long officeEmployeeId;
 
-    @OneToOne(optional = false, cascade = CascadeType.PERSIST)
+    @OneToOne(optional = false, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(
         name = "user_id",
         nullable = false,

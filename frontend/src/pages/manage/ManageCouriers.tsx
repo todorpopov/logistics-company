@@ -21,7 +21,7 @@ const config: Config = {
 };
 
 const courierEmployeeColumns: Column<CourierEmployee>[] = [
-  { header: 'ID', accessor: 'courierEmployeeId', mandatoryForCreation: true, editable: false },
+  { header: 'ID', accessor: 'courierEmployeeId', editable: false },
   { header: 'Email', accessor: 'email', mandatoryForCreation: true },
   { header: 'First Name', accessor: 'firstName', mandatoryForCreation: true },
   { header: 'Last Name', accessor: 'lastName', mandatoryForCreation: true },
@@ -33,7 +33,7 @@ const ManageCouriers: React.FC = () => {
   const [toast, setToast] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleCreate = (employee: CourierEmployee) => {
-    axiosInstance.post(`${API_URL}/api/user/courier-employee`, { email: employee.email, firstName: employee.firstName, lastName: employee.lastName, password: employee.lastName })
+    axiosInstance.post(`${API_URL}/api/user/courier-employee`, { email: employee.email, firstName: employee.firstName, lastName: employee.lastName, password: employee.email })
       .then(() => {
         setToast({ type: 'success', text: 'Employee added successfully' });
         queryClient.invalidateQueries({ queryKey: ['courierEmployees'] });
