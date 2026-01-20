@@ -1,6 +1,6 @@
 import React from 'react';
 import Table, { Config } from '../../components/table/Table';
-import './ManageOffices.css';
+import '../manage/ManageOffices.css';
 import Toast from '../../components/toast/Toast';
 import { useGetShipments } from '../request';
 import { shipmentColumns } from '../shipmentCommon';
@@ -8,13 +8,13 @@ import { useShipmentHandlers } from '../useShipmentHandlers';
 
 const config: Config = {
   enableCreation: true,
-  enableEdition: true,
-  enableDeletion: true,
+  enableEdition: false,
+  enableDeletion: false,
 };
 
-const ManageShipments: React.FC = () => {
+const CreateShipment: React.FC = () => {
   const { data: shipments } = useGetShipments();
-  const { toast, setToast, handleCreate, handleEdit, handleDelete } = useShipmentHandlers({ enableCreation: true, enableEdition: true, enableDeletion: true });
+  const { toast, setToast, handleCreate } = useShipmentHandlers({ enableCreation: true });
 
   return (
     <div className="manage-container">
@@ -27,12 +27,10 @@ const ManageShipments: React.FC = () => {
           columns={shipmentColumns}
           data={shipments ?? []}
           onCreate={handleCreate}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
         />
       </div>
     </div>
   );
 };
 
-export default ManageShipments;
+export default CreateShipment;

@@ -1,10 +1,10 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { API_URL } from '../../App';
-import type { Office } from './ManageOffices';
-import {OfficeEmployee} from './ManageOfficeEmployees';
-import { CourierEmployee } from './ManageCouriers';
-import { Shipment } from './ManageShipments';
-import axiosInstance from '../../utils/axiosConfig';
+import { API_URL } from '../App';
+import type { Office } from './manage/ManageOffices';
+import {OfficeEmployee} from './manage/ManageOfficeEmployees';
+import { CourierEmployee } from './manage/ManageCouriers';
+import { Shipment } from './shipmentCommon';
+import axiosInstance from '../utils/axiosConfig';
 
 interface OfficeEmployeeRaw {
   officeEmployeeId: number;

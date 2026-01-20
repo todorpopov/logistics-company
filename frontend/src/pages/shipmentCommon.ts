@@ -1,0 +1,31 @@
+import { Column } from '../components/table/Table';
+
+export interface Shipment {
+  shipmentId: number;
+  senderId: number;
+  registeredById: string;
+  deliveryType: string;
+  deliveryOfficeId: string;
+  courierEmployeeId: string;
+  weightGram: string;
+  price: string;
+  status: string;
+  sentDate: string;
+  deliveredDate: string;
+  clientPhoneNumber: string;
+}
+
+export const shipmentColumns: Column<Shipment>[] = [
+  { header: 'ID', accessor: 'shipmentId', editable: false },
+  { header: 'Sender', accessor: 'senderId', mandatoryForCreation: true },
+  { header: 'Registered By', accessor: 'registeredById', mandatoryForCreation: true },
+  { header: 'Delivery Type', accessor: 'deliveryType', mandatoryForCreation: true },
+  { header: 'Office ID', accessor: 'deliveryOfficeId', mandatoryForCreation: true },
+  { header: 'Delivered By', accessor: 'courierEmployeeId', mandatoryForCreation: true },
+  { header: 'Weight', accessor: 'weightGram', mandatoryForCreation: true },
+  { header: 'Price', accessor: 'price', mandatoryForCreation: true },
+  { header: 'Shipment Status', accessor: 'status', mandatoryForCreation: true },
+  { header: 'Sent Date', accessor: 'sentDate', mandatoryForCreation: true },
+  { header: 'Client Phone Number', accessor: 'clientPhoneNumber', mandatoryForCreation: true },
+  { header: 'Delivered Date', accessor: 'deliveredDate' },
+];

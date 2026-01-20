@@ -1,7 +1,7 @@
 import React from 'react';
 import Table, { Column, Config } from '../../components/table/Table';
 import './ManageOffices.css';
-import { useGetOfficeEmployees } from './request';
+import { useGetOfficeEmployees } from '../request';
 import { useQueryClient } from '@tanstack/react-query';
 import {API_URL} from '../../App';
 import Toast from '../../components/toast/Toast';
