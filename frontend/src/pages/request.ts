@@ -17,6 +17,7 @@ interface OfficeEmployeeRaw {
 interface ShipmentRaw {
   shipmentId: number;
   sender: { clientId: number };
+  receiver: { clientId: number };
   registeredBy: { officeEmployeeId: string };
   deliveryType: string;
   deliveryOffice: { officeId: string };
@@ -72,6 +73,7 @@ export const useGetShipments = (): UseQueryResult<Shipment[], Error> => useQuery
     return data.map(shipment => ({
       shipmentId: shipment.shipmentId,
       senderId: shipment.sender?.clientId ?? 0,
+      receiverId: shipment.receiver?.clientId ?? 0,
       registeredById: shipment.registeredBy?.officeEmployeeId ?? '',
       deliveryType: shipment.deliveryType,
       deliveryOfficeId: shipment.deliveryOffice?.officeId ?? '',

@@ -12,6 +12,7 @@ export function useShipmentHandlers(config: { enableCreation?: boolean; enableEd
     ? (shipment: Shipment) => {
       axiosInstance.post(`${API_URL}/api/shipment`, {
         senderId: shipment.senderId,
+        receiverId: shipment.receiverId,
         registeredById: shipment.registeredById,
         deliveryType: shipment.deliveryType,
         deliveryOfficeId: shipment.deliveryOfficeId,
@@ -39,7 +40,9 @@ export function useShipmentHandlers(config: { enableCreation?: boolean; enableEd
         price: shipment.price,
         clientPhoneNumber: shipment.clientPhoneNumber,
         shipmentStatus: shipment.status,
-        deliveredDate: shipment.deliveredDate
+        phoneNumber: shipment.clientPhoneNumber,
+        deliveredDate: shipment.deliveredDate,
+        status: shipment.status
       })
         .then(() => {
           setToast({ type: 'success', text: 'Shipment updated successfully' });

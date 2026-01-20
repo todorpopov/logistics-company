@@ -3,6 +3,7 @@ import { Column } from '../components/table/Table';
 export interface Shipment {
   shipmentId: number;
   senderId: number;
+  receiverId: number;
   registeredById: string;
   deliveryType: string;
   deliveryOfficeId: string;
@@ -18,6 +19,7 @@ export interface Shipment {
 export const shipmentColumns: Column<Shipment>[] = [
   { header: 'ID', accessor: 'shipmentId', editable: false },
   { header: 'Sender', accessor: 'senderId', mandatoryForCreation: true },
+  { header: 'Receiver', accessor: 'receiverId', mandatoryForCreation: true },
   { header: 'Registered By', accessor: 'registeredById', mandatoryForCreation: true },
   { header: 'Delivery Type', accessor: 'deliveryType', mandatoryForCreation: true },
   { header: 'Office ID', accessor: 'deliveryOfficeId', mandatoryForCreation: true },

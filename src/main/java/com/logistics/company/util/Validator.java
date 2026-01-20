@@ -1,8 +1,11 @@
 package com.logistics.company.util;
 
+import com.logistics.company.models.Shipment;
 import com.logistics.company.models.enums.ShipmentDeliveryType;
+import com.logistics.company.models.enums.ShipmentStatus;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.regex.Pattern;
 
 public class Validator {
@@ -113,7 +116,7 @@ public class Validator {
         return "";
     }
 
-    public static String isShipmentTypeValid(
+    public static String isDeliveryTypeValid(
         ShipmentDeliveryType deliveryType,
         Long deliveryOfficeId,
         Long courierEmployeeId

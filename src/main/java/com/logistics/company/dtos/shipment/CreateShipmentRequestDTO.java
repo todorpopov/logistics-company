@@ -4,8 +4,10 @@ import com.logistics.company.exceptions.custom.BadRequestException;
 import com.logistics.company.models.enums.ShipmentDeliveryType;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashMap;
 
+import com.logistics.company.models.enums.ShipmentStatus;
 import com.logistics.company.util.Validator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,9 +32,9 @@ public class CreateShipmentRequestDTO implements Validatable {
     public void validate() throws BadRequestException {
         HashMap<String, String> errors = new HashMap<>();
 
-        String shipmentTypeValidation = Validator.isShipmentTypeValid(this.deliveryType, this.deliveryOfficeId, this.courierEmployeeId);
-        if (!shipmentTypeValidation.isEmpty()) {
-            errors.put("shipmentType", shipmentTypeValidation);
+        String deliveryTypeValidation = Validator.isDeliveryTypeValid(this.deliveryType, this.deliveryOfficeId, this.courierEmployeeId);
+        if (!deliveryTypeValidation.isEmpty()) {
+            errors.put("deliveryType", deliveryTypeValidation);
         }
 
         String senderIdValidation = Validator.isIdValidMsg(this.senderId, true);

@@ -28,9 +28,9 @@ public class UpdateShipmentRequestDTO implements Validatable {
     public void validate() throws BadRequestException {
         HashMap<String, String> errors = new HashMap<>();
 
-        String shipmentTypeValidation = Validator.isShipmentTypeValid(this.deliveryType, this.deliveryOfficeId, this.courierEmployeeId);
-        if (!shipmentTypeValidation.isEmpty()) {
-            errors.put("shipmentType", shipmentTypeValidation);
+        String deliveryTypeValidation = Validator.isDeliveryTypeValid(this.deliveryType, this.deliveryOfficeId, this.courierEmployeeId);
+        if (!deliveryTypeValidation.isEmpty()) {
+            errors.put("deliveryType", deliveryTypeValidation);
         }
 
         String deliveryOfficeIdValidation = Validator.isIdValidMsg(this.deliveryOfficeId, false);
@@ -59,6 +59,17 @@ public class UpdateShipmentRequestDTO implements Validatable {
 
         if (!errors.isEmpty()) {
             throw new BadRequestException("Invalid request", errors);
+        }
+
+        updateDeliveredShipment();
+    }
+
+    public void updateDeliveredShipment() {
+        if (this.status == ShipmentStatus.DELIVERED && this.deliveredDate == null) {
+            this.deliveredDate = LocalDate.now();
+        }
+        if (this.status != ShipmentStatus.DELIVERED && this.deliveredDate != null) {
+            this.status = ShipmentStatus.DELIVERED;
         }
     }
 }
