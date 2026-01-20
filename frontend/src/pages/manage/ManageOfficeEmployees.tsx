@@ -23,7 +23,7 @@ const config: Config = {
 
 const officeEmployeeColumns: Column<OfficeEmployee>[] = [
   { header: 'ID', accessor: 'officeEmployeeId', editable: false },
-  { header: 'Email', accessor: 'email' },
+  { header: 'Email', accessor: 'email', mandatoryForCreation: true},
   { header: 'First Name', accessor: 'firstName', mandatoryForCreation: true },
   { header: 'Last Name', accessor: 'lastName', mandatoryForCreation: true },
   { header: 'Office ID', accessor: 'officeId', mandatoryForCreation: true },
@@ -35,7 +35,7 @@ const ManageOfficeEmployees: React.FC = () => {
   const [toast, setToast] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleCreate = (employee: OfficeEmployee) => {
-    axiosInstance.post(`${API_URL}/api/user/office-employee`, { email: employee.email, firstName: employee.firstName, lastName: employee.lastName, officeId: employee.officeId, password: employee.lastName })
+    axiosInstance.post(`${API_URL}/api/user/office-employee`, { email: employee.email, firstName: employee.firstName, lastName: employee.lastName, officeId: employee.officeId, password: employee.email })
       .then(() => {
         setToast({ type: 'success', text: 'Employee added successfully' });
         queryClient.invalidateQueries({ queryKey: ['officeEmployees'] });
