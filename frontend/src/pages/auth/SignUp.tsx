@@ -60,7 +60,7 @@ const SignUp: React.FunctionComponent = () => {
       setLoading(true);
       setToastType(null);
       setShowToast(false);
-      axiosInstance.post(`${API_URL}/api/auth/sign-up`, { email, password, firstName, lastName })
+      axiosInstance.post(`${API_URL}/api/auth/register-client`, { email, password, firstName, lastName })
         .then((response) => {
           // If backend returns a token and role, log the user in automatically
           const { role, token } = response.data;
