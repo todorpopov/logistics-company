@@ -13,9 +13,14 @@
 
 .icon-row {
   display: flex;
-  gap: 8vw;
+  flex-direction: row;
+  gap: 2rem;
   margin-top: 2rem;
   justify-content: center;
+  flex-wrap: nowrap;
+  width: 100%;
+  overflow-x: auto;
+  box-sizing: border-box;
 }
 
 .icon-feature-card {
@@ -27,10 +32,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 22vw;
-  flex: 1 1 18vw;
+  min-width: 200px;
+  max-width: 320px;
+  width: 100%;
+  flex: 1 1 220px;
   transition: box-shadow 0.2s, transform 0.2s;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .icon-feature-card:hover,
@@ -42,7 +50,7 @@
 }
 
 .icon-feature-card i {
-  font-size: 12vw;
+  font-size: 3rem;
   color: var(--bs-primary, #0d6efd);
 }
 
@@ -52,27 +60,23 @@
   border-top: 0.125rem solid #939393;
 }
 
-@media (max-width: 48rem) {
-  .home-title {
-    margin-top: 6rem;
-    color: #fff;
-  }
+@media (max-width: 900px) {
   .icon-row {
     flex-direction: column;
     gap: 2rem;
     align-items: center;
-  }
-  .icon-card {
-    padding: 1.5rem 0.5rem;
-    border-radius: 1rem;
+    flex-wrap: nowrap;
+    overflow-x: visible;
   }
   .icon-feature-card {
-    min-width: 60vw;
+    min-width: 70vw;
+    max-width: 95vw;
+    width: 100%;
     padding: 1.5rem 0.5rem;
     border-radius: 1rem;
   }
   .icon-feature-card i {
-    font-size: 30vw;
+    font-size: 2.5rem;
     max-width: 40vw;
   }
 }

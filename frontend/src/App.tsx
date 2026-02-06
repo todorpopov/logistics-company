@@ -16,6 +16,10 @@ import ReportsHome from './pages/reports/ReportsHome';
 import Report from './pages/reports/Report';
 import CreateShipment from './pages/officeEmployee/CreateShipment';
 import ShipmentsTable from './pages/client/ShipmentsTable';
+import AccessDenied from './pages/auth/AccessDenied';
+import ProtectedRoute from './components/ProtectedRoute';
+import { UserRole } from './context/AuthContext';
+import UpdateShipment from './pages/courierEmployee/UpdateShipment';
 
 export const API_URL = process.env.REACT_APP_API_URL;
 
@@ -31,15 +35,49 @@ const App: React.FunctionComponent = () => {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LogIn />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/manage" element={<Manage />} />
-            <Route path="/manage/offices" element={<ManageOffices />} />
-            <Route path="/manage/workers" element={<ManageOfficeEmployees />} />
-            <Route path="/manage/couriers" element={<ManageCouriers />} />
-            <Route path="/manage/shipments" element={<ManageShipments />} />
+            <Route path="/manage" element={
+              <ProtectedRoute allowedRoles={[UserRole.ADMIN]}>
+                <Manage />
+              </ProtectedRoute>
+            } />
+            <Route path="/manage/offices" element={
+              <ProtectedRoute allowedRoles={[UserRole.ADMIN]}>
+                <ManageOffices />
+              </ProtectedRoute>
+            } />
+            <Route path="/manage/workers" element={
+              <ProtectedRoute allowedRoles={[UserRole.ADMIN]}>
+                <ManageOfficeEmployees />
+              </ProtectedRoute>
+            } />
+            <Route path="/manage/couriers" element={
+              <ProtectedRoute allowedRoles={[UserRole.ADMIN]}>
+                <ManageCouriers />
+              </ProtectedRoute>
+            } />
+            <Route path="/manage/shipments" element={
+              <ProtectedRoute allowedRoles={[UserRole.ADMIN]}>
+                <ManageShipments />
+              </ProtectedRoute>
+            } />
             <Route path="/reports" element={<ReportsHome />} />
             <Route path="/report" element={<Report />} />
-            <Route path="/shipment" element={<CreateShipment />} />
-            <Route path="/shipments" element={<ShipmentsTable />} />
+            <Route path="/shipment" element={
+              <ProtectedRoute allowedRoles={[UserRole.OFFICE_EMPLOYEE]}>
+                <CreateShipment />
+              </ProtectedRoute>
+            } />
+            <Route path="/shipment" element={
+              <ProtectedRoute allowedRoles={[UserRole.COURIER_EMPLOYEE]}>
+                <UpdateShipment />
+              </ProtectedRoute>
+            } />
+            <Route path="/shipments" element={
+              <ProtectedRoute allowedRoles={[UserRole.CLIENT]}>
+                <ShipmentsTable />
+              </ProtectedRoute>
+            } />
+            <Route path="/access-denied" element={<AccessDenied />} />
           </Routes>
         </div>
       </AuthProvider>
