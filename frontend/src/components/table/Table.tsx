@@ -102,7 +102,7 @@ function Table<T extends object>({ config, columns, data, pageSize = 5, onEdit, 
             <tr>
               {columns.map((column) => (
                 <td key={String(column.accessor)}>
-                  {config.enableCreation && (column.editable === undefined || column.editable) ? (
+                  {config.enableCreation && (column.mandatoryForCreation === undefined || column.mandatoryForCreation) ? (
                     <input
                       className="editable-table-input"
                       value={createData[column.accessor] !== undefined ? String(createData[column.accessor]) : ''}

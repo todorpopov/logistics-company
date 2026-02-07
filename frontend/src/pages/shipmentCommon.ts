@@ -17,7 +17,7 @@ export interface Shipment {
 }
 
 export const shipmentColumns: Column<Shipment>[] = [
-  { header: 'ID', accessor: 'shipmentId', editable: false },
+  { header: 'ID', accessor: 'shipmentId', mandatoryForCreation: false, editable: false },
   { header: 'Sender', accessor: 'senderId', mandatoryForCreation: true, editable: false },
   { header: 'Receiver', accessor: 'receiverId', mandatoryForCreation: true, editable: false },
   { header: 'Registered By', accessor: 'registeredById', mandatoryForCreation: true, editable: false },
