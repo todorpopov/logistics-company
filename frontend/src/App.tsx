@@ -60,20 +60,28 @@ const App: React.FunctionComponent = () => {
                 <ManageShipments />
               </ProtectedRoute>
             } />
-            <Route path="/reports" element={<ReportsHome />} />
-            <Route path="/report" element={<Report />} />
+            <Route path="/reports" element={
+              <ProtectedRoute allowedRoles={[UserRole.ADMIN]}>
+                <ReportsHome />
+              </ProtectedRoute>
+            } />
+            <Route path="/report" element={
+              <ProtectedRoute allowedRoles={[UserRole.ADMIN]}>
+                <Report />
+              </ProtectedRoute>
+            } />
             <Route path="/shipment" element={
-              <ProtectedRoute allowedRoles={[UserRole.OFFICE_EMPLOYEE]}>
+              <ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.OFFICE_EMPLOYEE]}>
                 <CreateShipment />
               </ProtectedRoute>
             } />
             <Route path="/shipment" element={
-              <ProtectedRoute allowedRoles={[UserRole.COURIER_EMPLOYEE]}>
+              <ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.COURIER_EMPLOYEE]}>
                 <UpdateShipment />
               </ProtectedRoute>
             } />
             <Route path="/shipments" element={
-              <ProtectedRoute allowedRoles={[UserRole.CLIENT]}>
+              <ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.CLIENT]}>
                 <ShipmentsTable />
               </ProtectedRoute>
             } />
