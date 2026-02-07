@@ -128,19 +128,23 @@ function Table<T extends object>({ config, columns, data, pageSize = 5, onEdit, 
             </tr>
             {paginatedData.map((row, rowIndex) => (
               <tr key={rowIndex + (page - 1) * pageSize}>
-                {columns.map((column) => (
-                  <td key={String(column.accessor)}>
-                    {editRow === rowIndex && (column.editable === undefined || column.editable) ? (
-                      <input
-                        className="editable-table-input"
-                        value={editData[column.accessor] !== undefined ? String(editData[column.accessor]) : ''}
-                        onChange={e => handleEditChange(column.accessor, e.target.value)}
-                      />
-                    ) : (
-                      String(row[column.accessor])
-                    )}
-                  </td>
-                ))}
+                {columns.map((column) => {
+                  const value = row[column.accessor];
+                  const displayValue = value === null ? 'N/A' : String(value);
+                  return (
+                    <td key={String(column.accessor)}>
+                      {editRow === rowIndex && (column.editable === undefined || column.editable) ? (
+                        <input
+                          className="editable-table-input"
+                          value={editData[column.accessor] !== undefined ? String(editData[column.accessor]) : ''}
+                          onChange={e => handleEditChange(column.accessor, e.target.value)}
+                        />
+                      ) : (
+                        displayValue
+                      )}
+                    </td>
+                  );
+                })}
                 {config.enableEdition && (
                   <td>
                     {editRow === rowIndex ? (

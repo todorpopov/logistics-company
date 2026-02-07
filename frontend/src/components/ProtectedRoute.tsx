@@ -8,7 +8,10 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles, children }) => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   if (!user || !allowedRoles.includes(user.role)) {
     return <Navigate to="/access-denied" replace />;
   }
@@ -16,4 +19,3 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles, children 
 };
 
 export default ProtectedRoute;
-
