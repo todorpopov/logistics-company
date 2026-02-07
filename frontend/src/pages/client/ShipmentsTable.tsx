@@ -1,8 +1,10 @@
 import React from 'react';
 import Table from '../../components/table/Table';
 import { shipmentColumns } from '../shipmentCommon';
-import { useGetShipmentsSentBy } from '../request';
-import {getUserId} from '../../context/AuthContext';
+import {
+  useGetShipmentsReceivedByCurrentUser,
+  useGetShipmentsSentByCurrentUser
+} from '../request';
 
 const readOnlyConfig = {
   enableCreation: false,
@@ -11,18 +13,25 @@ const readOnlyConfig = {
 };
 
 const ShipmentsTable: React.FC = () => {
-  console.log(getUserId());
-
-  const { data: shipments } = useGetShipmentsSentBy();
+  const { data: shipmentsSentByCurrentUser } = useGetShipmentsSentByCurrentUser();
+  const { data: shipmentsReceivedByCurrentUser } = useGetShipmentsReceivedByCurrentUser();
 
   return (
     <div className="manage-container">
       <div className="manage-content">
-        <h2>My Shipments</h2>
+        <h2>Shipments sent by me</h2>
         <Table
           config={readOnlyConfig}
           columns={shipmentColumns}
-          data={shipments ?? []}
+          data={shipmentsSentByCurrentUser ?? []}
+        />
+      </div>
+      <div className="manage-content">
+        <h2>Shipments received by me</h2>
+        <Table
+            config={readOnlyConfig}
+            columns={shipmentColumns}
+            data={shipmentsReceivedByCurrentUser ?? []}
         />
       </div>
     </div>

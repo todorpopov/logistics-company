@@ -6,6 +6,7 @@ import { CourierEmployee } from './manage/ManageCouriers';
 import { Shipment } from './shipmentCommon';
 import axiosInstance from '../utils/axiosConfig';
 import { mapOfficeEmployees, mapShipments } from './reports/reportMappers';
+import { getUserId } from '../context/AuthContext';
 
 interface OfficeEmployeeRaw {
   officeEmployeeId: number;
@@ -70,10 +71,20 @@ export const useGetShipments = (): UseQueryResult<Shipment[], Error> => useQuery
   refetchInterval: 5000
 });
 
-export const useGetShipmentsSentBy = (): UseQueryResult<Shipment[], Error> => useQuery<Shipment[], Error>({
+
+export const useGetShipmentsSentByCurrentUser = (): UseQueryResult<Shipment[], Error> => useQuery<Shipment[], Error>({
   queryKey: ['shipments'],
   queryFn: async () => {
-    const { data } = await axiosInstance.get<ShipmentRaw[]>(`${API_URL}/api/shipments-sent-by/${localStorage.getItem('userId')}`);
+    const { data } = await axiosInstance.get<ShipmentRaw[]>(`${API_URL}/api/shipments-sent-by/${getUserId()}`);
+    return mapShipments(data);
+  },
+  refetchInterval: 5000
+});
+
+export const useGetShipmentsReceivedByCurrentUser = (): UseQueryResult<Shipment[], Error> => useQuery<Shipment[], Error>({
+  queryKey: ['shipments'],
+  queryFn: async () => {
+    const { data } = await axiosInstance.get<ShipmentRaw[]>(`${API_URL}/api/shipments-received-by/${getUserId()}`);
     return mapShipments(data);
   },
   refetchInterval: 5000
