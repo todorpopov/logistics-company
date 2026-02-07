@@ -6,6 +6,7 @@ import { API_URL } from '../../App';
 import axiosInstance from '../../utils/axiosConfig';
 import Toast from '../../components/toast/Toast';
 import { useNavigate } from 'react-router-dom';
+import { mapOfficeEmployees, mapShipments } from './reportMappers';
 
 const cards = [
   { icon: 'bi bi-person-badge', label: 'Employees', path: '/employees' },
@@ -109,7 +110,13 @@ const ReportsHome: React.FC = () => {
     axiosInstance.get(url)
       .then((response) => {
         setToast({ type: 'success', text: 'Report generated successfully' });
-        navigate('/report', { state: { reportData: response.data, reportTitle: modalTitle } });
+        let mappedData = response.data;
+        if (modalTitle === 'Employees') {
+          mappedData = mapOfficeEmployees(response.data);
+        } else if (modalTitle === 'Registered Shipments' || modalTitle === 'Shipments Sent for Delivery' || modalTitle === 'Shipments Registered By' || modalTitle === 'Shipments Sent By' || modalTitle === 'Shipments Received By') {
+          mappedData = mapShipments(response.data);
+        }
+        navigate('/report', { state: { reportData: mappedData, reportTitle: modalTitle } });
       })
       .catch(() => setToast({ type: 'error', text: 'Error generating report' }))
       .finally(() => setModalOpen(false));

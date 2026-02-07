@@ -5,6 +5,7 @@ import {OfficeEmployee} from './manage/ManageOfficeEmployees';
 import { CourierEmployee } from './manage/ManageCouriers';
 import { Shipment } from './shipmentCommon';
 import axiosInstance from '../utils/axiosConfig';
+import { mapOfficeEmployees, mapShipments } from './reports/reportMappers';
 
 interface OfficeEmployeeRaw {
   officeEmployeeId: number;
@@ -45,13 +46,7 @@ export const useGetOfficeEmployees = ():
       queryKey: ['officeEmployees'],
       queryFn: async () => {
         const { data } = await axiosInstance.get<OfficeEmployeeRaw[]>(`${API_URL}/api/user/office-employee`);
-        return data.map(employee => ({
-          officeEmployeeId: employee.officeEmployeeId,
-          email: employee.email,
-          firstName: employee.firstName,
-          lastName: employee.lastName,
-          officeId: employee.office?.officeId ?? 0
-        }));
+        return mapOfficeEmployees(data);
       },
       refetchInterval: 5000
     });
@@ -70,21 +65,7 @@ export const useGetShipments = (): UseQueryResult<Shipment[], Error> => useQuery
   queryKey: ['shipments'],
   queryFn: async () => {
     const { data } = await axiosInstance.get<ShipmentRaw[]>(`${API_URL}/api/shipment`);
-    return data.map(shipment => ({
-      shipmentId: shipment.shipmentId,
-      senderId: shipment.sender?.clientId ?? 0,
-      receiverId: shipment.receiver?.clientId ?? 0,
-      registeredById: shipment.registeredBy?.officeEmployeeId ?? '',
-      deliveryType: shipment.deliveryType,
-      deliveryOfficeId: shipment.deliveryOffice?.officeId ?? '',
-      courierEmployeeId: shipment.courierEmployee?.courierEmployeeId ?? '',
-      weightGram: shipment.weightGram,
-      price: shipment.price,
-      status: shipment.status,
-      sentDate: shipment.sentDate,
-      deliveredDate: shipment.deliveredDate,
-      clientPhoneNumber: shipment.clientPhoneNumber
-    }));
+    return mapShipments(data);
   },
   refetchInterval: 5000
 });

@@ -30,7 +30,6 @@ const Report: React.FC = () => {
         <h4>Report: {reportTitle}</h4>
         {isNumberReport ? (
           <div className="report-number-card">
-            <span className="report-number-label">Result:</span>
             <span className="report-number-value">{reportData}</span>
           </div>
         ) : (
