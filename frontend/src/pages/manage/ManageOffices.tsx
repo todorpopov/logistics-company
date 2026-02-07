@@ -21,7 +21,7 @@ const config: Config = {
 };
 
 const officeColumns: Column<Office>[] = [
-  { header: 'ID', accessor: 'officeId', editable: false },
+  { header: 'ID', accessor: 'officeId', mandatoryForCreation: false, editable: false },
   { header: 'Name', accessor: 'name', mandatoryForCreation: true },
   { header: 'Address', accessor: 'address', mandatoryForCreation: true },
   { header: 'Phone Number', accessor: 'phoneNumber', mandatoryForCreation: true }
@@ -38,8 +38,8 @@ const ManageOffices: React.FC = () => {
         setToast({ type: 'success', text: 'Office created successfully' });
         queryClient.invalidateQueries({ queryKey: ['offices'] });
       })
-      .catch(() => {
-        setToast({ type: 'error', text: 'Error creating office' });
+      .catch((e) => {
+        setToast({ type: 'error', text: 'Error creating office' + (e?.response?.data?.message ? `: ${e.response.data.message}` : '') });
       });
   };
 
@@ -49,8 +49,8 @@ const ManageOffices: React.FC = () => {
         setToast({ type: 'success', text: 'Office updated successfully' });
         queryClient.invalidateQueries({ queryKey: ['offices'] });
       })
-      .catch(() => {
-        setToast({ type: 'error', text: 'Error updating office' });
+      .catch((e) => {
+        setToast({ type: 'error', text: 'Error updating office' + (e?.response?.data?.message ? `: ${e.response.data.message}` : '') });
       });
   };
 
@@ -60,8 +60,8 @@ const ManageOffices: React.FC = () => {
         setToast({ type: 'success', text: 'Office deleted successfully' });
         queryClient.invalidateQueries({ queryKey: ['offices'] });
       })
-      .catch(() => {
-        setToast({ type: 'error', text: 'Error deleting office' });
+      .catch((e) => {
+        setToast({ type: 'error', text: 'Error deleting office' + (e?.response?.data?.message ? `: ${e.response.data.message}` : '') });
       });
   };
 

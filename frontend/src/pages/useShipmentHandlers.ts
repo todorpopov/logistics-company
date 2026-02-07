@@ -25,8 +25,8 @@ export function useShipmentHandlers(config: { enableCreation?: boolean; enableEd
           setToast({ type: 'success', text: 'Shipment created successfully' });
           queryClient.invalidateQueries({ queryKey: ['shipments'] });
         })
-        .catch(() => {
-          setToast({ type: 'error', text: 'Error creating shipment' });
+        .catch((e) => {
+          setToast({ type: 'error', text: 'Error creating shipment' + (e?.response?.data?.message ? `: ${e.response.data.message}` : '') });
         });
     }
     : undefined;
@@ -48,8 +48,8 @@ export function useShipmentHandlers(config: { enableCreation?: boolean; enableEd
           setToast({ type: 'success', text: 'Shipment updated successfully' });
           queryClient.invalidateQueries({ queryKey: ['shipments'] });
         })
-        .catch(() => {
-          setToast({ type: 'error', text: 'Error updating shipment' });
+        .catch((e) => {
+          setToast({ type: 'error', text: 'Error updating shipment' + (e?.response?.data?.message ? `: ${e.response.data.message}` : '') });
         });
     }
     : undefined;
@@ -61,12 +61,11 @@ export function useShipmentHandlers(config: { enableCreation?: boolean; enableEd
           setToast({ type: 'success', text: 'Shipment deleted successfully' });
           queryClient.invalidateQueries({ queryKey: ['shipments'] });
         })
-        .catch(() => {
-          setToast({ type: 'error', text: 'Error deleting shipment' });
+        .catch((e) => {
+          setToast({ type: 'error', text: 'Error deleting shipment' + (e?.response?.data?.message ? `: ${e.response.data.message}` : '') });
         });
     }
     : undefined;
 
   return { toast, setToast, handleCreate, handleEdit, handleDelete };
 }
-

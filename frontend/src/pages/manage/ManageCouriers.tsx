@@ -21,7 +21,7 @@ const config: Config = {
 };
 
 const courierEmployeeColumns: Column<CourierEmployee>[] = [
-  { header: 'ID', accessor: 'courierEmployeeId', editable: false },
+  { header: 'ID', accessor: 'courierEmployeeId', mandatoryForCreation: false, editable: false },
   { header: 'Email', accessor: 'email', mandatoryForCreation: true },
   { header: 'First Name', accessor: 'firstName', mandatoryForCreation: true },
   { header: 'Last Name', accessor: 'lastName', mandatoryForCreation: true },
@@ -38,8 +38,8 @@ const ManageCouriers: React.FC = () => {
         setToast({ type: 'success', text: 'Employee added successfully' });
         queryClient.invalidateQueries({ queryKey: ['courierEmployees'] });
       })
-      .catch(() => {
-        setToast({ type: 'error', text: 'Error adding employee' });
+      .catch((e) => {
+        setToast({ type: 'error', text: 'Error adding employee' + (e?.response?.data?.message ? `: ${e.response.data.message}` : '') });
       });
   };
 
@@ -49,8 +49,8 @@ const ManageCouriers: React.FC = () => {
         setToast({ type: 'success', text: 'Employee updated successfully' });
         queryClient.invalidateQueries({ queryKey: ['courierEmployees'] });
       })
-      .catch(() => {
-        setToast({ type: 'error', text: 'Error updating employee' });
+      .catch((e) => {
+        setToast({ type: 'error', text: 'Error updating employee' + (e?.response?.data?.message ? `: ${e.response.data.message}` : '') });
       });
   };
 
@@ -60,8 +60,8 @@ const ManageCouriers: React.FC = () => {
         setToast({ type: 'success', text: 'Employee deleted successfully' });
         queryClient.invalidateQueries({ queryKey: ['courierEmployees'] });
       })
-      .catch(() => {
-        setToast({ type: 'error', text: 'Error deleting employee' });
+      .catch((e) => {
+        setToast({ type: 'error', text: 'Error deleting employee' + (e?.response?.data?.message ? `: ${e.response.data.message}` : '') });
       });
   };
 

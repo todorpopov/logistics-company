@@ -118,7 +118,9 @@ const ReportsHome: React.FC = () => {
         }
         navigate('/report', { state: { reportData: mappedData, reportTitle: modalTitle } });
       })
-      .catch(() => setToast({ type: 'error', text: 'Error generating report' }))
+      .catch((e) => {
+        setToast({ type: 'error', text: 'Error generating report' + (e?.response?.data?.message ? `: ${e.response.data.message}` : '') })
+      })
       .finally(() => setModalOpen(false));
   };
 
