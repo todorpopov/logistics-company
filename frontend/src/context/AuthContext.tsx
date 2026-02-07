@@ -9,6 +9,7 @@ export enum UserRole {
 }
 
 interface User {
+  userId: number;
   role: UserRole;
   token?: string;
 }
@@ -37,6 +38,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = (user: User) => {
     setUser(user);
+    console.log(user);
     localStorage.setItem('user', JSON.stringify(user));
     if (user.token) {
       localStorage.setItem('token', user.token);

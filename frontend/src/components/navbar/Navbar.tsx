@@ -8,7 +8,7 @@ const Navbar: React.FC = () => {
 
   // todo remove this mock
   // React.useEffect(() => {
-  //   login({ role: UserRole.ADMIN });
+  //   login({ userId: 1, role: UserRole.ADMIN });
   // }, []);
 
   return (
