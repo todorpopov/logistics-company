@@ -12,7 +12,7 @@ const config: Config = {
   enableDeletion: false,
 };
 
-const CreateShipment: React.FC = () => {
+const UpdateShipment: React.FC = () => {
   const { data: shipments } = useGetShipments();
   const { toast, setToast, handleEdit } = useShipmentHandlers({ enableCreation: true });
 
@@ -33,4 +33,4 @@ const CreateShipment: React.FC = () => {
   );
 };
 
-export default CreateShipment;
+export default UpdateShipment;

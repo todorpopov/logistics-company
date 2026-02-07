@@ -75,7 +75,7 @@ export const useGetShipments = (): UseQueryResult<Shipment[], Error> => useQuery
 export const useGetShipmentsSentByCurrentUser = (): UseQueryResult<Shipment[], Error> => useQuery<Shipment[], Error>({
   queryKey: ['shipments'],
   queryFn: async () => {
-    const { data } = await axiosInstance.get<ShipmentRaw[]>(`${API_URL}/api/shipments-sent-by/${getUserId()}`);
+    const { data } = await axiosInstance.get<ShipmentRaw[]>(`${API_URL}/api/report/shipments-sent-by/${getUserId()}`);
     return mapShipments(data);
   },
   refetchInterval: 5000
@@ -84,7 +84,7 @@ export const useGetShipmentsSentByCurrentUser = (): UseQueryResult<Shipment[], E
 export const useGetShipmentsReceivedByCurrentUser = (): UseQueryResult<Shipment[], Error> => useQuery<Shipment[], Error>({
   queryKey: ['shipments'],
   queryFn: async () => {
-    const { data } = await axiosInstance.get<ShipmentRaw[]>(`${API_URL}/api/shipments-received-by/${getUserId()}`);
+    const { data } = await axiosInstance.get<ShipmentRaw[]>(`${API_URL}/api/report/shipments-received-by/${getUserId()}`);
     return mapShipments(data);
   },
   refetchInterval: 5000

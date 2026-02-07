@@ -70,12 +70,12 @@ const App: React.FunctionComponent = () => {
                 <Report />
               </ProtectedRoute>
             } />
-            <Route path="/shipment" element={
+            <Route path="/create-shipment" element={
               <ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.OFFICE_EMPLOYEE]}>
                 <CreateShipment />
               </ProtectedRoute>
             } />
-            <Route path="/shipment" element={
+            <Route path="/update-shipment" element={
               <ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.COURIER_EMPLOYEE]}>
                 <UpdateShipment />
               </ProtectedRoute>
