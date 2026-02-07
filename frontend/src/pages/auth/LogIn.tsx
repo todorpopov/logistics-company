@@ -47,7 +47,7 @@ const LogIn: React.FunctionComponent = () => {
 
       axiosInstance.post(endpoint, { email, password })
         .then((response) => {
-          const { userId, role, token} = response.data;
+          const { id, role, token} = response.data;
           if (role && token) {
             let roleEnum;
             switch (role) {
@@ -66,7 +66,7 @@ const LogIn: React.FunctionComponent = () => {
             default:
               roleEnum = role;
             }
-            login({ userId, role: roleEnum, token});
+            login({ userId: id, role: roleEnum, token});
             setToastType('success');
             setShowToast(true);
             setTimeout(() => {

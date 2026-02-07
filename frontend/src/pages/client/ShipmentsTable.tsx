@@ -2,6 +2,7 @@ import React from 'react';
 import Table from '../../components/table/Table';
 import { shipmentColumns } from '../shipmentCommon';
 import {useGetShipments, useGetShipmentsSentBy} from '../request';
+import { useAuth } from '../../context/AuthContext';
 
 const readOnlyConfig = {
   enableCreation: false,
@@ -10,8 +11,12 @@ const readOnlyConfig = {
 };
 
 const ShipmentsTable: React.FC = () => {
+  const { getUserId } = useAuth();
+
+  console.log(getUserId);
+
   const { data: shipments } = useGetShipmentsSentBy();
-  console.log(localStorage.getItem('userId'));
+
   return (
     <div className="manage-container">
       <div className="manage-content">

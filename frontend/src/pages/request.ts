@@ -71,10 +71,10 @@ export const useGetShipments = (): UseQueryResult<Shipment[], Error> => useQuery
 });
 
 export const useGetShipmentsSentBy = (): UseQueryResult<Shipment[], Error> => useQuery<Shipment[], Error>({
-    queryKey: ['shipments'],
-    queryFn: async () => {
-        const { data } = await axiosInstance.get<ShipmentRaw[]>(`${API_URL}/api/shipments-sent-by/${localStorage.getItem('userId')}`);
-        return mapShipments(data);
-    },
-    refetchInterval: 5000
+  queryKey: ['shipments'],
+  queryFn: async () => {
+    const { data } = await axiosInstance.get<ShipmentRaw[]>(`${API_URL}/api/shipments-sent-by/${localStorage.getItem('userId')}`);
+    return mapShipments(data);
+  },
+  refetchInterval: 5000
 });
