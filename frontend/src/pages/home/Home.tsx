@@ -4,7 +4,7 @@ import './Home.css';
 const Home: React.FunctionComponent = () => {
   return (
     <div data-testid="home-page" className="home-container">
-      <h1 className="home-title">Welcome to Logistics Company</h1>
+      <h1 className="home-title">Welcome to A*</h1>
       <div className="icon-row">
         <div className="icon-feature-card">
           <i className="bi bi-truck"></i>

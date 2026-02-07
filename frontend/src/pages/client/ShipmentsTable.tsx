@@ -29,9 +29,9 @@ const ShipmentsTable: React.FC = () => {
       <div className="manage-content">
         <h2>Shipments received by me</h2>
         <Table
-            config={readOnlyConfig}
-            columns={shipmentColumns}
-            data={shipmentsReceivedByCurrentUser ?? []}
+          config={readOnlyConfig}
+          columns={shipmentColumns}
+          data={shipmentsReceivedByCurrentUser ?? []}
         />
       </div>
     </div>

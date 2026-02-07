@@ -14,7 +14,7 @@ const config: Config = {
 
 const UpdateShipment: React.FC = () => {
   const { data: shipments } = useGetShipments();
-  const { toast, setToast, handleEdit } = useShipmentHandlers({ enableCreation: true });
+  const { toast, setToast, handleEdit } = useShipmentHandlers({ enableEdition: true });
 
   return (
     <div className="manage-container">
