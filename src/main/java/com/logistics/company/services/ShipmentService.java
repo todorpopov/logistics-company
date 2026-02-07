@@ -203,13 +203,14 @@ public class ShipmentService {
         return this.getShipmentsByStatus(ShipmentStatus.SENT_FOR_DELIVERY);
     }
 
-    public List<ShipmentDTO> getAllShipmentsSentByClient(Long clientId) {
-        if (Validator.isIdInvalid(clientId, true)) {
+    public List<ShipmentDTO> getAllShipmentsSentByClient(Long userId) {
+        if (Validator.isIdInvalid(userId, true)) {
             throw new BadRequestException("Invalid client id");
         }
 
         try {
-            List<Shipment> registeredShipments = this.shipmentRepository.findAllBySender_ClientId(clientId);
+            Client client = this.clientRepository.findByUser_UserId(userId);
+            List<Shipment> registeredShipments = this.shipmentRepository.findAllBySender_ClientId(client.getClientId());
             return registeredShipments.stream()
                 .map(DtoMapper::shipmentEntityToDto)
                 .toList();
