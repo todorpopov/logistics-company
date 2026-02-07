@@ -1,3 +1,14 @@
+export function mapEmployees(data: any[]): any[] {
+  return data.map((employee: any) => ({
+    employeeId: employee.employeeId,
+    employeeType: employee.userRole,
+    email: employee.email,
+    firstName: employee.firstName,
+    lastName: employee.lastName,
+    officeId: employee.office?.officeId ?? 0
+  }));
+}
+
 export function mapOfficeEmployees(data: any[]): any[] {
   return data.map((employee: any) => ({
     officeEmployeeId: employee.officeEmployeeId,
