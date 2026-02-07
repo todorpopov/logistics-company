@@ -1,8 +1,8 @@
 import React from 'react';
 import Table from '../../components/table/Table';
 import { shipmentColumns } from '../shipmentCommon';
-import {useGetShipments, useGetShipmentsSentBy} from '../request';
-import { useAuth } from '../../context/AuthContext';
+import { useGetShipmentsSentBy } from '../request';
+import {getUserId} from '../../context/AuthContext';
 
 const readOnlyConfig = {
   enableCreation: false,
@@ -11,9 +11,7 @@ const readOnlyConfig = {
 };
 
 const ShipmentsTable: React.FC = () => {
-  const { getUserId } = useAuth();
-
-  console.log(getUserId);
+  console.log(getUserId());
 
   const { data: shipments } = useGetShipmentsSentBy();
 

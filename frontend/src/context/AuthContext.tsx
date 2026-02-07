@@ -69,4 +69,4 @@ export const useAuth = () => {
 
 export const getUserId = () => {
   return JSON.parse(localStorage.getItem('user') || '').userId;
-}
+};
