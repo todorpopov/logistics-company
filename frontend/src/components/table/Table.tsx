@@ -94,9 +94,9 @@ function Table<T extends object>({ config, columns, data, pageSize = 5, onEdit, 
               {columns.map((column) => (
                 <th key={column.header}>{column.header}</th>
               ))}
-              {config.enableCreation && !config.enableEdition && !config.enableDeletion && <th>Edit</th>}
-              {config.enableEdition && <th>Edit</th>}
-              {config.enableDeletion && <th>Delete</th>}
+              {config.enableCreation && !config.enableEdition && !config.enableDeletion && <th></th>}
+              {config.enableEdition && <th></th>}
+              {config.enableDeletion && <th></th>}
             </tr>
           </thead>
           <tbody>
@@ -116,7 +116,7 @@ function Table<T extends object>({ config, columns, data, pageSize = 5, onEdit, 
                 </td>
               ))}
               {config.enableCreation && (
-                <td colSpan={(config.enableEdition && config.enableDeletion) ? 2 : 1} className="editable-table-center-cell">
+                <td colSpan={(config.enableEdition && config.enableDeletion) ? 2 : 1}>
                   <button
                     className="btn btn-success btn-sm"
                     onClick={handleCreate}
