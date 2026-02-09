@@ -1,6 +1,6 @@
 import React from 'react';
 import Table, { Column, Config } from '../../components/table/Table';
-import './ManageOffices.css';
+import './ManageCommon.css';
 import {API_URL} from '../../App';
 import {useGetOffices} from '../request';
 import { useQueryClient } from '@tanstack/react-query';

@@ -1,6 +1,6 @@
 import React from 'react';
 import Table, { Config } from '../../components/table/Table';
-import './ManageOffices.css';
+import './ManageCommon.css';
 import Toast from '../../components/toast/Toast';
 import { useGetShipments } from '../request';
 import { shipmentColumns } from '../shipmentCommon';
