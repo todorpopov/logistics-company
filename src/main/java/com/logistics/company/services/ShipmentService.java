@@ -253,4 +253,19 @@ public class ShipmentService {
             .map(ShipmentDTO::getPrice)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
+    public List<ShipmentDTO> getAllShipmentsByCourierUserId(Long userId) {
+        if (Validator.isIdInvalid(userId, true)) {
+            throw new BadRequestException("Invalid user id");
+        }
+        try {
+            List<Shipment> shipments = this.shipmentRepository.findAllByCourierEmployee_User_UserId(userId);
+            return shipments.stream()
+                .map(DtoMapper::shipmentEntityToDto)
+                .toList();
+        } catch (DataAccessException e) {
+            logger.error(e.getMessage());
+            throw new BadRequestException("Cannot fetch shipments by courier user id");
+        }
+    }
 }

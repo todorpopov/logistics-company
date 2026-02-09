@@ -2,7 +2,7 @@ import React from 'react';
 import Table, { Config } from '../../components/table/Table';
 import '../manage/ManageOffices.css';
 import Toast from '../../components/toast/Toast';
-import { useGetShipments } from '../request';
+import { useGetShipmentsByCourierUserId } from '../request';
 import { shipmentColumns } from '../shipmentCommon';
 import { useShipmentHandlers } from '../useShipmentHandlers';
 
@@ -13,7 +13,7 @@ const config: Config = {
 };
 
 const UpdateShipment: React.FC = () => {
-  const { data: shipments } = useGetShipments();
+  const { data: shipments } = useGetShipmentsByCourierUserId(JSON.parse(localStorage.getItem('user') || '{}').userId);
   const { toast, setToast, handleEdit } = useShipmentHandlers({ enableEdition: true });
 
   return (

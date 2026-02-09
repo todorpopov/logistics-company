@@ -13,4 +13,5 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
     List<Shipment> findAllBySender_ClientId(Long clientId);
     List<Shipment> findAllByReceiver_ClientId(Long clientId);
     List<Shipment> findAllByDeliveredDateBetween(LocalDate deliveredDateAfter, LocalDate deliveredDateBefore);
+    List<Shipment> findAllByCourierEmployee_User_UserId(Long userId);
 }

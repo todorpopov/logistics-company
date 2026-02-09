@@ -89,3 +89,23 @@ export const useGetShipmentsReceivedByCurrentUser = (): UseQueryResult<Shipment[
   },
   refetchInterval: 5000
 });
+
+export const useGetShipmentsByCourierId = (courierId: string | number): UseQueryResult<Shipment[], Error> => useQuery<Shipment[], Error>({
+  queryKey: ['shipments', 'courier', courierId],
+  queryFn: async () => {
+    if (!courierId) return [];
+    const { data } = await axiosInstance.get<ShipmentRaw[]>(`${API_URL}/api/shipment/courier/${courierId}`);
+    return mapShipments(data);
+  },
+  refetchInterval: 5000
+});
+
+export const useGetShipmentsByCourierUserId = (userId: string | number): UseQueryResult<Shipment[], Error> => useQuery<Shipment[], Error>({
+  queryKey: ['shipments', 'courier-user', userId],
+  queryFn: async () => {
+    if (!userId) return [];
+    const { data } = await axiosInstance.get<ShipmentRaw[]>(`${API_URL}/api/shipment/courier/${userId}`);
+    return mapShipments(data);
+  },
+  refetchInterval: 5000
+});

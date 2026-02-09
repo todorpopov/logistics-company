@@ -29,6 +29,11 @@ public class ShipmentController {
         return ResponseEntity.ok(this.shipmentService.getAllShipments());
     }
 
+    @GetMapping("/courier/{userId}")
+    public ResponseEntity<Iterable<ShipmentDTO>> getShipmentsByCourierUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(this.shipmentService.getAllShipmentsByCourierUserId(userId));
+    }
+
     @PutMapping("{shipmentId}")
     public ResponseEntity<ShipmentDTO> updateShipment(@PathVariable Long shipmentId, @RequestBody UpdateShipmentRequestDTO dto) {
         try {
