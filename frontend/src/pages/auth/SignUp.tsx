@@ -4,8 +4,9 @@ import { API_URL } from '../../App';
 import { useAuth, UserRole } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './SignUp.css';
+import './Auth.css';
 import axiosInstance from '../../utils/axiosConfig';
+import Toast from '../../components/toast/Toast';
 
 const SignUp: React.FunctionComponent = () => {
   const [firstName, setFirstName] = useState('');
@@ -118,22 +119,14 @@ const SignUp: React.FunctionComponent = () => {
 
   return (
     <>
-      {showToast && (
-        <div className="signup-toast">
-          {toastType === 'success' && (
-            <div className="alert alert-success mb-0" role="alert">
-              You have registered successfully!
-            </div>
-          )}
-          {toastType === 'error' && (
-            <div className="alert alert-danger mb-0" role="alert">
-              Registration failed!
-            </div>
-          )}
-        </div>
+      {showToast && toastType && (
+        <Toast
+          type={toastType}
+          text={toastType === 'success' ? 'You have registered successfully!' : 'Registration failed!'}
+        />
       )}
-      <div className="container signup-container" data-testid="sign-up-page">
-        <div className="card signup-card">
+      <div className="container auth-container" data-testid="sign-up-page">
+        <div className="card auth-card">
           <div className="card-body">
             <h2 className="card-title mb-4 text-center">Sign Up</h2>
             <form noValidate onSubmit={handleSubmit}>

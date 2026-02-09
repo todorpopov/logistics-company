@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { validateAuthFields } from '../../utils/validateAuthFields';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './LogIn.css';
+import './Auth.css';
 import { API_URL } from '../../App';
 import { useAuth, UserRole } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -114,11 +114,11 @@ const LogIn: React.FunctionComponent = () => {
           text={toastType === 'success' ? 'You successfully logged in!' : 'Invalid credentials!'}
         />
       )}
-      <div className="container login-container" data-testid="login-page">
-        <div className="card login-card">
+      <div className="container auth-container" data-testid="login-page">
+        <div className="card auth-card">
           <div className="card-body">
             <h2 className="card-title mb-4 text-center">Log In</h2>
-            <form className="login-form" noValidate onSubmit={handleSubmit}>
+            <form noValidate onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="email" className="form-label text-start w-100">Email address</label>
                 <input
