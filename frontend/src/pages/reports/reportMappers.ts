@@ -5,7 +5,7 @@ export function mapEmployees(data: any[]): any[] {
     email: employee.email,
     firstName: employee.firstName,
     lastName: employee.lastName,
-    officeId: employee.office?.officeId ?? 0
+    officeId: employee.officeId ?? 'N/A'
   }));
 }
 
@@ -26,8 +26,8 @@ export function mapShipments(data: any[]): any[] {
     receiverId: shipment.receiver?.clientId ?? 0,
     registeredById: shipment.registeredBy?.officeEmployeeId ?? '',
     deliveryType: shipment.deliveryType,
-    deliveryOfficeId: shipment.deliveryOffice?.officeId ?? '',
-    courierEmployeeId: shipment.courierEmployee?.courierEmployeeId ?? '',
+    deliveryOfficeId: shipment.deliveryOffice?.officeId ?? 'N/A',
+    courierEmployeeId: shipment.courierEmployee?.courierEmployeeId ?? 'N/A',
     weightGram: shipment.weightGram,
     price: shipment.price,
     status: shipment.status,

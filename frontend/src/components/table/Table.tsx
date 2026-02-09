@@ -94,6 +94,7 @@ function Table<T extends object>({ config, columns, data, pageSize = 5, onEdit, 
               {columns.map((column) => (
                 <th key={column.header}>{column.header}</th>
               ))}
+              {config.enableCreation && !config.enableEdition && !config.enableDeletion && <th>Edit</th>}
               {config.enableEdition && <th>Edit</th>}
               {config.enableDeletion && <th>Delete</th>}
             </tr>

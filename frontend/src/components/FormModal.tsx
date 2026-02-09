@@ -50,7 +50,7 @@ const FormModal: React.FC<ConfigurableModalProps> = ({
               />
             </div>
           ))}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 24 }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 24 }}>
             <button type="button" onClick={onClose} style={{ padding: '8px 16px', borderRadius: 4, border: 'none', background: '#ccc' }}>{closeLabel}</button>
             <button type="submit" style={{ padding: '8px 16px', borderRadius: 4, border: 'none', background: '#0d6efd', color: '#fff' }}>{submitLabel}</button>
           </div>
