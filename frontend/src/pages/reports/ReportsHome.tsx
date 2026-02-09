@@ -1,6 +1,6 @@
 import React from 'react';
 import './ReportsHome.css';
-import FormModal, { ModalInputField } from '../../components/FormModal';
+import FormModal, { ModalInputField } from '../../components/formModal/FormModal';
 import { modalFieldsConfigMap, ModalFieldConfig } from './FormConfig';
 import { API_URL } from '../../App';
 import axiosInstance from '../../utils/axiosConfig';

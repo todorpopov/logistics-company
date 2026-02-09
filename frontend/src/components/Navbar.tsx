@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
-import {useAuth, UserRole} from '../../context/AuthContext';
+import {useAuth, UserRole} from '../context/AuthContext';
 
 const Navbar: React.FC = () => {
   const [expanded, setExpanded] = useState(false);

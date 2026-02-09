@@ -1,4 +1,4 @@
-import {ModalInputField} from '../../components/FormModal';
+import {ModalInputField} from '../../components/formModal/FormModal';
 
 export interface ModalFieldConfig {
     name: string;

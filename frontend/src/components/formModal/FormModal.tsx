@@ -1,4 +1,5 @@
 import React from 'react';
+import './FormModal.css';
 
 export interface ModalInputField {
   name: string;
@@ -32,12 +33,12 @@ const FormModal: React.FC<ConfigurableModalProps> = ({
   }
 
   return (
-    <div className="modal-backdrop" style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.3)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div className="modal-content d-flex gap-4" style={{ background: '#fff', borderRadius: 8, padding: 32, minWidth: 320, maxWidth: 400, boxShadow: '0 2px 16px rgba(0,0,0,0.2)' }}>
+    <div className="modal-backdrop">
+      <div className="modal-content d-flex gap-4">
         <span>Generate Report for {title}</span>
         <form onSubmit={e => { e.preventDefault(); onSubmit(); }}>
           {inputFields.map((field) => (
-            <div key={field.name} style={{ marginBottom: 16 }}>
+            <div key={field.name} className="form-modal-input-wrapper">
               <input
                 id={field.name}
                 name={field.name}
@@ -45,14 +46,14 @@ const FormModal: React.FC<ConfigurableModalProps> = ({
                 value={field.value}
                 onChange={field.onChange}
                 placeholder={field.label}
-                style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #ccc' }}
+                className="form-modal-input"
                 required
               />
             </div>
           ))}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 24 }}>
-            <button type="button" onClick={onClose} style={{ padding: '8px 16px', borderRadius: 4, border: 'none', background: '#ccc' }}>{closeLabel}</button>
-            <button type="submit" style={{ padding: '8px 16px', borderRadius: 4, border: 'none', background: '#0d6efd', color: '#fff' }}>{submitLabel}</button>
+          <div className="form-modal-actions">
+            <button type="button" onClick={onClose} className="form-modal-btn-close">{closeLabel}</button>
+            <button type="submit" className="form-modal-btn-submit">{submitLabel}</button>
           </div>
         </form>
       </div>
