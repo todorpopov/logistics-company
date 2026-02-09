@@ -1,6 +1,6 @@
 import React from 'react';
 import Table, { Config } from '../../components/table/Table';
-import '../manage/ManageOffices.css';
+import './CreateShipment.css';
 import Toast from '../../components/toast/Toast';
 import { useGetShipments } from '../request';
 import { shipmentColumns } from '../shipmentCommon';
@@ -17,11 +17,11 @@ const CreateShipment: React.FC = () => {
   const { toast, setToast, handleCreate } = useShipmentHandlers({ enableCreation: true });
 
   return (
-    <div className="manage-container">
+    <div className="create-shipments-container">
       {toast && (
         <Toast type={toast.type} text={toast.text} onClose={() => setToast(null)} />
       )}
-      <div className="manage-content">
+      <div className="create-shipments-content">
         <Table
           config={config}
           columns={shipmentColumns}
