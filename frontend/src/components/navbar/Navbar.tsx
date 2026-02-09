@@ -14,7 +14,9 @@ const Navbar: React.FC = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">A*</Link>
+        <Link className="navbar-brand" to="/">
+          <img src={process.env.PUBLIC_URL + '/favicon.ico'} alt="Logo" style={{ height: '32px', width: '32px' }} />
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -37,6 +39,27 @@ const Navbar: React.FC = () => {
                 </li>
                 <li className="nav-item align-items-center">
                   <Link className="nav-link" to="/reports" onClick={() => setExpanded(false)}>Reports</Link>
+                </li>
+              </>
+            )}
+            {user && (user.role === UserRole.OFFICE_EMPLOYEE) && (
+              <>
+                <li className="nav-item align-items-center">
+                  <Link className="nav-link" to="/create-shipment" onClick={() => setExpanded(false)}>Register Shipment</Link>
+                </li>
+              </>
+            )}
+            {user && (user.role === UserRole.COURIER_EMPLOYEE) && (
+              <>
+                <li className="nav-item align-items-center">
+                  <Link className="nav-link" to="/update-shipment" onClick={() => setExpanded(false)}>Deliver Shipment</Link>
+                </li>
+              </>
+            )}
+            {user && (user.role === UserRole.CLIENT) && (
+              <>
+                <li className="nav-item align-items-center">
+                  <Link className="nav-link" to="/shipments" onClick={() => setExpanded(false)}>My Shipments</Link>
                 </li>
               </>
             )}

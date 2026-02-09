@@ -5,6 +5,7 @@ import {
   useGetShipmentsReceivedByCurrentUser,
   useGetShipmentsSentByCurrentUser
 } from '../request';
+import './Shipments.css';
 
 const readOnlyConfig = {
   enableCreation: false,
@@ -17,8 +18,8 @@ const ShipmentsTable: React.FC = () => {
   const { data: shipmentsReceivedByCurrentUser } = useGetShipmentsReceivedByCurrentUser();
 
   return (
-    <div className="manage-container">
-      <div className="manage-content">
+    <div className="shipments-container">
+      <div className="shipments-content">
         <h2>Shipments sent by me</h2>
         <Table
           config={readOnlyConfig}
@@ -26,7 +27,7 @@ const ShipmentsTable: React.FC = () => {
           data={shipmentsSentByCurrentUser ?? []}
         />
       </div>
-      <div className="manage-content">
+      <div className="shipments-content">
         <h2>Shipments received by me</h2>
         <Table
           config={readOnlyConfig}
@@ -39,4 +40,3 @@ const ShipmentsTable: React.FC = () => {
 };
 
 export default ShipmentsTable;
-

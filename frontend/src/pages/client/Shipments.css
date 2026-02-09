@@ -1,0 +1,18 @@
+.shipments-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.shipments-content {
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 0.25rem 1.5rem rgba(0,0,0,0.10);
+    padding: 2rem 2.5rem;
+    min-width: 40rem;
+    overflow-x: auto;
+}
