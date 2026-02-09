@@ -15,7 +15,7 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import ReportsHome from './pages/reports/ReportsHome';
 import Report from './pages/reports/Report';
 import CreateShipment from './pages/officeEmployee/CreateShipment';
-import ShipmentsTable from './pages/client/ShipmentsTable';
+import Shipments from './pages/client/Shipments';
 import AccessDenied from './pages/auth/AccessDenied';
 import ProtectedRoute from './components/ProtectedRoute';
 import { UserRole } from './context/AuthContext';
@@ -82,7 +82,7 @@ const App: React.FunctionComponent = () => {
             } />
             <Route path="/shipments" element={
               <ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.CLIENT]}>
-                <ShipmentsTable />
+                <Shipments />
               </ProtectedRoute>
             } />
             <Route path="/access-denied" element={<AccessDenied />} />

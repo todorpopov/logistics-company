@@ -13,7 +13,7 @@ const readOnlyConfig = {
   enableDeletion: false,
 };
 
-const ShipmentsTable: React.FC = () => {
+const Shipments: React.FC = () => {
   const { data: shipmentsSentByCurrentUser } = useGetShipmentsSentByCurrentUser();
   const { data: shipmentsReceivedByCurrentUser } = useGetShipmentsReceivedByCurrentUser();
 
@@ -39,4 +39,4 @@ const ShipmentsTable: React.FC = () => {
   );
 };
 
-export default ShipmentsTable;
+export default Shipments;
