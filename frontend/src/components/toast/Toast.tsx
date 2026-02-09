@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import './Toast.css';
 
 export interface ToastProps {
     type: 'success' | 'error';
@@ -18,7 +19,7 @@ const Toast: React.FC<ToastProps> = ({ type, text, autoClose = true, onClose }) 
   }, [autoClose, onClose]);
 
   return (
-    <div className="login-toast">
+    <div className="toast-wrapper">
       {type === 'success' && (
         <div className="alert alert-success mb-0" role="alert">
           {text}

@@ -1,0 +1,9 @@
+.toast-wrapper {
+    max-width: 40rem;
+    min-width: 30rem;
+    z-index: 1;
+    transform: translateX(-50%);
+    left: 50%;
+    top: 4rem;
+    position: fixed;
+}
