@@ -3,22 +3,22 @@ import './Home.css';
 
 const Home: React.FunctionComponent = () => {
   return (
-    <div data-testid="home-page" className="home-container">
+    <div className="home-container">
       <h1 className="home-title">Welcome to A*</h1>
-      <div className="icon-row">
-        <div className="icon-feature-card">
+      <div className="home-icon-row">
+        <div className="home-icon-feature-card">
           <i className="bi bi-truck"></i>
-          <hr className="icon-divider" />
+          <hr className="home-icon-divider" />
           <div>Fast Deliveries</div>
         </div>
-        <div className="icon-feature-card">
+        <div className="home-icon-feature-card">
           <i className="bi bi-box-seam"></i>
-          <hr className="icon-divider" />
+          <hr className="home-icon-divider" />
           <div>Send and Receive Packages</div>
         </div>
-        <div className="icon-feature-card">
+        <div className="home-icon-feature-card">
           <i className="bi bi-currency-dollar"></i>
-          <hr className="icon-divider" />
+          <hr className="home-icon-divider" />
           <div>Best prices</div>
         </div>
       </div>
