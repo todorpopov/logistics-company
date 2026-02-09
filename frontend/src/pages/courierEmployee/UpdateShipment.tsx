@@ -1,6 +1,6 @@
 import React from 'react';
 import Table, { Config } from '../../components/table/Table';
-import '../manage/ManageOffices.css';
+import './UpdateShipment.css';
 import Toast from '../../components/toast/Toast';
 import { useGetShipmentsByCourierUserId } from '../request';
 import { shipmentColumns } from '../shipmentCommon';
@@ -17,11 +17,11 @@ const UpdateShipment: React.FC = () => {
   const { toast, setToast, handleEdit } = useShipmentHandlers({ enableEdition: true });
 
   return (
-    <div className="manage-container">
+    <div className="update-shipments-container">
       {toast && (
         <Toast type={toast.type} text={toast.text} onClose={() => setToast(null)} />
       )}
-      <div className="manage-content">
+      <div className="update-shipments-content">
         <Table
           config={config}
           columns={shipmentColumns}
