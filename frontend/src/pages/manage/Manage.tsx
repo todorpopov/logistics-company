@@ -11,7 +11,7 @@ function Manage() {
           <hr className="manage-icon-divider" />
           <div>Manage offices</div>
         </div>
-        <div className="manage-icon-feature-card clickable" tabIndex={0} role="button" onClick={() => window.location.href='/manage/workers'}>
+        <div className="manage-icon-feature-card clickable" tabIndex={0} role="button" onClick={() => window.location.href='/manage/office-employees'}>
           <i className="bi bi-person"></i>
           <hr className="manage-icon-divider" />
           <div>Manage office employees</div>

@@ -45,7 +45,7 @@ const App: React.FunctionComponent = () => {
                 <ManageOffices />
               </ProtectedRoute>
             } />
-            <Route path="/manage/workers" element={
+            <Route path="/manage/office-employees" element={
               <ProtectedRoute allowedRoles={[UserRole.ADMIN]}>
                 <ManageOfficeEmployees />
               </ProtectedRoute>

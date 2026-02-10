@@ -131,7 +131,7 @@ function Table<T extends object>({ config, columns, data, pageSize = 5, onEdit, 
               <tr key={rowIndex + (page - 1) * pageSize}>
                 {columns.map((column) => {
                   const value = row[column.accessor];
-                  const displayValue = value === null ? 'N/A' : String(value);
+                  const displayValue = value === null || value === undefined ? 'N/A' : String(value);
                   return (
                     <td key={String(column.accessor)}>
                       {editRow === rowIndex && (column.editable === undefined || column.editable) ? (
