@@ -29,6 +29,14 @@ The application follows a layered architecture, separating concerns into distinc
      - `repository/`: Contains repository interfaces for database access.
      - `service/`: Contains service classes that implement business logic.
      - `util/`: Contains utility classes for common functionalities like validation and DTO mappings.
+   - `src/main/resources/`: Application configuration and static assets.
+     - `application.properties`: Database and application configuration.
+     - `data.sql`: Seed data for local development.
+
+## Authentication and Authorization
+- The backend issues JWTs for authenticated users.
+- Role-based access is enforced via the `AuthGuard` annotation and request interceptors.
+- The frontend stores auth state in `AuthContext` and protects routes using `ProtectedRoute`.
 
 ## Database
 The application uses PostgreSQL as its database.
@@ -36,3 +44,13 @@ The application uses PostgreSQL as its database.
 - **Database Schema**
   
   ![Home Page](/docs/db.png)
+
+## Local Development
+### Prerequisites
+- Java 23 (configured via Gradle toolchain).
+- PostgreSQL (local or containerized instance).
+- Node.js 16+ (frontend build tooling).
+
+## Documentation Assets
+- UI screenshots are stored in `docs/pages/`.
+- Database diagram is in `docs/db.png`.
