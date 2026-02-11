@@ -23,7 +23,7 @@ export const shipmentColumns: Column<Shipment>[] = [
   { header: 'Registered By', accessor: 'registeredById', mandatoryForCreation: true, editable: false },
   { header: 'Delivery Type', accessor: 'deliveryType', mandatoryForCreation: true, editable: false },
   { header: 'Office ID', accessor: 'deliveryOfficeId', mandatoryForCreation: true, editable: false },
-  { header: 'Delivered By', accessor: 'courierEmployeeId', mandatoryForCreation: false, editable: false },
+  { header: 'Courier ID', accessor: 'courierEmployeeId', mandatoryForCreation: true, editable: false },
   { header: 'Weight', accessor: 'weightGram', mandatoryForCreation: true, editable: false },
   { header: 'Price', accessor: 'price', mandatoryForCreation: true, editable: false },
   { header: 'Shipment Status', accessor: 'status', mandatoryForCreation: true },

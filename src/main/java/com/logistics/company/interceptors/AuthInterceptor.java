@@ -2,7 +2,6 @@ package com.logistics.company.interceptors;
 
 import com.logistics.company.annotations.AuthGuard;
 import com.logistics.company.models.enums.UserRole;
-import com.logistics.company.services.AuthService;
 import com.logistics.company.services.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

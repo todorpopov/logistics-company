@@ -22,7 +22,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor);
-        registry.addInterceptor(loggedInInterceptor).addPathPatterns("/api/auth/log-in");
+        registry.addInterceptor(loggedInInterceptor).addPathPatterns(
+            "/api/auth/log-in",
+            "/api/auth/log-admin-in",
+            "/api/auth/register-client"
+        );
     }
 
     @Override

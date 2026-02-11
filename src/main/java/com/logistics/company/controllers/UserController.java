@@ -1,5 +1,6 @@
 package com.logistics.company.controllers;
 
+import com.logistics.company.annotations.AuthGuard;
 import com.logistics.company.dtos.client.ClientDTO;
 import com.logistics.company.dtos.courier_employee.CourierEmployeeDTO;
 import com.logistics.company.dtos.office_employee.OfficeEmployeeDTO;
@@ -22,33 +23,39 @@ public class UserController {
         this.userService = userService;
     }
 
+    @AuthGuard({ "ADMIN" })
     @GetMapping("client")
     public ResponseEntity<Iterable<ClientDTO>> getAllClients(){
         return ResponseEntity.ok(this.userService.getAllClients());
     }
 
+    @AuthGuard({ "ADMIN" })
     @GetMapping("office-employee")
     public ResponseEntity<Iterable<OfficeEmployeeDTO>> getAllOfficeEmployees(){
         return ResponseEntity.ok(this.userService.getAllOfficeEmployees());
     }
 
+    @AuthGuard({ "ADMIN" })
     @GetMapping("courier-employee")
     public ResponseEntity<Iterable<CourierEmployeeDTO>> getAllCourierEmployees(){
         return ResponseEntity.ok(this.userService.getAllCourierEmployees());
     }
 
+    @AuthGuard({ "ADMIN" })
     @PostMapping("office-employee")
     public ResponseEntity<OfficeEmployeeDTO> createOfficeEmployee(@RequestBody CreateUserRequestDTO dto) {
         dto.validate();
         return ResponseEntity.ok(this.userService.createOfficeEmployee(dto));
     }
 
+    @AuthGuard({ "ADMIN" })
     @PostMapping("courier-employee")
     public ResponseEntity<CourierEmployeeDTO> createCourierEmployee(@RequestBody CreateUserRequestDTO dto) {
         dto.validate();
         return ResponseEntity.ok(this.userService.createCourierEmployee(dto));
     }
 
+    @AuthGuard({ "ADMIN" })
     @PutMapping("client/{clientId}")
     public ResponseEntity<ClientDTO> updateClient(@PathVariable Long clientId, @RequestBody UpdateUserRequestDTO dto) {
         try {
@@ -63,6 +70,7 @@ public class UserController {
         return ResponseEntity.ok(this.userService.updateClient(clientId, dto));
     }
 
+    @AuthGuard({ "ADMIN" })
     @PutMapping("courier-employee/{courierEmployeeId}")
     public ResponseEntity<CourierEmployeeDTO> updateCourierEmployee(
         @PathVariable Long courierEmployeeId,
@@ -80,6 +88,7 @@ public class UserController {
         return ResponseEntity.ok(this.userService.updateCourierEmployee(courierEmployeeId, dto));
     }
 
+    @AuthGuard({ "ADMIN" })
     @PutMapping("office-employee/{officeEmployeeId}")
     public ResponseEntity<OfficeEmployeeDTO> updateOfficeEmployee(
         @PathVariable Long officeEmployeeId,
@@ -97,6 +106,7 @@ public class UserController {
         return ResponseEntity.ok(this.userService.updateOfficeEmployee(officeEmployeeId, dto));
     }
 
+    @AuthGuard({ "ADMIN" })
     @DeleteMapping("client/{clientId}")
     public void deleteClient(@PathVariable Long clientId){
         if(Validator.isIdInvalid(clientId, true)){
@@ -105,6 +115,7 @@ public class UserController {
         this.userService.deleteUser(clientId, UserRole.CLIENT);
     }
 
+    @AuthGuard({ "ADMIN" })
     @DeleteMapping("courier-employee/{courierEmployeeId}")
     public void deleteCourierEmployee(@PathVariable Long courierEmployeeId){
         if(Validator.isIdInvalid(courierEmployeeId, true)){
@@ -113,6 +124,7 @@ public class UserController {
         this.userService.deleteUser(courierEmployeeId, UserRole.COURIER_EMPLOYEE);
     }
 
+    @AuthGuard({ "ADMIN" })
     @DeleteMapping("office-employee/{officeEmployeeId}")
     public void deleteOfficeEmployee(@PathVariable Long officeEmployeeId){
         if(Validator.isIdInvalid(officeEmployeeId, true)){

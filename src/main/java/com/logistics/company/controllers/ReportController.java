@@ -1,5 +1,6 @@
 package com.logistics.company.controllers;
 
+import com.logistics.company.annotations.AuthGuard;
 import com.logistics.company.dtos.client.ClientDTO;
 import com.logistics.company.dtos.shipment.ShipmentDTO;
 import com.logistics.company.dtos.user.EmployeeDTO;
@@ -24,26 +25,31 @@ public class ReportController {
         this.reportService = reportService;
     }
 
+    @AuthGuard({ "ADMIN" })
     @GetMapping("employees")
     public ResponseEntity<Iterable<EmployeeDTO>> getAllEmployees() {
         return ResponseEntity.ok(this.reportService.getAllEmployees());
     }
 
+    @AuthGuard({ "ADMIN" })
     @GetMapping("clients")
     public ResponseEntity<Iterable<ClientDTO>> getAllClients() {
         return ResponseEntity.ok(this.reportService.getAllClients());
     }
 
+    @AuthGuard({ "ADMIN" })
     @GetMapping("registered-shipments")
     public ResponseEntity<Iterable<ShipmentDTO>> getAllRegisteredShipments() {
         return ResponseEntity.ok(this.reportService.getAllRegisteredShipments());
     }
 
+    @AuthGuard({ "ADMIN" })
     @GetMapping("shipments-sent-for-delivery")
     public ResponseEntity<Iterable<ShipmentDTO>> getAllShipmentsSentForDelivery() {
         return ResponseEntity.ok(this.reportService.getAllShipmentsSentForDelivery());
     }
 
+    @AuthGuard({ "ADMIN" })
     @GetMapping("shipments-registered-by/{officeEmployeeId}")
     public ResponseEntity<Iterable<ShipmentDTO>> getAllShipmentsRegisteredBy(@PathVariable Long officeEmployeeId) {
         if (Validator.isIdInvalid(officeEmployeeId, true)) {
@@ -52,6 +58,7 @@ public class ReportController {
         return ResponseEntity.ok(this.reportService.getAllShipmentsRegisteredBy(officeEmployeeId));
     }
 
+    @AuthGuard({ "ADMIN", "CLIENT" })
     @GetMapping("shipments-sent-by/{clientId}")
     public ResponseEntity<Iterable<ShipmentDTO>> getAllShipmentsSentByClient(@PathVariable Long clientId) {
         if (Validator.isIdInvalid(clientId, true)) {
@@ -60,6 +67,7 @@ public class ReportController {
         return ResponseEntity.ok(this.reportService.getAllShipmentsSentByClient(clientId));
     }
 
+    @AuthGuard({ "ADMIN" })
     @GetMapping("shipments-received-by/{clientId}")
     public ResponseEntity<Iterable<ShipmentDTO>> getAllShipmentsReceivedByClient(@PathVariable Long clientId) {
         if (Validator.isIdInvalid(clientId, true)) {
@@ -68,6 +76,7 @@ public class ReportController {
         return ResponseEntity.ok(this.reportService.getAllShipmentsReceivedByClient(clientId));
     }
 
+    @AuthGuard({ "ADMIN" })
     @GetMapping("total-gross-income-for-period/{startDate}/{endDate}")
     public BigDecimal getTotalPriceOfShipmentsBetween(@PathVariable LocalDate startDate, @PathVariable LocalDate endDate) {
         return this.reportService.getTotalPriceOfShipmentsBetween(startDate, endDate);

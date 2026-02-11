@@ -1,5 +1,6 @@
 package com.logistics.company.controllers;
 
+import com.logistics.company.annotations.AuthGuard;
 import com.logistics.company.dtos.shipment.CreateShipmentRequestDTO;
 import com.logistics.company.dtos.shipment.ShipmentDTO;
 import com.logistics.company.dtos.shipment.UpdateShipmentRequestDTO;
@@ -18,22 +19,26 @@ public class ShipmentController {
         this.shipmentService = shipmentService;
     }
 
+    @AuthGuard({ "ADMIN", "OFFICE_EMPLOYEE" })
     @PostMapping()
     public ResponseEntity<ShipmentDTO> createShipment(@RequestBody CreateShipmentRequestDTO dto) {
         dto.validate();
         return ResponseEntity.ok(this.shipmentService.createShipment(dto));
     }
 
+    @AuthGuard({ "ADMIN", "OFFICE_EMPLOYEE" })
     @GetMapping()
     public ResponseEntity<Iterable<ShipmentDTO>> getAllShipments(){
         return ResponseEntity.ok(this.shipmentService.getAllShipments());
     }
 
+    @AuthGuard({ "COURIER_EMPLOYEE" })
     @GetMapping("/courier/{userId}")
     public ResponseEntity<Iterable<ShipmentDTO>> getShipmentsByCourierUserId(@PathVariable Long userId) {
         return ResponseEntity.ok(this.shipmentService.getAllShipmentsByCourierUserId(userId));
     }
 
+    @AuthGuard({ "ADMIN", "COURIER_EMPLOYEE" })
     @PutMapping("{shipmentId}")
     public ResponseEntity<ShipmentDTO> updateShipment(@PathVariable Long shipmentId, @RequestBody UpdateShipmentRequestDTO dto) {
         try {
@@ -48,6 +53,7 @@ public class ShipmentController {
         return ResponseEntity.ok(this.shipmentService.updateShipment(shipmentId, dto));
     }
 
+    @AuthGuard({ "ADMIN" })
     @DeleteMapping("{shipmentId}")
     public void deleteShipment(@PathVariable Long shipmentId){
         if(Validator.isIdInvalid(shipmentId, true)){
