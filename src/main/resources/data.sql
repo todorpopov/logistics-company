@@ -6,31 +6,27 @@ INSERT INTO offices (office_id, address, name, phone_number)
 SELECT setval(pg_get_serial_sequence('offices', 'office_id'), (SELECT MAX(office_id) FROM offices));
 
 INSERT INTO users (user_id, first_name, last_name, email, password_hash, user_role)
-    VALUES (1, 'John', 'Doe', 'jdoe@gmail.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'CLIENT');
+    VALUES (1, 'client', '1', 'client1@logistics.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'CLIENT');
 INSERT INTO clients (client_id, user_id) VALUES (1, 1);
 
 INSERT INTO users (user_id, first_name, last_name, email, password_hash, user_role)
-    VALUES (2, 'Max', 'Ram', 'mram@gmail.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'CLIENT');
+    VALUES (2, 'client', '2', 'client2@logistics.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'CLIENT');
 INSERT INTO clients (client_id, user_id) VALUES (2, 2);
 
 INSERT INTO users (user_id, first_name, last_name, email, password_hash, user_role)
-    VALUES (3, 'Jacob', 'Jones', 'jjones@gmail.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'CLIENT');
-INSERT INTO clients (client_id, user_id) VALUES (3, 3);
-
-INSERT INTO users (user_id, first_name, last_name, email, password_hash, user_role)
-    VALUES (4, 'Lex', 'Mans', 'lmans@gmail.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'OFFICE_EMPLOYEE');
+    VALUES (4, 'office', 'emp1', 'officeemp1@logistics.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'OFFICE_EMPLOYEE');
 INSERT INTO office_employees (office_employee_id, user_id, office_id) VALUES (1, 4, 1);
 
 INSERT INTO users (user_id, first_name, last_name, email, password_hash, user_role)
-    VALUES (5, 'Tom', 'Rogan', 'trogan@gmail.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'OFFICE_EMPLOYEE');
+    VALUES (5, 'office', 'emp2', 'officeemp2@logistics.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'OFFICE_EMPLOYEE');
 INSERT INTO office_employees (office_employee_id, user_id, office_id) VALUES (2, 5, 2);
 
 INSERT INTO users (user_id, first_name, last_name, email, password_hash, user_role)
-    VALUES (6, 'Joana', 'Max', 'jmax@gmail.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'COURIER_EMPLOYEE');
+    VALUES (6, 'courier', 'emp1', 'courieremp1@logistics.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'COURIER_EMPLOYEE');
 INSERT INTO courier_employees (courier_employee_id, user_id) VALUES (1, 6);
 
 INSERT INTO users (user_id, first_name, last_name, email, password_hash, user_role)
-    VALUES (7, 'Jay', 'Parks', 'jparks@gmail.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'COURIER_EMPLOYEE');
+    VALUES (7, 'courier', 'emp2', 'courieremp2@logistics.com', '$2a$12$KNFsdYIHYO8D8yYV9OBzSOLJRPV3Sw1YOdJjIklL9n19Jpi6U4u/u', 'COURIER_EMPLOYEE');
 INSERT INTO courier_employees (courier_employee_id, user_id) VALUES (2, 7);
 
 SELECT setval(pg_get_serial_sequence('users', 'user_id'), (SELECT MAX(user_id) FROM users));
@@ -84,8 +80,8 @@ INSERT INTO shipments (
     delivered_date
 ) VALUES (
     2,
-    3,
     1,
+    2,
     2,
     null,
     2,

@@ -67,7 +67,7 @@ public class ReportController {
         return ResponseEntity.ok(this.reportService.getAllShipmentsSentByClient(clientId));
     }
 
-    @AuthGuard({ "ADMIN" })
+    @AuthGuard({ "ADMIN", "CLIENT" })
     @GetMapping("shipments-received-by/{clientId}")
     public ResponseEntity<Iterable<ShipmentDTO>> getAllShipmentsReceivedByClient(@PathVariable Long clientId) {
         if (Validator.isIdInvalid(clientId, true)) {
