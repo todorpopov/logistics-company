@@ -73,7 +73,7 @@ export const useGetShipments = (): UseQueryResult<Shipment[], Error> => useQuery
 
 
 export const useGetShipmentsSentByCurrentUser = (): UseQueryResult<Shipment[], Error> => useQuery<Shipment[], Error>({
-  queryKey: ['shipments'],
+  queryKey: ['shipments', 'sent-by', getUserId()],
   queryFn: async () => {
     const { data } = await axiosInstance.get<ShipmentRaw[]>(`${API_URL}/api/report/shipments-sent-by/${getUserId()}`);
     return mapShipments(data);
@@ -82,7 +82,7 @@ export const useGetShipmentsSentByCurrentUser = (): UseQueryResult<Shipment[], E
 });
 
 export const useGetShipmentsReceivedByCurrentUser = (): UseQueryResult<Shipment[], Error> => useQuery<Shipment[], Error>({
-  queryKey: ['shipments'],
+  queryKey: ['shipments', 'received-by', getUserId()],
   queryFn: async () => {
     const { data } = await axiosInstance.get<ShipmentRaw[]>(`${API_URL}/api/report/shipments-received-by/${getUserId()}`);
     return mapShipments(data);
